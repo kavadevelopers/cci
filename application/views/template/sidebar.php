@@ -10,19 +10,18 @@
                             <span class="pcoded-mtext">Dashboard</span>
                         </a>
                     </li>
+                </ul>
+
+                <div class="pcoded-navigatio-lavel">Master's Management</div>
+                <ul class="pcoded-item pcoded-left-item">
                     <?php if($this->session->userdata('user_type') == "0"){ ?>
+
                         <li class="<?= menu(1,["branch"])[0]; ?>">
                             <a href="<?= base_url('branch') ?>">
                                 <span class="pcoded-micon"><i class="fa fa-font-awesome"></i></span>
                                 <span class="pcoded-mtext">Branch</span>
                             </a>
                         </li>
-                    <?php } ?>
-                </ul>
-
-                <div class="pcoded-navigatio-lavel">Master's Management</div>
-                <ul class="pcoded-item pcoded-left-item">
-                    <?php if($this->session->userdata('user_type') == "0"){ ?>
 
                         <li class="pcoded-hasmenu <?= menu(1,["user"])[2]; ?>">
                             <a href="javascript:void(0)">
@@ -108,6 +107,13 @@
                                     </a>
                                 </li>
                             </ul>
+                        </li>
+
+                        <li class="<?= menu(1,["services"])[0]; ?>">
+                            <a href="<?= base_url('services') ?>">
+                                <span class="pcoded-micon"><i class="fa fa-cogs"></i></span>
+                                <span class="pcoded-mtext">Services</span>
+                            </a>
                         </li>
                     <?php } ?>
 

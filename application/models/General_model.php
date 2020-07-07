@@ -22,6 +22,21 @@ class General_model extends CI_Model
 		return $this->db->get_where('branch',['df'	=> ''])->result_array();
 	}
 
+	public function get_services()
+	{
+		return $this->db->get_where('services',['df'	=> ''])->result_array();
+	}
+
+	public function get_service($id)
+	{
+		return $this->db->get_where('services',['id'	=> $id,'df' => ''])->row_array();
+	}
+
+	public function _get_service($id)
+	{
+		return $this->db->get_where('services',['id'	=> $id])->row_array();
+	}
+
 	public function get_user($id)
 	{
 		return $this->db->get_where('user',['id'	=> $id,'df' => ''])->row_array();
