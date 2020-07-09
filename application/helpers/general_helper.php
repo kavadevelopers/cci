@@ -50,4 +50,22 @@ function menu($seg,$array)
         }
     }
 }
+
+function getRole($type){
+    if($type == 0){
+        return "Super Admin";
+    }else if($type == 1){
+        return "Admin";
+    }else if($type == 2){
+        return "Back Office";
+    }else if($type == 3){
+        return "Sales Person";
+    }
+}
+
+function selected($val,$val2){
+    if($val == $val2){
+        return "selected";
+    }
+}
 ?>

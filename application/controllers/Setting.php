@@ -6,6 +6,9 @@ class Setting extends CI_Controller
 	{
 		parent::__construct();
 		$this->auth->check_session();
+		if(get_user()['user_type'] != '0'){
+			redirect(base_url());
+		}
 	}
 
 	public function index()

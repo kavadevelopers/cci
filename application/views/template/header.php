@@ -143,11 +143,13 @@
                                         <i class="feather icon-chevron-down"></i>
                                     </div>
                                     <ul class="show-notification profile-notification dropdown-menu" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
-                                        <li>
-                                            <a href="<?= base_url('setting') ?>" class="dis-block">
-                                                <i class="feather icon-settings"></i> Settings
-                                            </a>
-                                        </li>
+                                        <?php if(get_user()['user_type'] == '0'){ ?>
+                                            <li>
+                                                <a href="<?= base_url('setting') ?>" class="dis-block">
+                                                    <i class="feather icon-settings"></i> Settings
+                                                </a>
+                                            </li>
+                                        <?php } ?>
                                         <li>
                                             <a href="#" class="dis-block">
                                                 <i class="feather icon-user"></i> Profile
