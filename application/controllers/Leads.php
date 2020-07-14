@@ -33,6 +33,7 @@ class Leads extends CI_Controller
 
 	public function save()
 	{
+
 		$mobiles = '';
 		foreach ($this->input->post('mobile') as $key => $value) {
 			if($value != ''){
@@ -47,24 +48,10 @@ class Leads extends CI_Controller
 			}
 		}
 
-		$services = '';
+		$services = [];
 		foreach ($this->input->post('services') as $key => $value) {
-			if($value != ''){
-				$services .= $value.',';
-			}
-		}
-
-		$prefered_language = '';
-		foreach ($this->input->post('prefered_language') as $key => $value) {
-			if($value != ''){
-				$prefered_language .= $value.',';
-			}
-		}
-
-		$timing = '';
-		foreach ($this->input->post('from') as $key => $value) {
-			if($value != '' || $this->input->post('to')[$key] != ''){
-				$timing .= $value.'-'.$this->input->post('to')[$key].',';
+			if($value != '' || $this->input->post('amount')[$key]){
+				$services[] = [$value,$this->input->post('amount')[$key]];
 			}
 		}
 
@@ -73,14 +60,7 @@ class Leads extends CI_Controller
 			if($value != ''){
 				$landline .= $value.',';
 			}
-		}
-
-		$additional = [];
-		foreach ($this->input->post('industry') as $key => $value) {
-			if($value != '' || $this->input->post('sub_industry')[$key] != '' || $this->input->post('ind_remarks')[$key] != ''){
-				$additional[] = [$value,$this->input->post('sub_industry')[$key],$this->input->post('ind_remarks')[$key]];
-			}
-		}		
+		}	
 
 		$data = [
 			'owner'							=> $this->input->post('owner'),
@@ -91,27 +71,56 @@ class Leads extends CI_Controller
 			'state'							=> $this->input->post('state'),
 			'city'							=> $this->input->post('city'),
 			'area'							=> $this->input->post('area'),
+			'other_area'					=> $this->input->post('other_area_name'),
 			'mobile'						=> rtrim($mobiles,','),
 			'email'							=> rtrim($emails,','),
-			'services'						=> rtrim($services,','),
+			'services'						=> json_encode($services),
 			'importance'					=> $this->input->post('importance'),
 			'remarks'						=> $this->input->post('remarks'),
 			'next_followup_date'			=> dd($this->input->post('ndate')),
+			'next_followup_time'			=> $this->input->post('ntime'),
 			'source'						=> $this->input->post('source'),
 			'occupation'					=> $this->input->post('occupation'),
 			'quotation'						=> $this->input->post('special_quote'),
-			'helth_insurance'				=> $this->input->post('helth_insurance'),
-			'life_insurance'				=> $this->input->post('life_insurance'),
-			'languages'						=> rtrim($prefered_language,','),
-			'timing'						=> rtrim($timing,','),
-			'landline'						=> rtrim($landline,','),
-			'additional'					=> json_encode($additional)
+			'landline'						=> rtrim($landline,',')
 		];
 
 		$this->db->insert('leads',$data);
 		$id = $this->db->insert_id();
-		$lead_id = substr($this->general_model->_get_branch($this->input->post('branch'))['name'],0,2).'_'.$id;
+		$count_lead = $this->db->get_where('leads',['branch' => $this->input->post('branch')])->num_rows();
+		$lead_id = substr($this->general_model->_get_branch($this->input->post('branch'))['name'],0,2).'_'.($count_lead);
 		$this->db->where('id',$id)->update('leads',['lead' => $lead_id]);
+
+
+		$config['upload_path'] = './uploads/doc/';
+	    $config['allowed_types']	= '*';
+	    $config['max_size']      = '0';
+	    $config['overwrite']     = FALSE;
+	    $this->load->library('upload', $config);
+
+
+
+	    foreach ($_FILES['file']['name'] as $key => $value) {
+	    	$fname = microtime(true).".".pathinfo($_FILES['file']['name'][$key], PATHINFO_EXTENSION);
+	    	$_FILES['doc']['name'] 		= $fname;
+	    	$_FILES['doc']['type'] 		= $_FILES['file']['type'][$key];
+	    	$_FILES['doc']['tmp_name'] 	= $_FILES['file']['tmp_name'][$key];
+	    	$_FILES['doc']['error'] 	= $_FILES['file']['error'][$key];
+	    	$_FILES['doc']['size'] 		= $_FILES['file']['size'][$key];
+
+	    	$config['file_name'] = $fileName;
+	    	$this->upload->initialize($config);
+	    	if($this->upload->do_upload('doc')){
+	    		$data = [
+		        	'filename'	=> $fname,
+		        	'for' 		=> 'Lead',
+		        	'type' 		=> pathinfo($_FILES['file']['name'][$key], PATHINFO_EXTENSION),
+		        	'for_id' 	=> $id
+		        ];
+
+		        $this->db->insert('files',$data);
+	    	}
+	    }
 
 		$this->session->set_flashdata('msg', 'Lead Added');
 	    redirect(base_url('leads'));
@@ -124,6 +133,7 @@ class Leads extends CI_Controller
 				
 				$data['lead']		= $this->general_model->get_lead($id);
 				$data['_title']		= "Edit Lead - ".$data['lead']['lead'];	
+				$data['dump']		= 0;
 				$this->load->theme('leads/edit',$data);
 
 			}else{
@@ -150,24 +160,10 @@ class Leads extends CI_Controller
 			}
 		}
 
-		$services = '';
+		$services = [];
 		foreach ($this->input->post('services') as $key => $value) {
-			if($value != ''){
-				$services .= $value.',';
-			}
-		}
-
-		$prefered_language = '';
-		foreach ($this->input->post('prefered_language') as $key => $value) {
-			if($value != ''){
-				$prefered_language .= $value.',';
-			}
-		}
-
-		$timing = '';
-		foreach ($this->input->post('from') as $key => $value) {
-			if($value != '' || $this->input->post('to')[$key] != ''){
-				$timing .= $value.'-'.$this->input->post('to')[$key].',';
+			if($value != '' || $this->input->post('amount')[$key]){
+				$services[] = [$value,$this->input->post('amount')[$key]];
 			}
 		}
 
@@ -176,14 +172,7 @@ class Leads extends CI_Controller
 			if($value != ''){
 				$landline .= $value.',';
 			}
-		}
-
-		$additional = [];
-		foreach ($this->input->post('industry') as $key => $value) {
-			if($value != '' || $this->input->post('sub_industry')[$key] != '' || $this->input->post('ind_remarks')[$key] != ''){
-				$additional[] = [$value,$this->input->post('sub_industry')[$key],$this->input->post('ind_remarks')[$key]];
-			}
-		}		
+		}	
 
 		$data = [
 			'owner'							=> $this->input->post('owner'),
@@ -194,27 +183,60 @@ class Leads extends CI_Controller
 			'state'							=> $this->input->post('state'),
 			'city'							=> $this->input->post('city'),
 			'area'							=> $this->input->post('area'),
+			'other_area'					=> $this->input->post('other_area_name'),
 			'mobile'						=> rtrim($mobiles,','),
 			'email'							=> rtrim($emails,','),
-			'services'						=> rtrim($services,','),
+			'services'						=> json_encode($services),
 			'importance'					=> $this->input->post('importance'),
 			'remarks'						=> $this->input->post('remarks'),
 			'next_followup_date'			=> dd($this->input->post('ndate')),
+			'next_followup_time'			=> $this->input->post('ntime'),
 			'source'						=> $this->input->post('source'),
 			'occupation'					=> $this->input->post('occupation'),
 			'quotation'						=> $this->input->post('special_quote'),
-			'helth_insurance'				=> $this->input->post('helth_insurance'),
-			'life_insurance'				=> $this->input->post('life_insurance'),
-			'languages'						=> rtrim($prefered_language,','),
-			'timing'						=> rtrim($timing,','),
-			'landline'						=> rtrim($landline,','),
-			'additional'					=> json_encode($additional)
+			'landline'						=> rtrim($landline,',')
 		];
 
 		$this->db->where('id',$this->input->post('id'))->update('leads',$data);
 
+		$id = $this->input->post('id');
+
+		$config['upload_path'] = './uploads/doc/';
+	    $config['allowed_types']	= '*';
+	    $config['max_size']      = '0';
+	    $config['overwrite']     = FALSE;
+	    $this->load->library('upload', $config);
+
+
+
+	    foreach ($_FILES['file']['name'] as $key => $value) {
+	    	$fname = microtime(true).".".pathinfo($_FILES['file']['name'][$key], PATHINFO_EXTENSION);
+	    	$_FILES['doc']['name'] 		= $fname;
+	    	$_FILES['doc']['type'] 		= $_FILES['file']['type'][$key];
+	    	$_FILES['doc']['tmp_name'] 	= $_FILES['file']['tmp_name'][$key];
+	    	$_FILES['doc']['error'] 	= $_FILES['file']['error'][$key];
+	    	$_FILES['doc']['size'] 		= $_FILES['file']['size'][$key];
+
+	    	$config['file_name'] = $fileName;
+	    	$this->upload->initialize($config);
+	    	if($this->upload->do_upload('doc')){
+	    		$data = [
+		        	'filename'	=> $fname,
+		        	'for' 		=> 'Lead',
+		        	'type' 		=> pathinfo($_FILES['file']['name'][$key], PATHINFO_EXTENSION),
+		        	'for_id' 	=> $id
+		        ];
+
+		        $this->db->insert('files',$data);
+	    	}
+	    }
+
 		$this->session->set_flashdata('msg', 'Lead Updated');
-	    redirect(base_url('leads'));
+		if($this->input->post('dump') == 1){
+			redirect(base_url('leads/dump_leads'));	
+		}else{
+	    	redirect(base_url('leads'));
+	    }
 	}
 
 	public function transfer()
@@ -272,6 +294,34 @@ class Leads extends CI_Controller
 		$this->load->theme('leads/dump',$data);
 	}
 
+	public function edit_dump($id = false)
+	{
+		if($id){
+			if($this->general_model->get_lead($id)){
+				
+				$data['lead']		= $this->general_model->get_lead($id);
+				$data['_title']		= "Edit Lead - ".$data['lead']['lead'];	
+				$data['dump']		= 1;
+				$this->load->theme('leads/edit',$data);
+
+			}else{
+				redirect(base_url('leads'));	
+			}
+		}else{
+			redirect(base_url('leads'));
+		}
+	}
+
+	public function file_delete()
+	{
+		$data = $this->db->get_where('files',['id' => $this->input->post('id')])->row_array();
+		if(file_exists(FCPATH.'uploads/doc/'.$data['filename'])){
+            unlink(FCPATH.'/uploads/doc/'.$data['filename']);   
+        }
+
+        $this->db->where('id',$data['id'])->delete('files');
+	}
+
 	public function normal($id = false)
 	{
 		if($id){
@@ -285,5 +335,17 @@ class Leads extends CI_Controller
 		}else{
 			redirect(base_url('leads/dump_leads'));
 		}
+	}
+
+	private function set_upload_options()
+	{   
+	    //upload an image options
+	    $config = array();
+	    $config['upload_path'] = './uploads/doc/';
+	    $config['allowed_types']	= '*';
+	    $config['max_size']      = '0';
+	    $config['overwrite']     = FALSE;
+
+	    return $config;
 	}
 }

@@ -84,7 +84,7 @@
             </div>
 
             <div class="card-footer text-right">
-                <a href="<?= base_url('user/sales_person') ?>" class="btn btn-danger"><i class="fa fa-arrow-left"></i> Cancel</a>
+                <a href="<?= base_url('user/sales_person') ?>" class="btn btn-danger"><i class="fa fa-arrow-left"></i> Back</a>
                 <button class="btn btn-success" type="submit">
                     <i class="fa fa-plus"></i> Add
                 </button>

@@ -33,4 +33,19 @@
 	.m-t2{
 		margin-top: 2px;
 	}
+	.datepicker table tr td.disabled,.datepicker table tr td.disabled:hover{
+		color: #ccc;
+	}
+	.table-dt td, .table-dt th{
+		padding: 5px;
+	}
+	.grid-images{
+		width: auto;
+	    height: 100px;
+	    max-width: 100%;
+	}
+
+	.table-no-padding td,.table-no-padding tH{
+		padding: 5px;
+	}
 </style>

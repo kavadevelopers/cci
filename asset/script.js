@@ -74,5 +74,49 @@ $(function(){
         todayHighlight:'TRUE',
         autoclose: true
     });
+
+	var date = new Date();
+   var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    $('.datepicker-new').datepicker({
+        format: 'dd-mm-yyyy',
+        todayHighlight:'TRUE',
+        autoclose: true,
+        startDate: new Date()
+    });
+
+    // $('.timepicker').datetimepicker({
+    //     format: 'LT'
+    // });
 })
 
+
+function readFile(input) {
+    if (input.files && input.files[0]) {
+        
+        var FileSize = input.files[0].size / 1024 / 1024; // in MB
+        var extension = input.files[0].name.substring(input.files[0].name.lastIndexOf('.')+1);
+        
+        if (FileSize > 2) {
+            alert("Maxiumum Image Size Is 2 Mb.");
+            input.value = '';
+            return false;
+        }
+        else{
+            if (extension == 'jpg' || extension == 'png' || extension == 'jpeg' || extension == 'docx' || extension == 'pdf' || extension == 'csv' || extension == 'xlsx') {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $("#imgProfile").attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+            else
+            {
+                alert("Only Allowed '.jpg' OR '.png' OR '.jpeg' OR '.docx' OR '.pdf' OR '.csv' OR '.xlsx' Extension ");
+                input.value = '';
+                return false;
+            }
+        }
+    }
+}

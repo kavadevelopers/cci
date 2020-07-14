@@ -157,5 +157,10 @@ class General_model extends CI_Model
 	{
 		return $this->db->get_where('leads',['id'	=> $id,'df' => ''])->row_array();	
 	}
+
+	public function _get_lead($id)
+	{
+		return $this->db->get_where('leads',['id'	=> $id])->row_array();	
+	}
 }
 ?>

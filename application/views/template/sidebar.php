@@ -11,41 +11,72 @@
                         </a>
                     </li>
                 </ul>
+                <?php if($this->session->userdata('user_type') == "2"){ ?>
+                    <ul class="pcoded-item pcoded-left-item">
+                        <li class="<?= menu(2,["new_clients","new_client_register"])[0]; ?>">
+                            <a href="<?= base_url('client/new_clients') ?>">
+                                <span class="pcoded-micon"><i class="fa fa-user"></i></span>
+                                <span class="pcoded-mtext">New Client</span>
+                            </a>
+                        </li>
+                    </ul>
+                <?php } ?>
 
-                <ul class="pcoded-item pcoded-left-item">
+                <?php if($this->session->userdata('user_type') != "2"){ ?>
+                    <ul class="pcoded-item pcoded-left-item">
+                        <li class="pcoded-hasmenu <?= menu(1,["leads"])[2]; ?>">
+                            <a href="javascript:void(0)">
+                                <span class="pcoded-micon"><i class="fa fa-tasks"></i></span>
+                                <span class="pcoded-mtext">Manage Leads</span>
+                             </a>   
+                            <ul class="pcoded-submenu">
 
-                    <li class="pcoded-hasmenu <?= menu(1,["leads"])[2]; ?>">
-                        <a href="javascript:void(0)">
-                            <span class="pcoded-micon"><i class="fa fa-tasks"></i></span>
-                            <span class="pcoded-mtext">Manage Leads</span>
-                         </a>   
-                        <ul class="pcoded-submenu">
+                                <li class="<?= $this->uri->segment(2) == '' || $this->uri->segment(2) == 'edit'?menu(1,["leads"])[0]:''; ?>">
+                                    <a href="<?= base_url('leads') ?>">
+                                        <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                        <span class="pcoded-mtext">Leads</span>
+                                    </a>
+                                </li>
 
-                            <li class="<?= $this->uri->segment(2) == '' || $this->uri->segment(2) == 'edit'?menu(1,["leads"])[0]:''; ?>">
-                                <a href="<?= base_url('leads') ?>">
-                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
-                                    <span class="pcoded-mtext">Leads</span>
-                                </a>
-                            </li>
+                                <li class="<?= menu(2,["add_lead"])[0]; ?>">
+                                    <a href="<?= base_url('leads/add_lead') ?>">
+                                        <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                        <span class="pcoded-mtext">Add Lead</span>
+                                    </a>
+                                </li>
 
-                            <li class="<?= menu(2,["add_lead"])[0]; ?>">
-                                <a href="<?= base_url('leads/add_lead') ?>">
-                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
-                                    <span class="pcoded-mtext">Add Lead</span>
-                                </a>
-                            </li>
+                                <li class="<?= menu(2,["dump_leads"])[0]; ?>">
+                                    <a href="<?= base_url('leads/dump_leads') ?>">
+                                        <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                        <span class="pcoded-mtext">Dump Leads</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                <?php } ?>
 
-                            <li class="<?= menu(2,["dump_leads"])[0]; ?>">
-                                <a href="<?= base_url('leads/dump_leads') ?>">
-                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
-                                    <span class="pcoded-mtext">Dump Leads</span>
-                                </a>
-                            </li>
 
-                        </ul>
-                    </li>
+                <?php if($this->session->userdata('user_type') == "1" || $this->session->userdata('user_type') == "3"){ ?>
+                    <ul class="pcoded-item pcoded-left-item">
+                        <li class="pcoded-hasmenu <?= menu(1,["followup"])[2]; ?>">
+                            <a href="javascript:void(0)">
+                                <span class="pcoded-micon"><i class="fa fa-phone"></i></span>
+                                <span class="pcoded-mtext">Follow Up</span>
+                             </a>   
+                            <ul class="pcoded-submenu">
+                                <li class="<?= menu(2,["lead"])[0]; ?>">
+                                    <a href="<?= base_url('followup/lead') ?>">
+                                        <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                        <span class="pcoded-mtext">Lead</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                <?php } ?>                    
 
-                </ul>
+
                 <?php if($this->session->userdata('user_type') == "0"){ ?>
                     <div class="pcoded-navigatio-lavel">Master's Management</div>
                 <?php } ?>

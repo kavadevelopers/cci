@@ -121,12 +121,14 @@
                                     <td class="text-center"><?= $value['pincode'] ?></td>
                                     <td><?= $this->general_model->_get_city($value['city'])['name'] ?></td>
                                     <td class="text-center">
-                                        <a href="<?= base_url('area/edit_area/').$value['id'] ?>" class="btn btn-primary btn-mini">
-                                            <i class="fa fa-pencil"></i>
-                                        </a>
-                                        <a href="<?= base_url('area/delete_area/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete">
-                                            <i class="fa fa-trash"></i>
-                                        </a>
+                                        <?php if($value['id'] != '3244'){ ?>
+                                            <a href="<?= base_url('area/edit_area/').$value['id'] ?>" class="btn btn-primary btn-mini">
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
+                                            <a href="<?= base_url('area/delete_area/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        <?php } ?>
                                     </td>
                                 </tr>
                             <?php } ?>

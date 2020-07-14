@@ -57,7 +57,7 @@
 	   	</div>
 	<?php } ?>   
 
-	<?php if(get_user()['user_type'] == '2' || get_user()['user_type'] == '3'){ ?>
+	<?php if(get_user()['user_type'] == '3'){ ?>
    		<div class="row">
    			<div class="col-md-6 col-xl-3">
 					<div class="card user-widget-card bg-c-green">

@@ -22,7 +22,7 @@
 	$(function(){
 		$(document).on('keyup','.mobile-key-up', function(){
 			if($('.mobile-body').children().last().val() != ""){
-				var textbox = '<input type="text" name="mobile[]" class="form-control form-control-sm numbers m-t2 mobile-key-up" autocomplete="off" maxlength="10" placeholder="Mobile">';
+				var textbox = '<input type="text" name="mobile[]" class="form-control form-control-sm numbers m-t2 mobile-key-up" autocomplete="off" maxlength="10" placeholder="Mobile" minlength="10">';
 				$('.mobile-body').append(textbox);
 			}
 		});
@@ -43,6 +43,9 @@
 					textbox += '<?php } ?>';	                    					
 				textbox += '</select>';	                    					        				
 				$('.service-body').append(textbox);
+
+				textbox = '<input type="text" name="amount[]" class="form-control form-control-sm decimal-num mobile-key-up m-t2" autocomplete="off" placeholder="Amount" >';
+				$('.amount-body').append(textbox);
 			}
 		});	
 
@@ -68,8 +71,15 @@
 
 		$(document).on('keyup','.landline-key-up', function(){
 			if($('.landline-body').children().last().val() != ""){
-				var textbox = '<input type="text" name="landline[]" class="form-control form-control-sm numbers landline-key-up m-t2" autocomplete="off" placeholder="Landline">';
+				var textbox = '<input type="text" name="landline[]" class="form-control form-control-sm numbers landline-key-up m-t2" autocomplete="off" placeholder="Landline" minlength="5" maxlength="10">';
 				$('.landline-body').append(textbox);
+			}
+		});
+
+		$(document).on('keyup','.from-to-time', function(){
+			if($('.time-body').children().last().val() != ""){
+				var textbox = '<input name="time_to_call[]" type="text" placeholder="Add From To Time Here" class="form-control form-control-sm from-to-time m-t2" value="" >';
+				$('.time-body').append(textbox);
 			}
 		});
 
@@ -104,5 +114,142 @@
 			$('#lead_transfer_model').modal('show');
 			$('#lead_tranfer_id').val($(this).data('lead'));
 		});
+
+		$(document).on('click','.add-attechment-row',function(){
+			textbox = '<tr>';
+				textbox += '<td><input type="file" name="file[]" class="form-control fileupload-change" onchange="readFile(this)"></td>';
+				textbox += '<td class="text-center"><button type="button" class="btn btn-danger btn-mini remove-row"><i class="fa fa-remove"></i></button></td>';
+			textbox += '</tr>';
+			$('.body-attchment').append(textbox);
+		});
+
+
+		$(document).on('change','.gst_client',function(){
+			_this = $(this);
+			if(_this.val() == "YES"){
+				$('.gst_type_div').show();
+				$('.gst_type').val('');
+				$('.gst_type').attr('required',true);
+			}else{
+				$('.gst_type_div').hide();
+				$('.gst_type').val('');
+				$('.gst_type').removeAttr('required');
+				$('.month_quater_div').hide();
+				$('.month_quater').removeAttr('required');
+			}
+		});
+
+		$(document).on('change','.gst_type',function(){
+			_this = $(this);
+			if(_this.val() == "REGULAR"){
+				$('.month_quater_div').show();
+				$('.month_quater').val('');
+				$('.month_quater').attr('required',true);
+			}else{
+				$('.month_quater_div').hide();
+				$('.month_quater').val('');
+				$('.month_quater').removeAttr('required');
+			}
+		});
+
+		$(document).on('click', '.remove-file-lead', function(event) {
+			if(confirm('Are you sure want to delete this?')){
+				id = $(this).data('id');
+				athis = $(this); 
+				
+				$.ajax({
+	                type: "POST",
+	                url : "<?= base_url('leads/file_delete'); ?>",
+	                data : "id="+id,
+	                cache : false,
+	                beforeSend: function() {
+	                    PNOTY('Please Wait','info');     
+	                },
+	                success: function(out)
+	                {
+	                	athis.closest(".remove-file").remove();
+	                	PNOTY("File Deleted",'success');     	
+	                }
+                });
+			}
+		});
+
+		$(document).on('click', '.add-followup', function(event) {
+			_this = $(this);
+			_this.html('<i class="fa fa-circle-o-notch fa-spin"></i> Please Wait');
+			$("#id_followup_lead").val(_this.data('id'));
+			$("#type_followup_lead").val(_this.data('type'));
+			$('#message_followup').val(_this.data('stop'));
+			$.ajax({
+                type: "POST",
+                url : "<?= base_url('followup/get'); ?>",
+                data : "id="+_this.data('id')+"&type="+_this.data('type'),
+                dataType: "JSON",
+                cache : false,
+                beforeSend: function() {
+                    
+                },
+                success: function(out)
+                {
+                	_this.html('<i class="fa fa-plus"></i>');
+                	$('#followup_model').modal('show');
+                	$('#followup_body').append(out[0]);
+                	if(out[0] != ""){
+						$('#followup_table').show();
+					}
+					$('#type_followup_cus').val(out[1]);
+                }
+            });
+		});
+
+		$('#followupForm').submit(function(event) {
+			event.preventDefault();
+			if($('#type_followup_cus').val() != '1'){
+				if($("#customer_checkbox").prop('checked') == true){
+				    cus = 1;
+				}else{
+					cus = '';
+				}
+				$.ajax({
+	                type: "POST",
+	                url : "<?= base_url('followup/save'); ?>",
+	                data : "cus="+cus+"&remarks="+$('#followup_remarks').val()+"&date="+$('#followup_date').val()+"&time="+$('#followup_time').val()+"&id="+$('#id_followup_lead').val()+"&type="+$('#type_followup_lead').val(),
+	                cache : false,
+	                dataType: "JSON",
+	                beforeSend: function() {
+	                    $('#followup_save').attr('disabled','true');
+	                    $('#followup_save').html('<i class="fa fa-circle-o-notch fa-spin"></i> Please Wait');
+	                },
+	                success: function(out)
+	                {
+	                	PNOTY("Followup Saved",'success');  
+	                	$('#followup_save').removeAttr('disabled');
+	                    $('#followup_save').html('Save');
+	                    $('#followup_remarks').val("");
+	                    $('#followup_time').val("");
+	                    if($("#customer_checkbox").prop('checked') == true){
+						    $('#customer_checkbox').prop('checked', false);
+						}
+						$('#followup_body').prepend(out[0]);
+						$('#followup_table').show();
+						$('#type_followup_cus').val(cus);
+	                }
+	            });
+			}else{
+				PNOTY($('#message_followup').val(),'error');  
+			}
+		});
 	})
+
+
+
+	function otherArea(val){
+		if(val == '3244'){
+			$('#otherArea').show();
+			$('.other-area').attr('required',true);
+		}else{
+			$('#otherArea').hide();
+			$('.other-area').removeAttr('required');
+		}
+	}
 </script>

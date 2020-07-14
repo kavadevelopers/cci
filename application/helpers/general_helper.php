@@ -6,6 +6,7 @@ function pre_print($array)
     echo count($array);
     echo "<pre>";
     print_r($array);
+    exit;
 }
 
 
@@ -63,9 +64,17 @@ function getRole($type){
     }
 }
 
-function selected($val,$val2){
+function selected($val,$val2,$val3 = false){
+    $ret = "";
     if($val == $val2){
-        return "selected";
+        $ret = "selected";
     }
-}
+
+    if($val3 && $ret == ''){
+        if($val == $val3){
+            $ret = "selected";       
+        }
+    }
+    return $ret;
+}   
 ?>
