@@ -39,6 +39,15 @@
                             <?= form_error('time') ?>
                         </div>
                     </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Price <span class="-req">*</span></label>
+                            <input name="price" type="text" placeholder="Price" class="form-control decimal-num" value="<?= set_value('price',$service['price']); ?>">
+                            <?= form_error('price') ?>
+                        </div>
+                    </div>
+
                     <input type="hidden" name="id" value="<?= $service['id'] ?>">
                 </div>
             </div>

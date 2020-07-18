@@ -16,7 +16,7 @@
         <?php if($_e == 0){ ?>
             <div class="col-md-4">
                 <div class="card">
-                    <form method="post" action="<?= base_url('subindustry/save') ?>">
+                    <form method="post" action="<?= base_url('source/save') ?>">
                         <div class="card-block">
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -24,19 +24,21 @@
                                     <input name="name" type="text" class="form-control" value="<?= set_value('name'); ?>" placeholder="Name">
                                     <?= form_error('name') ?>
                                 </div>
-                            </div>    
+                            </div>
+
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Industry <span class="-req">*</span></label>
-                                    <select class="form-control" name="industry">
-                                        <option value="">-- Select Industry --</option>
-                                        <?php foreach ($this->general_model->list_industries() as $key => $value) { ?>
-                                            <option value="<?= $value['id'] ?>" <?= set_value('industry') == $value['id']?'selected':'' ?>><?= $value['name'] ?></option>
+                                    <label>Company <span class="-req">*</span></label>
+                                    <select class="form-control form-control-sm select2" name="company">
+                                        <option value="">-- Select --</option>
+                                        <?php foreach ($this->general_model->list_company() as $key => $value) { ?>
+                                            <option value="<?= $value['id'] ?>" <?= set_value('company') == $value['id']?'selected':''; ?>><?= $value['name'] ?></option>
                                         <?php } ?>
                                     </select>
-                                    <?= form_error('industry') ?>
+                                    <?= form_error('company') ?>
                                 </div>
-                            </div>                    
+                            </div>   
+
                         </div>
                         <div class="card-footer text-right">
                             <button class="btn btn-success">
@@ -49,7 +51,7 @@
         <?php }else{ ?>
             <div class="col-md-4">
                 <div class="card">
-                    <form method="post" action="<?= base_url('subindustry/update') ?>">
+                    <form method="post" action="<?= base_url('source/update') ?>">
                         <div class="card-block">
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -57,22 +59,22 @@
                                     <input name="name" type="text" class="form-control" value="<?= set_value('name',$ind['name']); ?>" placeholder="Name">
                                     <?= form_error('name') ?>
                                 </div>
-                            </div>    
+                            </div>       
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Industry <span class="-req">*</span></label>
-                                    <select class="form-control" name="industry">
-                                        <option value="">-- Select Industry --</option>
-                                        <?php foreach ($this->general_model->list_industries() as $key => $value) { ?>
-                                            <option value="<?= $value['id'] ?>" <?= set_value('industry',$ind['industry']) == $value['id']?'selected':'' ?>><?= $value['name'] ?></option>
+                                    <label>Company <span class="-req">*</span></label>
+                                    <select class="form-control form-control-sm select2" name="company">
+                                        <option value="">-- Select --</option>
+                                        <?php foreach ($this->general_model->list_company() as $key => $value) { ?>
+                                            <option value="<?= $value['id'] ?>" <?= set_value('company',$ind['company']) == $value['id']?'selected':''; ?>><?= $value['name'] ?></option>
                                         <?php } ?>
                                     </select>
-                                    <?= form_error('industry') ?>
+                                    <?= form_error('company') ?>
                                 </div>
-                            </div>                  
+                            </div>                
                         </div>
                         <div class="card-footer text-right">
-                            <a href="<?= base_url('subindustry') ?>" class="btn btn-danger">
+                            <a href="<?= base_url('source') ?>" class="btn btn-danger">
                                 <i class="fa fa-arrow-left"></i> Back
                             </a>
                             <button class="btn btn-success">
@@ -94,7 +96,6 @@
                             <tr>
                                 <th class="text-center">#</th>
                                 <th>Name</th>
-                                <th>Industry</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -103,12 +104,11 @@
                                 <tr>
                                     <td class="text-center"><?= $key + 1 ?></td>
                                     <td><?= $value['name'] ?></td>
-                                    <td><?= $this->general_model->_get_industry($value['industry'])['name'] ?></td>
                                     <td class="text-center">
-                                        <a href="<?= base_url('subindustry/edit/').$value['id'] ?>" class="btn btn-primary btn-mini">
+                                        <a href="<?= base_url('source/edit/').$value['id'] ?>" class="btn btn-primary btn-mini">
                                             <i class="fa fa-pencil"></i>
                                         </a>
-                                        <a href="<?= base_url('subindustry/delete/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete">
+                                        <a href="<?= base_url('source/delete/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete">
                                             <i class="fa fa-trash"></i>
                                         </a>
                                     </td>

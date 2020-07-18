@@ -25,6 +25,15 @@ function dd($date)
     return date('Y-m-d',strtotime($date));
 }
 
+
+function dt($time){
+    return date('H:i:s',strtotime($time));   
+}
+
+function vt($time){
+    return date('h:i A',strtotime($time));   
+}
+
 function get_setting()
 {
 	$ci=& get_instance();

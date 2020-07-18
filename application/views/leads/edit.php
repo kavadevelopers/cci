@@ -153,17 +153,17 @@
                                     <label>Services <span class="-req">*</span></label> 
                                     <div class="service-body">
                                         <?php foreach (json_decode($lead['services']) as $key => $value) { ?>
-                                            <select class="form-control form-control-sm service-change m-t2" name="services[]" <?= $key == '0'?'required':'' ?>>
+                                            <select class="form-control form-control-sm service-change m-t2 select2" name="services[]" <?= $key == '0'?'required':'' ?>>
                                                 <option value="">-- Select Service --</option>
                                                 <?php foreach ($this->general_model->get_services() as $sekey => $sevalue) { ?> 
-                                                    <option value="<?= $sevalue['id'] ?>" <?= selected($sevalue['id'],$value[0]) ?>><?= $sevalue['name'] ?></option>
+                                                    <option value="<?= $sevalue['id'] ?>-<?=$sevalue['price']?>" <?= selected($sevalue['id'],$value[0]) ?>><?= $sevalue['name'] ?></option>
                                                 <?php } ?>
                                             </select>       
                                         <?php } ?>
-                                        <select class="form-control form-control-sm service-change m-t2" name="services[]">
+                                        <select class="form-control form-control-sm service-change m-t2 select2" name="services[]">
                                             <option value="">-- Select Service --</option>
                                             <?php foreach ($this->general_model->get_services() as $sekey => $sevalue) { ?> 
-                                                <option value="<?= $sevalue['id'] ?>"><?= $sevalue['name'] ?></option>
+                                                <option value="<?= $sevalue['id'] ?>-<?=$sevalue['price']?>"><?= $sevalue['name'] ?></option>
                                             <?php } ?>
                                         </select>   
                                     </div>
@@ -175,9 +175,9 @@
                                     <label>Amount </label> 
                                     <div class="amount-body">
                                         <?php foreach (json_decode($lead['services']) as $key => $value) { ?>
-                                            <input type="text" name="amount[]" class="form-control form-control-sm decimal-num mobile-key-up m-t2" value="<?= $value[1] ?>" autocomplete="off" placeholder="Amount">      
+                                            <input type="text" name="amount[]" class="form-control form-control-sm decimal-num m-t2" value="<?= $value[1] ?>" autocomplete="off" placeholder="Amount">      
                                         <?php } ?>
-                                        <input type="text" name="amount[]" class="form-control form-control-sm decimal-num mobile-key-up m-t2" autocomplete="off" placeholder="Amount">   
+                                        <input type="text" name="amount[]" class="form-control form-control-sm decimal-num m-t2" autocomplete="off" placeholder="Amount">   
                                     </div>
                                 </div>
                             </div>
@@ -187,6 +187,17 @@
 
                     <div class="col-md-12">
                         <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Landline</label> 
+                                    <div class="landline-body">
+                                        <?php if($lead['landline'] != ""){ foreach (explode(',', $lead['landline']) as $key => $value) { ?>
+                                            <input type="text" name="landline[]" class="form-control form-control-sm numbers landline-key-up m-t2" minlength="5" maxlength="11" autocomplete="off" placeholder="Landline" value="<?= $value ?>">   
+                                        <?php }} ?>
+                                            <input type="text" name="landline[]" class="form-control form-control-sm numbers landline-key-up m-t2" minlength="5" maxlength="11" autocomplete="off" placeholder="Landline">   
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Importance</label> 
@@ -199,13 +210,7 @@
                                     <?= form_error('importance') ?>
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Remarks</label> 
-                                    <textarea name="remarks" type="text" placeholder="Remarks" class="form-control form-control-sm" value=""><?= set_value('remarks',$lead['remarks']); ?></textarea>
-                                    <?= form_error('remarks') ?>
-                                </div>
-                            </div>
+                            
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Next Follow up Date <span class="-req">*</span></label> 
@@ -213,11 +218,12 @@
                                     <?= form_error('ndate') ?>
                                 </div>
                             </div>
+                            
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Next Follow up Time</label> 
-                                    <input name="ntime" type="text" placeholder="Next Follow up Time" class="form-control form-control-sm" value="<?= set_value('ntime',$lead['next_followup_time']); ?>" >
-                                    <?= form_error('ntime') ?>
+                                    <input name="nftime" type="text" placeholder="From" class="form-control form-control-sm hour-mask" value="<?= $lead['tfrom'] != null?$lead['tfrom']:'' ?>" >
+                                    <input name="nttime" type="text" placeholder="To" class="form-control form-control-sm hour-mask" value="<?= $lead['tto'] != null?$lead['tto']:'' ?>" >
                                 </div>
                             </div>
 
@@ -258,13 +264,9 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label>Landline</label> 
-                                    <div class="landline-body">
-                                        <?php if($lead['landline'] != ""){ foreach (explode(',', $lead['landline']) as $key => $value) { ?>
-                                            <input type="text" name="landline[]" class="form-control form-control-sm numbers landline-key-up m-t2" minlength="5" maxlength="10" autocomplete="off" placeholder="Landline" value="<?= $value ?>">   
-                                        <?php }} ?>
-                                            <input type="text" name="landline[]" class="form-control form-control-sm numbers landline-key-up m-t2" minlength="5" maxlength="10" autocomplete="off" placeholder="Landline">   
-                                    </div>
+                                    <label>Remarks</label> 
+                                    <textarea name="remarks" type="text" placeholder="Remarks" class="form-control form-control-sm" value=""><?= set_value('remarks',$lead['remarks']); ?></textarea>
+                                    <?= form_error('remarks') ?>
                                 </div>
                             </div>
                         </div>
@@ -348,3 +350,9 @@
         </form>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function($) {
+        $('.service-body .select2-container').addClass('m-t2');  
+    });
+</script>

@@ -11,16 +11,16 @@ class Leads extends CI_Controller
 	{
 		$data['_title']		= "Manage Leads";
 		if(get_user()['user_type'] == '1'){
-			$data['leads']		= $this->db->get_where('leads',['df' => '','dump' => '','branch' => get_user()['branch']])->result_array();
+			$data['leads']		= $this->db->get_where('leads',['status' => '0','df' => '','dump' => '','branch' => get_user()['branch']])->result_array();
 		}
 		else if(get_user()['user_type'] == '2'){
-			$data['leads']		= $this->db->get_where('leads',['df' => '','dump' => '','owner' => get_user()['id']])->result_array();
+			$data['leads']		= $this->db->get_where('leads',['status' => '0','df' => '','dump' => '','owner' => get_user()['id']])->result_array();
 		}
 		else if(get_user()['user_type'] == '3'){
-			$data['leads']		= $this->db->get_where('leads',['df' => '','dump' => '','owner' => get_user()['id']])->result_array();
+			$data['leads']		= $this->db->get_where('leads',['status' => '0','df' => '','dump' => '','owner' => get_user()['id']])->result_array();
 		}
 		else{
-			$data['leads']		= $this->db->get_where('leads',['df' => '','dump' => ''])->result_array();
+			$data['leads']		= $this->db->get_where('leads',['status' => '0','df' => '','dump' => ''])->result_array();
 		}
 		$this->load->theme('leads/index',$data);
 	}
@@ -51,7 +51,7 @@ class Leads extends CI_Controller
 		$services = [];
 		foreach ($this->input->post('services') as $key => $value) {
 			if($value != '' || $this->input->post('amount')[$key]){
-				$services[] = [$value,$this->input->post('amount')[$key]];
+				$services[] = [explode('-',$value)[0],$this->input->post('amount')[$key]];
 			}
 		}
 
@@ -78,7 +78,8 @@ class Leads extends CI_Controller
 			'importance'					=> $this->input->post('importance'),
 			'remarks'						=> $this->input->post('remarks'),
 			'next_followup_date'			=> dd($this->input->post('ndate')),
-			'next_followup_time'			=> $this->input->post('ntime'),
+			'tfrom'							=> dt($this->input->post('nftime')),
+			'tto'							=> dt($this->input->post('nttime')),
 			'source'						=> $this->input->post('source'),
 			'occupation'					=> $this->input->post('occupation'),
 			'quotation'						=> $this->input->post('special_quote'),
@@ -163,7 +164,7 @@ class Leads extends CI_Controller
 		$services = [];
 		foreach ($this->input->post('services') as $key => $value) {
 			if($value != '' || $this->input->post('amount')[$key]){
-				$services[] = [$value,$this->input->post('amount')[$key]];
+				$services[] = [explode('-',$value)[0],$this->input->post('amount')[$key]];
 			}
 		}
 
@@ -190,7 +191,8 @@ class Leads extends CI_Controller
 			'importance'					=> $this->input->post('importance'),
 			'remarks'						=> $this->input->post('remarks'),
 			'next_followup_date'			=> dd($this->input->post('ndate')),
-			'next_followup_time'			=> $this->input->post('ntime'),
+			'tfrom'							=> dt($this->input->post('nftime')),
+			'tto'							=> dt($this->input->post('nttime')),
 			'source'						=> $this->input->post('source'),
 			'occupation'					=> $this->input->post('occupation'),
 			'quotation'						=> $this->input->post('special_quote'),
@@ -243,6 +245,20 @@ class Leads extends CI_Controller
 	{
 		$this->db->where('id',$this->input->post('lead'))->update('leads',['owner' => $this->input->post('owner')]);
 		$this->session->set_flashdata('msg', 'Lead Transfered');
+	   	redirect(base_url('leads'));
+	}
+
+	public function transfer_all()
+	{
+		$leads = explode("-", $this->input->post('leads'));
+		foreach ($leads as $key => $value) {
+			$data = [
+				'owner' => $this->input->post('owner')
+			];
+			$this->db->where('id',$value)->update('leads',$data);
+		}	
+
+		$this->session->set_flashdata('msg', 'Leads Transfered');
 	   	redirect(base_url('leads'));
 	}
 

@@ -12,7 +12,7 @@
 
 <div class="page-body">
     <div class="card">
-        <form method="post" action="<?= base_url('services/save') ?>">
+        <form method="post" action="<?= base_url('company/save') ?>">
             <div class="card-block">
                 <div class="row">
 
@@ -26,25 +26,17 @@
 
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>Weightage <span class="-req">*</span></label>
-                            <input name="wightage" type="text" placeholder="Weightage" class="form-control numbers" value="<?= set_value('wightage'); ?>">
-                            <?= form_error('wightage') ?>
+                            <label>GST <span class="-req">*</span></label>
+                            <input name="gst" type="text" placeholder="GST" pattern="[0-9]{2}[A-Za-z]{3}[CPHFATBLJGcphfatblj]{1}[A-Za-z]{1}[0-9]{4}[A-Za-z]{1}[0-9A-Za-z]{1}(Z|z)[0-9A-Za-z]{1}$" class="form-control" value="<?= set_value('gst'); ?>">
+                            <?= form_error('gst') ?>
                         </div>
                     </div>
 
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>Time To Complete <small>(In Minutes)</small> <span class="-req">*</span></label>
-                            <input name="time" type="text" placeholder="Time To Complete" class="form-control numbers" value="<?= set_value('time'); ?>">
-                            <?= form_error('time') ?>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Price <span class="-req">*</span></label>
-                            <input name="price" type="text" placeholder="Price" class="form-control decimal-num" value="<?= set_value('price'); ?>">
-                            <?= form_error('price') ?>
+                            <label>PAN <span class="-req">*</span></label>
+                            <input name="pan" type="text" placeholder="PAN" maxlength="10" pattern="[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}" class="form-control" value="<?= set_value('pan'); ?>">
+                            <?= form_error('pan') ?>
                         </div>
                     </div>
 
@@ -52,7 +44,7 @@
             </div>
 
             <div class="card-footer text-right">
-                <a href="<?= base_url('services') ?>" class="btn btn-danger"><i class="fa fa-arrow-left"></i> Back</a>
+                <a href="<?= base_url('company') ?>" class="btn btn-danger"><i class="fa fa-arrow-left"></i> Back</a>
                 <button class="btn btn-success" type="submit">
                     <i class="fa fa-plus"></i> Add
                 </button>

@@ -35,15 +35,21 @@
 		});
 
 		$(document).on('change','.service-change', function(){
-			if($('.service-body').children().last().val() != ""){
-				textbox = '<select class="form-control form-control-sm service-change m-t2" name="services[]">';
+			if($(this).val() != ""){
+				$('.amount-body').children().eq(($(this).index() / 2)).val($(this).val().split("-")[1]);
+			}else{
+				$('.amount-body').children().eq(($(this).index() / 2)).val("");
+			}
+			if($('.service-body select').last().val() != ""){
+				textbox = '<select class="form-control form-control-sm service-change m-t2 select2" name="services[]">';
 					textbox += '<option value="">-- Select Service --</option>';
 					textbox += '<?php foreach ($this->general_model->get_services() as $sekey => $sevalue) { ?>';
-					textbox += '<option value="<?= $sevalue['id'] ?>"><?= $sevalue['name'] ?></option>';
+					textbox += '<option value="<?= $sevalue['id'] ?>-<?=$sevalue['price']?>"><?= $sevalue['name'] ?></option>';
 					textbox += '<?php } ?>';	                    					
 				textbox += '</select>';	                    					        				
 				$('.service-body').append(textbox);
-
+				$('.select2').select2();
+				$('.select2-container').addClass('m-t2');
 				textbox = '<input type="text" name="amount[]" class="form-control form-control-sm decimal-num mobile-key-up m-t2" autocomplete="off" placeholder="Amount" >';
 				$('.amount-body').append(textbox);
 			}
@@ -71,7 +77,7 @@
 
 		$(document).on('keyup','.landline-key-up', function(){
 			if($('.landline-body').children().last().val() != ""){
-				var textbox = '<input type="text" name="landline[]" class="form-control form-control-sm numbers landline-key-up m-t2" autocomplete="off" placeholder="Landline" minlength="5" maxlength="10">';
+				var textbox = '<input type="text" name="landline[]" class="form-control form-control-sm numbers landline-key-up m-t2" autocomplete="off" placeholder="Landline" minlength="5" maxlength="11">';
 				$('.landline-body').append(textbox);
 			}
 		});
@@ -112,6 +118,9 @@
 
 		$(document).on('click','.transfer-lead',function(){
 			$('#lead_transfer_model').modal('show');
+			$('.select2n').select2({
+			    dropdownParent: $('#lead_transfer_model .modal-content')
+			});
 			$('#lead_tranfer_id').val($(this).data('lead'));
 		});
 
@@ -191,11 +200,14 @@
                 },
                 success: function(out)
                 {
-                	_this.html('<i class="fa fa-plus"></i>');
+                	_this.html('<i class="fa fa-question"></i>');
                 	$('#followup_model').modal('show');
+                	$('#followup_body').empty();
                 	$('#followup_body').append(out[0]);
                 	if(out[0] != ""){
 						$('#followup_table').show();
+					}else{
+						$('#followup_table').hide();
 					}
 					$('#type_followup_cus').val(out[1]);
                 }
@@ -213,7 +225,7 @@
 				$.ajax({
 	                type: "POST",
 	                url : "<?= base_url('followup/save'); ?>",
-	                data : "cus="+cus+"&remarks="+$('#followup_remarks').val()+"&date="+$('#followup_date').val()+"&time="+$('#followup_time').val()+"&id="+$('#id_followup_lead').val()+"&type="+$('#type_followup_lead').val(),
+	                data : "cus="+cus+"&remarks="+$('#followup_remarks').val()+"&date="+$('#followup_date').val()+"&ftime="+$('#followup_timef').val()+"&ttime="+$('#followup_timet').val()+"&id="+$('#id_followup_lead').val()+"&type="+$('#type_followup_lead').val(),
 	                cache : false,
 	                dataType: "JSON",
 	                beforeSend: function() {
@@ -233,10 +245,31 @@
 						$('#followup_body').prepend(out[0]);
 						$('#followup_table').show();
 						$('#type_followup_cus').val(cus);
+
+						$('#fdate-'+$('#id_followup_lead').val()).html(out[1]);
+						if(cus == 1){
+							$('#tr-lead-'+$('#id_followup_lead').val()).remove();
+						}
 	                }
 	            });
 			}else{
 				PNOTY($('#message_followup').val(),'error');  
+			}
+		});
+
+		$('#transferLeadAll').click(function(){
+			if($(".checkBox:checked").length > 0){
+				str = "";
+				$('.checkBox:checked').each(function () {
+			       	str += $(this).val()+"-";
+			  	});
+			  	$('#leads_transfer_model').modal('show');
+			  	$('.select2n').select2({
+				    dropdownParent: $('#leads_transfer_model .modal-content')
+				});
+			  	$('#leadIds').val(str.substring(0, str.length - 1));
+			}else{
+				PNOTY("Please Select any lead",'error');  
 			}
 		});
 	})

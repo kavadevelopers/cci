@@ -90,6 +90,13 @@
                             </a>
                         </li>
 
+                        <li class="<?= menu(1,["company"])[0]; ?>">
+                            <a href="<?= base_url('company') ?>">
+                                <span class="pcoded-micon"><i class="fa fa-window-restore"></i></span>
+                                <span class="pcoded-mtext">Company</span>
+                            </a>
+                        </li>
+
                         <li class="pcoded-hasmenu <?= menu(1,["user"])[2]; ?>">
                             <a href="javascript:void(0)">
                                 <span class="pcoded-micon"><i class="fa fa-users"></i></span>
@@ -180,6 +187,12 @@
                             <a href="<?= base_url('services') ?>">
                                 <span class="pcoded-micon"><i class="fa fa-cogs"></i></span>
                                 <span class="pcoded-mtext">Services</span>
+                            </a>
+                        </li>
+                        <li class="<?= menu(1,["source"])[0]; ?>">
+                            <a href="<?= base_url('source') ?>">
+                                <span class="pcoded-micon"><i class="fa fa-share-square"></i></span>
+                                <span class="pcoded-mtext">Source</span>
                             </a>
                         </li>
                     <?php } ?>

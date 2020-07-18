@@ -12,6 +12,21 @@ class General_model extends CI_Model
 		return $this->db->get_where('setting',['id' => '1'])->row_array();
 	}
 
+	public function get_company($id)
+	{
+		return $this->db->get_where('company',['id'	=> $id,'df' => ''])->row_array();
+	}
+
+	public function list_company()
+	{
+		return $this->db->get_where('company',['df' => ''])->result_array();
+	}
+
+	public function get_source($id)
+	{
+		return $this->db->get_where('source',['id'	=> $id,'df' => ''])->row_array();
+	}
+
 	public function get_branch($id)
 	{
 		return $this->db->get_where('branch',['id'	=> $id,'df' => ''])->row_array();
@@ -60,11 +75,15 @@ class General_model extends CI_Model
 	public function get_lead_owners()
 	{
 		if(get_user()['user_type'] == '1'){
-			return $this->db->get_where('user',['df' => '','branch' => get_user()['branch'],'user_type !=' => '0','user_type !=' => '1'])->result_array();
-		}else if(get_user()['user_type'] == '2' || get_user()['user_type'] == '3'){
-			return $this->db->get_where('user',['df' => '','branch' => get_user()['branch'],'user_type !=' => '0','user_type !=' => '1','id !=' => get_user()['id']])->result_array();
+			return $this->db->get_where('user',['df' => '','branch' => get_user()['branch'],'user_type' => '3'])->result_array();
+		}else if(get_user()['user_type'] == '3'){
+			return $this->db->get_where('user',['df' => '','branch' => get_user()['branch'],'user_type' => '3','id !=' => get_user()['id']])->result_array();
 		}else{
-			return $this->db->get_where('user',['df' => '','user_type !=' => '0'])->result_array();
+			$this->db->group_start();
+				$this->db->or_where('user_type',"1");
+				$this->db->or_where('user_type',"3");
+			$this->db->group_end();
+			return $this->db->get_where('user',['df' => ''])->result_array();
 		}
 	}
 

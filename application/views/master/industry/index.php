@@ -49,7 +49,7 @@
                         </div>
                         <div class="card-footer text-right">
                             <a href="<?= base_url('industry') ?>" class="btn btn-danger">
-                                <i class="fa fa-arrow-left"></i> Cancel
+                                <i class="fa fa-arrow-left"></i> Back
                             </a>
                             <button class="btn btn-success">
                                 <i class="fa fa-save"></i> Save

@@ -1,0 +1,106 @@
+<?php
+class Company extends CI_Controller
+{
+	public function __construct()
+	{
+		parent::__construct();
+		$this->auth->check_session();
+	}
+
+	public function index()
+	{
+		$data['_title']		= "Company";
+		$data['company']		= $this->db->order_by('id','asc')->get_where('company',['df'	=> ''])->result_array();
+		$this->load->theme('master/company/index',$data);
+	}
+
+	public function add()
+	{
+		$data['_title']		= "Add Company";
+		$this->load->theme('master/company/add',$data);	
+	}
+
+	public function save()
+	{
+		$this->form_validation->set_error_delimiters('<div class="val-error">', '</div>');
+		$this->form_validation->set_rules('name', 'Name','trim|required');
+		$this->form_validation->set_rules('gst', 'GST','trim|required');
+		$this->form_validation->set_rules('pan', 'PAN','trim|required');
+
+		if ($this->form_validation->run() == FALSE)
+		{
+			$data['_title']	= 'Add Company';
+			$this->load->theme('master/company/add',$data);
+		}
+		else
+		{ 
+			$data = [
+				'name'		=> strtoupper($this->input->post('name')),
+				'gst'		=> strtoupper($this->input->post('gst')),
+				'pan'		=> strtoupper($this->input->post('pan'))
+			];
+			$this->db->insert('company',$data);
+
+			$this->session->set_flashdata('msg', 'Company Added');
+	        redirect(base_url('company'));
+		}
+	}
+
+	public function edit($id = false)
+	{
+		if($id){
+			if($this->general_model->get_company($id)){
+				$data['_title']	= 'Edit Branch';
+				$data['company']	= $this->general_model->get_company($id);
+				$this->load->theme('master/company/edit',$data);
+			}else{
+				redirect(base_url('company'));
+			}
+		}else{
+			redirect(base_url('company'));
+		}
+	}
+
+	public function update()
+	{
+		$this->form_validation->set_error_delimiters('<div class="val-error">', '</div>');
+		$this->form_validation->set_rules('name', 'Name','trim|required');
+		$this->form_validation->set_rules('gst', 'GST','trim|required');
+		$this->form_validation->set_rules('pan', 'PAN','trim|required');
+
+		if ($this->form_validation->run() == FALSE)
+		{
+			$data['_title']	= 'Edit Branch';
+			$data['company']	= $this->general_model->get_company($this->input->post('id'));
+			$this->load->theme('master/company/edit',$data);
+		}
+		else
+		{ 
+			$data = [
+				'name'		=> strtoupper($this->input->post('name')),
+				'gst'		=> strtoupper($this->input->post('gst')),
+				'pan'		=> strtoupper($this->input->post('pan'))
+			];
+			$this->db->where('id',$this->input->post('id'));
+			$this->db->update('company',$data);
+
+			$this->session->set_flashdata('msg', 'Company Saved');
+	        redirect(base_url('company'));
+		}
+	}
+
+	public function delete($id = false)
+	{
+		if($id){
+			if($this->general_model->get_company($id)){
+				$this->db->where('id',$id)->update('company',['df' => 'deleted']);			
+				$this->session->set_flashdata('msg', 'Company Deleted');
+		        redirect(base_url('company'));
+			}else{
+				redirect(base_url('company'));
+			}
+		}else{
+			redirect(base_url('company'));
+		}
+	}
+}

@@ -30,6 +30,7 @@ class Followup extends CI_Controller
 				$cus++;
 			}
 			$str = '<tr>';
+			$str .= '<td class="text-center">'.vd($followup['next_f']).'</td>';
 			$str .= '<td class="text-center">'._vdatetime($followup['date']).'</td>';
 			$str .= '<td>'.nl2br($followup['remarks']).'</td>';
 			$str .= '<td class="text-center">'.$customer.'</td>';
@@ -51,6 +52,7 @@ class Followup extends CI_Controller
 	{
 		$data = [
 			'remarks'		=> $this->input->post('remarks'),
+			'next_f'		=> dd($this->input->post('date')),
 			'customer'		=> $this->input->post('cus'),
 			'date'			=> date('Y-m-d H:i:s'),
 			'type'			=> $this->input->post('type'),
@@ -61,12 +63,13 @@ class Followup extends CI_Controller
 		$fId = $this->db->insert_id();
 
 		$status = $this->input->post('cus') == '1'?1:0;
-		$this->db->where('id',$this->input->post('id'))->update('leads',['next_followup_date' => dd($this->input->post('date')),'next_followup_time' => $this->input->post('time'),'status'	=> $status]);
+		$this->db->where('id',$this->input->post('id'))->update('leads',['next_followup_date' => dd($this->input->post('date')),'tfrom'	=> dt($this->input->post('ftime')),'tto' => dt($this->input->post('ttime')),'status'	=> $status]);
 
 
 		$followup = $this->db->get_where('followup',['id' => $fId])->row_array();
 		$customer = $followup['customer'] == '1'?'Yes':'No';
 		$str = '<tr>';
+			$str .= '<td class="text-center">'.vd($followup['next_f']).'</td>';
 			$str .= '<td class="text-center">'._vdatetime($followup['date']).'</td>';
 			$str .= '<td>'.nl2br($followup['remarks']).'</td>';
 			$str .= '<td class="text-center">'.$customer.'</td>';
@@ -74,6 +77,10 @@ class Followup extends CI_Controller
 				$str .= '<td>'.$this->general_model->_get_user($followup['followup_by'])['name'].'</td>';
 			}
 		$str .= '</tr>';
-		echo json_encode([$str]);
+
+
+		$lead = $this->db->get_where('leads',['id' => $this->input->post('id')])->row_array();
+		$date_str = vd($lead['next_followup_date']).'<br>'.vt($lead['tfrom']).'-'.vt($lead['tto']);
+		echo json_encode([$str,$date_str]);
 	}
 }

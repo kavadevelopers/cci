@@ -8,6 +8,11 @@
             </div>
         </div>
         <div class="col-md-6 text-right">
+            <?php if(get_user()['user_type'] != 3){ ?>
+                <button class="btn btn-warning btn-sm" type="button" id="transferLeadAll">
+                    <i class="fa fa-share"></i> Transfer Lead
+                </button>
+            <?php } ?>
             <a href="<?= base_url('leads/add_lead') ?>" class="btn btn-info btn-sm">
                 <i class="fa fa-plus"></i> Add
             </a>
@@ -21,6 +26,15 @@
             <table class="table table-striped table-bordered table-mini table-dt">
                 <thead>
                     <tr>
+                        <th class="text-center">
+                            <div class="checkbox-fade fade-in-primary d-">
+                                <label>
+                                    <input type="checkbox" value="1" class="checkAll">
+                                    <span class="cr"><i class="cr-icon icofont icofont-ui-check txt-primary"></i></span>
+                                    <span class="text-inverse">All</span>
+                                </label>
+                            </div>
+                        </th>
                         <th class="text-center">#</th>
                         <th class="text-center">Date</th>
                         <th>Customer Name</th>
@@ -36,7 +50,15 @@
                 </thead>
                 <tbody>
                     <?php foreach ($leads as $key => $value) { ?>
-                        <tr>
+                        <tr id="tr-lead-<?= $value['id'] ?>">
+                            <td class="text-center">
+                                <div class="checkbox-fade fade-in-primary d-">
+                                    <label>
+                                        <input type="checkbox" class="checkBox" value="<?= $value['id'] ?>">
+                                        <span class="cr"><i class="cr-icon icofont icofont-ui-check txt-primary"></i></span>
+                                    </label>
+                                </div>
+                            </td>
                             <td class="text-center"><?= $value['lead'] ?></td>
                             <td class="text-center"><?= vd($value['date']) ?></td>
                             <td>
@@ -58,7 +80,12 @@
                                     <?= $this->general_model->_get_service($mvalue[0])['name'] ?>
                                 <?php } ?>
                             </td>
-                            <td class="text-center"><?= vd($value['next_followup_date']) ?></td>
+                            <td class="text-center" id="fdate-<?= $value['id'] ?>">
+                                <?= vd($value['next_followup_date']) ?>
+                                <?php if($value['tfrom'] != ""){ ?>
+                                    <br><?= vt($value['tfrom']) ?> - <?= vt($value['tto']) ?>
+                                <?php } ?>
+                            </td>
                             <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){ ?>
                                 <td>
                                     <?= $this->general_model->_get_user($value['owner'])['name'] ?>

@@ -8,7 +8,7 @@
             </div>
         </div>
         <div class="col-md-6 text-right">
-            <a href="<?= base_url('services/add') ?>" class="btn btn-info btn-sm">
+            <a href="<?= base_url('company/add') ?>" class="btn btn-info btn-sm">
                 <i class="fa fa-plus"></i> Add
             </a>
         </div>
@@ -23,25 +23,23 @@
                     <tr>
                         <th class="text-center">#</th>
                         <th>Name</th>
-                        <th class="text-center">Weightage</th>
-                        <th class="text-center">Time To Complete</th>
-                        <th class="text-right">Price</th>
+                        <th class="text-center">GST</th>
+                        <th class="text-center">PAN</th>
                         <th class="text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($services as $key => $value) { ?>
+                    <?php foreach ($company as $key => $value) { ?>
                         <tr>
                             <td class="text-center"><?= $key + 1 ?></td>
                             <td><?= $value['name'] ?></td>
-                            <td class="text-center"><?= $value['weight'] ?></td>
-                            <td class="text-center"><?= $value['time'] ?></td>
-                            <td class="text-right"><?= $value['price'] ?></td>
+                            <td class="text-center"><?= $value['gst'] ?></td>
+                            <td class="text-center"><?= $value['pan'] ?></td>
                             <td class="text-center">
-                                <a href="<?= base_url('services/edit/').$value['id'] ?>" class="btn btn-primary btn-mini">
+                                <a href="<?= base_url('company/edit/').$value['id'] ?>" class="btn btn-primary btn-mini">
                                     <i class="fa fa-pencil"></i>
                                 </a>
-                                <a href="<?= base_url('services/delete/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete">
+                                <a href="<?= base_url('company/delete/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete">
                                     <i class="fa fa-trash"></i>
                                 </a>
                             </td>
@@ -52,5 +50,3 @@
         </div>
     </div>
 </div>
-
-

@@ -84,9 +84,22 @@ $(function(){
         startDate: new Date()
     });
 
-    // $('.timepicker').datetimepicker({
-    //     format: 'LT'
-    // });
+    $('.checkAll').click(function(){
+            if($(this).prop("checked")) {
+                $(".checkBox").prop("checked", true);
+            } else {
+                $(".checkBox").prop("checked", false);
+            }                
+        });
+
+
+    $('.checkBox').click(function(){
+        if($(".checkBox").length == $(".checkBox:checked").length) { 
+            $(".checkAll").prop("checked", true);
+        }else {
+            $(".checkAll").prop("checked", false);            
+        }
+    });
 })
 
 

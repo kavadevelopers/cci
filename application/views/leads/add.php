@@ -146,10 +146,10 @@
 		                        <div class="form-group">
 		                            <label>Services <span class="-req">*</span></label> 
 		                            <div class="service-body">
-		                            	<select class="form-control form-control-sm service-change" name="services[]" required>
+		                            	<select class="form-control form-control-sm service-change select2" name="services[]" required>
 	                    					<option value="">-- Select Service --</option>
 	                    					<?php foreach ($this->general_model->get_services() as $sekey => $sevalue) { ?> 
-	                    						<option value="<?= $sevalue['id'] ?>"><?= $sevalue['name'] ?></option>
+	                    						<option value="<?= $sevalue['id'] ?>-<?=$sevalue['price']?>"><?= $sevalue['name'] ?></option>
 	                    					<?php } ?>
 	                    				</select>	
 		                            </div>
@@ -160,7 +160,7 @@
                                 <div class="form-group">
                                     <label>Amount </label> 
                                     <div class="amount-body">
-                                        <input type="text" name="amount[]" class="form-control form-control-sm decimal-num mobile-key-up" autocomplete="off" placeholder="Amount">   
+                                        <input type="text" name="amount[]" class="form-control form-control-sm decimal-num" autocomplete="off" placeholder="Amount">   
                                     </div>
                                 </div>
                             </div>
@@ -170,6 +170,14 @@
 
                     <div class="col-md-12">
 	                    <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Landline</label> 
+                                    <div class="landline-body">
+                                        <input type="text" name="landline[]" class="form-control form-control-sm numbers landline-key-up" minlength="5" maxlength="11" autocomplete="off" placeholder="Landline">   
+                                    </div>
+                                </div>
+                            </div>
 	                    	<div class="col-md-3">
 		                        <div class="form-group">
 		                            <label>Importance</label> 
@@ -184,13 +192,6 @@
 		                    </div>
 		                    <div class="col-md-3">
 		                        <div class="form-group">
-		                            <label>Remarks</label> 
-		                            <textarea name="remarks" type="text" placeholder="Remarks" class="form-control form-control-sm" value=""><?= set_value('remarks'); ?></textarea>
-		                            <?= form_error('remarks') ?>
-		                        </div>
-		                    </div>
-		                    <div class="col-md-3">
-		                        <div class="form-group">
 		                            <label>Next Follow up Date <span class="-req">*</span></label> 
 		                            <input name="ndate" type="text" placeholder="Next Follow up Date" class="form-control form-control-sm datepicker-new" value="<?= set_value('ndate',date('d-m-Y')); ?>" readonly required>
 		                            <?= form_error('ndate') ?>
@@ -199,8 +200,8 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Next Follow up Time</label> 
-                                    <input name="ntime" type="text" placeholder="Next Follow up Time" class="form-control form-control-sm" value="<?= set_value('ntime'); ?>" >
-                                    <?= form_error('ntime') ?>
+                                    <input name="nftime" type="text" placeholder="From" class="form-control form-control-sm hour-mask" value="" >
+                                    <input name="nttime" type="text" placeholder="To" class="form-control form-control-sm hour-mask" value="" >
                                 </div>
                             </div>
 
@@ -241,10 +242,9 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label>Landline</label> 
-                                    <div class="landline-body">
-                                        <input type="text" name="landline[]" class="form-control form-control-sm numbers landline-key-up" minlength="5" maxlength="10" autocomplete="off" placeholder="Landline">   
-                                    </div>
+                                    <label>Remarks</label> 
+                                    <textarea name="remarks" type="text" placeholder="Remarks" class="form-control form-control-sm" value=""><?= set_value('remarks'); ?></textarea>
+                                    <?= form_error('remarks') ?>
                                 </div>
                             </div>
 	                    </div>

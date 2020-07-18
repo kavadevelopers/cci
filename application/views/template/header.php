@@ -52,6 +52,9 @@
     <!-- Style.css -->
     <link rel="stylesheet" type="text/css" href="<?= base_url() ?>asset/assets/css/style.css">
     <link rel="stylesheet" type="text/css" href="<?= base_url() ?>asset/assets/css/jquery.mCustomScrollbar.css">
+
+    <!--forms-wizard css-->
+    <link rel="stylesheet" type="text/css" href="<?= base_url() ?>asset/bower_components/jquery.steps/css/jquery.steps.css">
 </head>
 
 <body>

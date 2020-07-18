@@ -27,6 +27,7 @@ class Services extends CI_Controller
 		$this->form_validation->set_rules('name', 'Name','trim|required');
 		$this->form_validation->set_rules('wightage', 'Weightage','trim|required');
 		$this->form_validation->set_rules('time', 'Time To Complete','trim|required');
+		$this->form_validation->set_rules('price', 'Price','trim|required');
 
 		if ($this->form_validation->run() == FALSE)
 		{
@@ -38,7 +39,8 @@ class Services extends CI_Controller
 			$data = [
 				'name'		=> $this->input->post('name'),
 				'weight'	=> $this->input->post('wightage'),
-				'time'		=> $this->input->post('time')
+				'time'		=> $this->input->post('time'),
+				'price'		=> $this->input->post('price')
 			];
 			$this->db->insert('services',$data);
 
@@ -68,6 +70,7 @@ class Services extends CI_Controller
 		$this->form_validation->set_rules('name', 'Name','trim|required');
 		$this->form_validation->set_rules('wightage', 'Weightage','trim|required');
 		$this->form_validation->set_rules('time', 'Time To Complete','trim|required');
+		$this->form_validation->set_rules('price', 'Price','trim|required');
 
 		if ($this->form_validation->run() == FALSE)
 		{
@@ -80,7 +83,8 @@ class Services extends CI_Controller
 			$data = [
 				'name'		=> $this->input->post('name'),
 				'weight'	=> $this->input->post('wightage'),
-				'time'		=> $this->input->post('time')
+				'time'		=> $this->input->post('time'),
+				'price'		=> $this->input->post('price')
 			];
 			$this->db->where('id',$this->input->post('id'));
 			$this->db->update('services',$data);

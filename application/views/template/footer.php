@@ -55,6 +55,12 @@
     <script type="text/javascript" src="<?= base_url() ?>asset/assets/croppie/croppie.js"></script>
     <script type="text/javascript" src="<?= base_url() ?>asset/script.js"></script>
 
+    <!-- Masking js -->
+    <script src="<?= base_url() ?>asset/assets/pages/form-masking/inputmask.js"></script>
+    <script src="<?= base_url() ?>asset/assets/pages/form-masking/jquery.inputmask.js"></script>
+    <script src="<?= base_url() ?>asset/assets/pages/form-masking/autoNumeric.js"></script>
+    <script src="<?= base_url() ?>asset/assets/pages/form-masking/form-mask.js"></script>
+
 
     <script type="text/javascript">
         <?php if(!empty($this->session->flashdata('error'))){ ?>
