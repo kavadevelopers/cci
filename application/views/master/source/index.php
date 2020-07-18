@@ -96,6 +96,7 @@
                             <tr>
                                 <th class="text-center">#</th>
                                 <th>Name</th>
+                                <th>Company</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -104,6 +105,7 @@
                                 <tr>
                                     <td class="text-center"><?= $key + 1 ?></td>
                                     <td><?= $value['name'] ?></td>
+                                    <td><?= $this->general_model->_get_company($value['company'])['name'] ?></td>
                                     <td class="text-center">
                                         <a href="<?= base_url('source/edit/').$value['id'] ?>" class="btn btn-primary btn-mini">
                                             <i class="fa fa-pencil"></i>

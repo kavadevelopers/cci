@@ -17,6 +17,11 @@ class General_model extends CI_Model
 		return $this->db->get_where('company',['id'	=> $id,'df' => ''])->row_array();
 	}
 
+	public function _get_company($id)
+	{
+		return $this->db->get_where('company',['id'	=> $id])->row_array();
+	}
+
 	public function list_company()
 	{
 		return $this->db->get_where('company',['df' => ''])->result_array();
