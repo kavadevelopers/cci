@@ -80,6 +80,20 @@
                         </div>
                     </div>
 
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Type <span class="-req">*</span></label>
+                            <select class="form-control" name="type">
+                                <option value="">-- Select Type --</option>
+                                <option value="1" <?= selected(set_value('type'),"1") ?>>Field Sales</option>
+                                <option value="2" <?= selected(set_value('type'),"2") ?>>Tele Sales</option>
+                                <option value="3" <?= selected(set_value('type'),"3") ?>>Freelance Sales</option>
+                                <option value="4" <?= selected(set_value('type'),"4") ?>>Admin Tele Sales</option>
+                            </select>
+                            <?= form_error('type') ?>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 

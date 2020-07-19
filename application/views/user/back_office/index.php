@@ -26,6 +26,7 @@
                         <th class="text-center">Mobile</th>
                         <th>Email</th>
                         <th>Branch</th>
+                        <th class="text-center">Type</th>
                         <th class="text-center">Gender</th>
                         <th class="text-center">Action</th>
                     </tr>
@@ -38,6 +39,7 @@
                             <td class="text-center"><?= $value['mobile'] ?></td>
                             <td><?= $value['email'] ?></td>
                             <td><?= $this->general_model->get_branch($value['branch'])['name'] ?></td>
+                            <td class="text-center"><?= _user_type($value['id']) ?></td>
                             <td class="text-center">
                                 <span style="display: none;"><?= $value['gender'] ?> </span>
                                 <img src="<?= base_url() ?>asset/images/user/<?= $value['gender'] == 'Male'?'male.png':'female.png' ?>" class="img-radius" alt="User-Profile-Image" style="width: 35px;">    

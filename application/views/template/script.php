@@ -214,6 +214,38 @@
             });
 		});
 
+		$(document).on('click', '.add-job-followup', function(event) {
+			_this = $(this);
+			_this.html('<i class="fa fa-circle-o-notch fa-spin"></i> Please Wait');
+			$("#id_jobModel").val(_this.data('id'));
+			$("#type_followup_job").val(_this.data('type'));
+			$('#message_followup_job').val(_this.data('stop'));
+			$('#jobStatus').val(_this.data('status'))
+			$.ajax({
+                type: "POST",
+                url : "<?= base_url('followup/job_get'); ?>",
+                data : "id="+_this.data('id')+"&type="+_this.data('type'),
+                dataType: "JSON",
+                cache : false,
+                beforeSend: function() {
+                    
+                },
+                success: function(out)
+                {
+                	_this.html('<i class="fa fa-question"></i>');
+                	$('#job_followup_modal').modal('show');
+                	$('#jobfollowup_body').empty();
+                	$('#jobfollowup_body').append(out[0]);
+                	if(out[0] != ""){
+						$('#jobfollowup_table').show();
+					}else{
+						$('#jobfollowup_table').hide();
+					}
+					$('#type_followup_jobdone').val(out[1]);
+                }
+            });
+		});		
+
 		$('#followupForm').submit(function(event) {
 			event.preventDefault();
 			if($('#type_followup_cus').val() != '1'){
@@ -257,6 +289,38 @@
 			}
 		});
 
+		$('#jobfollowupForm').submit(function(event) {
+			event.preventDefault();
+			if($('#type_followup_jobdone').val() != '1'){				
+				$.ajax({
+	                type: "POST",
+	                url : "<?= base_url('followup/saveJob'); ?>",
+	                data : "remarks="+$('#followup_remarks').val()+"&date="+$('#followup_date').val()+"&ftime="+$('#followup_timef').val()+"&ttime="+$('#followup_timet').val()+"&id="+$('#id_jobModel').val()+"&type="+$('#type_followup_job').val()+"&status="+$('#jobStatus').val(),
+	                cache : false,
+	                dataType: "JSON",
+	                beforeSend: function() {
+	                    $('#followup_save').attr('disabled','true');
+	                    $('#followup_save').html('<i class="fa fa-circle-o-notch fa-spin"></i> Please Wait');
+	                },
+	                success: function(out)
+	                {
+	                	PNOTY("Followup Saved",'success');  
+	                	$('#followup_save').removeAttr('disabled');
+	                    $('#followup_save').html('Save');
+	                    $('#followup_remarks').val("");
+	                    $('#followup_timef').val("");
+	                    $('#followup_timet').val("");
+						$('#jobfollowup_body').prepend(out[0]);
+						$('#jobfollowup_table').show();
+
+						$('#status-'+$('#id_jobModel').val()).html(out[1]);
+	                }
+	            });
+			}else{
+				PNOTY($('#message_followup_job').val(),'error');  
+			}
+		});
+
 		$('#transferLeadAll').click(function(){
 			if($(".checkBox:checked").length > 0){
 				str = "";
@@ -272,6 +336,22 @@
 				PNOTY("Please Select any lead",'error');  
 			}
 		});
+
+		$('#tranferJob').click(function () {
+			if($(".checkBox:checked").length > 0){
+				str = "";
+				$('.checkBox:checked').each(function () {
+			       	str += $(this).val()+"-";
+			  	});
+			  	$('#jobTransferModel').modal('show');
+			  	$('.select2n').select2({
+				    dropdownParent: $('#jobTransferModel .modal-content')
+				});
+			  	$('#jobIds').val(str.substring(0, str.length - 1));
+			}else{
+				PNOTY("Please Select any job",'error');  
+			}
+		})
 	})
 
 

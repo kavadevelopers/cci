@@ -83,4 +83,75 @@ class Followup extends CI_Controller
 		$date_str = vd($lead['next_followup_date']).'<br>'.vt($lead['tfrom']).'-'.vt($lead['tto']);
 		echo json_encode([$str,$date_str]);
 	}
+
+	public function saveJob()
+	{	
+		$customer = 0;
+		if($this->input->post('status') == "5"){
+			$customer = 1;
+		}
+		$data = [
+			'remarks'		=> $this->input->post('remarks'),
+			'next_f'		=> dd($this->input->post('date')),
+			'customer'		=> $customer,
+			'date'			=> date('Y-m-d H:i:s'),
+			'type'			=> $this->input->post('type'),
+			'main_id'		=> $this->input->post('id'),
+			'followup_by'	=> $this->session->userdata('id')
+		];
+		$this->db->insert('followup',$data);
+		$fId = $this->db->insert_id();
+
+		$status = $this->input->post('status');
+		$this->db->where('id',$this->input->post('id'))->update('job',['f_date' => dd($this->input->post('date')),'f_time'	=> dt($this->input->post('ftime')),'t_time' => dt($this->input->post('ttime')),'status'	=> $status]);
+
+
+		$followup = $this->db->get_where('followup',['id' => $fId])->row_array();
+		$customer = $followup['customer'] == '1'?'Yes':'No';
+		$str = '<tr>';
+			$str .= '<td class="text-center">'.vd($followup['next_f']).'</td>';
+			$str .= '<td class="text-center">'._vdatetime($followup['date']).'</td>';
+			$str .= '<td>'.nl2br($followup['remarks']).'</td>';
+			$str .= '<td class="text-center">'.$customer.'</td>';
+			if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){
+				$str .= '<td>'.$this->general_model->_get_user($followup['followup_by'])['name'].'</td>';
+			}
+		$str .= '</tr>';
+
+
+		
+		$status = getjobStatus($this->input->post('status'));
+		echo json_encode([$str,$status]);
+	}
+
+	public function job_get()
+	{
+		$followups = $this->db->order_by('id','desc')->get_where('followup',['main_id' => $this->input->post('id'),'type' => $this->input->post('type')])->result_array();
+		$string = '';
+		$cus = 0;
+		foreach ($followups as $key => $followup) {
+			$customer = $followup['customer'] == '1'?'Yes':'No';
+			if($followup['customer'] == 1){
+				$cus++;
+			}
+			$str = '<tr>';
+			$str .= '<td class="text-center">'.vd($followup['next_f']).'</td>';
+			$str .= '<td class="text-center">'._vdatetime($followup['date']).'</td>';
+			$str .= '<td>'.nl2br($followup['remarks']).'</td>';
+			$str .= '<td class="text-center">'.$customer.'</td>';
+			if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){
+				$str .= '<td>'.$this->general_model->_get_user($followup['followup_by'])['name'].'</td>';
+			}
+			$str .= '</tr>';
+			$string .= $str;
+		}
+		if($cus > 0){
+			$cus = "1";
+		}else{
+			$cus = "";
+		}
+		echo json_encode([$string,$cus]);
+	}
 }
+
+

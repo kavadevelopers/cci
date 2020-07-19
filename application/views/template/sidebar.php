@@ -11,12 +11,28 @@
                         </a>
                     </li>
                 </ul>
-                <?php if($this->session->userdata('user_type') == "2"){ ?>
+                <?php if($this->session->userdata('user_type') != "3"){ ?>
                     <ul class="pcoded-item pcoded-left-item">
                         <li class="<?= menu(2,["new_clients","new_client_register"])[0]; ?>">
                             <a href="<?= base_url('client/new_clients') ?>">
                                 <span class="pcoded-micon"><i class="fa fa-user"></i></span>
                                 <span class="pcoded-mtext">New Client</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="pcoded-item pcoded-left-item">
+                        <li class="<?= $this->uri->segment(2) != 'new_clients' && $this->uri->segment(2) != 'new_client_register' ?menu(1,["client"])[0]:''; ?>">
+                            <a href="<?= base_url('client') ?>">
+                                <span class="pcoded-micon"><i class="fa fa-user-circle-o"></i></span>
+                                <span class="pcoded-mtext">Clients</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="pcoded-item pcoded-left-item">
+                        <li class="<?= menu(1,["job"])[0]; ?>">
+                            <a href="<?= base_url('job') ?>">
+                                <span class="pcoded-micon"><i class="fa fa-briefcase"></i></span>
+                                <span class="pcoded-mtext">Job</span>
                             </a>
                         </li>
                     </ul>

@@ -80,6 +80,19 @@
                         </div>
                     </div>
 
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Type <span class="-req">*</span></label>
+                            <select class="form-control" name="type">
+                                <option value="">-- Select Type --</option>
+                                <option value="1" <?= selected(set_value('type',$user['type']),"1") ?>>Manager</option>
+                                <option value="2" <?= selected(set_value('type',$user['type']),"2") ?>>Senior</option>
+                                <option value="3" <?= selected(set_value('type',$user['type']),"3") ?>>Junior</option>
+                            </select>
+                            <?= form_error('type') ?>
+                        </div>
+                    </div>
+
                     <input type="hidden" name="id" value="<?= $user['id'] ?>">
                 </div>
             </div>

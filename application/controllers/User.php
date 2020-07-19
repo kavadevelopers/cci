@@ -157,6 +157,7 @@ class User extends CI_Controller
 		$this->form_validation->set_rules('email', 'Email','trim|required|valid_email|xss_clean');
 		$this->form_validation->set_rules('gender', 'Gender','trim|required');
 		$this->form_validation->set_rules('branch', 'Branch','trim|required');
+		$this->form_validation->set_rules('type', 'Type','trim|required');
 		$this->form_validation->set_rules('password', 'Password','trim|required|min_length[5]');
 		$this->form_validation->set_rules('username', 'Username','trim|required|alpha_dash|min_length[5]|max_length[10]|is_unique[user.username]',array('is_unique' => 'Username Is Already Exists','alpha_dash' => "Only numbers,characters,`-` and `_` allowed in username"));
 
@@ -174,6 +175,7 @@ class User extends CI_Controller
 				'username'		=> $this->input->post('username'),
 				'password'		=> md5($this->input->post('password')),
 				'email'			=> $this->input->post('email'),
+				'type'			=> $this->input->post('type'),
 				'mobile'		=> $this->input->post('mobile'),
 				'gender'		=> $this->input->post('gender')
 			];
@@ -207,6 +209,7 @@ class User extends CI_Controller
 		$this->form_validation->set_rules('mobile', 'Mobile','trim|required|regex_match[/^[0-9]{10}$/]|min_length[10]|max_length[10]');
 		$this->form_validation->set_rules('email', 'Email','trim|required|valid_email|xss_clean');
 		$this->form_validation->set_rules('gender', 'Gender','trim|required');
+		$this->form_validation->set_rules('type', 'Type','trim|required');
 		$this->form_validation->set_rules('branch', 'Branch','trim|required');
 		$this->form_validation->set_rules('password', 'Password','trim|min_length[5]');
 		$this->form_validation->set_rules('username', 'Username','trim|required|alpha_dash|min_length[5]|max_length[10]|callback_check_username',array('alpha_dash' => "Only numbers,characters,`-` and `_` allowed in username"));
@@ -224,6 +227,7 @@ class User extends CI_Controller
 				'branch'		=> $this->input->post('branch'),
 				'name'			=> $this->input->post('name'),
 				'username'		=> $this->input->post('username'),
+				'type'			=> $this->input->post('type'),
 				'email'			=> $this->input->post('email'),
 				'mobile'		=> $this->input->post('mobile'),
 				'gender'		=> $this->input->post('gender')
@@ -285,6 +289,7 @@ class User extends CI_Controller
 		$this->form_validation->set_rules('email', 'Email','trim|required|valid_email|xss_clean');
 		$this->form_validation->set_rules('gender', 'Gender','trim|required');
 		$this->form_validation->set_rules('branch', 'Branch','trim|required');
+		$this->form_validation->set_rules('type', 'Type','trim|required');
 		$this->form_validation->set_rules('password', 'Password','trim|required|min_length[5]');
 		$this->form_validation->set_rules('username', 'Username','trim|required|alpha_dash|min_length[5]|max_length[10]|is_unique[user.username]',array('is_unique' => 'Username Is Already Exists','alpha_dash' => "Only numbers,characters,`-` and `_` allowed in username"));
 
@@ -302,6 +307,7 @@ class User extends CI_Controller
 				'username'		=> $this->input->post('username'),
 				'password'		=> md5($this->input->post('password')),
 				'email'			=> $this->input->post('email'),
+				'type'			=> $this->input->post('type'),
 				'mobile'		=> $this->input->post('mobile'),
 				'gender'		=> $this->input->post('gender')
 			];
@@ -335,6 +341,7 @@ class User extends CI_Controller
 		$this->form_validation->set_rules('mobile', 'Mobile','trim|required|regex_match[/^[0-9]{10}$/]|min_length[10]|max_length[10]');
 		$this->form_validation->set_rules('email', 'Email','trim|required|valid_email|xss_clean');
 		$this->form_validation->set_rules('gender', 'Gender','trim|required');
+		$this->form_validation->set_rules('type', 'Type','trim|required');
 		$this->form_validation->set_rules('branch', 'Branch','trim|required');
 		$this->form_validation->set_rules('password', 'Password','trim|min_length[5]');
 		$this->form_validation->set_rules('username', 'Username','trim|required|alpha_dash|min_length[5]|max_length[10]|callback_check_username',array('alpha_dash' => "Only numbers,characters,`-` and `_` allowed in username"));
@@ -353,6 +360,7 @@ class User extends CI_Controller
 				'name'			=> $this->input->post('name'),
 				'username'		=> $this->input->post('username'),
 				'email'			=> $this->input->post('email'),
+				'type'			=> $this->input->post('type'),
 				'mobile'		=> $this->input->post('mobile'),
 				'gender'		=> $this->input->post('gender')
 			];

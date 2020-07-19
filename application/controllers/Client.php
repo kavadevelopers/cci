@@ -7,6 +7,13 @@ class Client extends CI_Controller
 		$this->auth->check_session();
 	}
 
+	public function index()
+	{
+		$data['_title']		= "Clients";	
+		$data['client']		= $this->general_model->get_clients();
+		$this->load->theme('client/index',$data);
+	}
+
 	public function new_clients()
 	{
 		$data['_title']		= "New Clients";
@@ -52,12 +59,14 @@ class Client extends CI_Controller
 		}
 
 		$data = [
+			'lead'		=> $this->input->post('lead'),
+			'branch'		=> $this->input->post('branch'),
 			'fname'		=> strtoupper($this->input->post('fname')),
 			'mname'		=> strtoupper($this->input->post('mname')),
 			'lname'		=> strtoupper($this->input->post('lname')),
 			'firm'		=> strtoupper($this->input->post('firm')),
-			'mobile'	=> $mobiles,
-			'email'		=> $emails,	
+			'mobile'	=> rtrim($mobiles,','),
+			'email'		=> rtrim($emails,','),
 			'pan'		=> strtoupper($this->input->post('pan')),
 			'dob'		=> dd($this->input->post('pan')),
 			'gender'	=> $this->input->post('gender'),
@@ -68,8 +77,8 @@ class Client extends CI_Controller
 			'state'		=> $this->input->post('state'),
 			'pin'		=> $this->input->post('pin'),
 			'occupation'		=> $this->input->post('occupation'),
-			'language'		=> $language,	
-			'time_to_call'	=> $time_to_call,	
+			'language'		=> rtrim($language,','),	
+			'time_to_call'	=> rtrim($time_to_call,','),	
 			'health_in'		=> $this->input->post('health_insurance'),
 			'life_in'		=> $this->input->post('life_insurance'),
 			'itr_client'		=> $this->input->post('itr_client'),
@@ -87,6 +96,40 @@ class Client extends CI_Controller
 		];
 
 		$this->db->insert('client',$data);
+		$customer_id = $this->db->insert_id();
+
+		$this->db->where('id',$customer_id)->update('client',['c_id' => "CLIENT_".$customer_id]);
+
+
+		foreach ($this->input->post('services') as $key => $value) {
+			if($value != ''){
+				$service = explode('-',$value)[0];
+				$price = $this->input->post('amount')[$key];
+				$this->db->order_by('rand()');
+			    $this->db->limit(1);
+			    $this->db->where('user_type','2');
+			    $this->db->where('df','');
+			    $user = $this->db->get('user')->row_array();
+				$data = [
+					'branch'		=> $this->input->post('branch'),
+					'service'		=> $service,
+					'price'			=> $price,
+					'client'		=> $customer_id,
+					'status'		=> 0,
+					'owner'			=> $user['id'],
+					'importance'	=> 'Medium',
+					'f_date'		=> null,
+					'f_time'		=> null,
+					'created_by'	=> get_user()['id'],
+					'created_at'		=> date('Y-m-d H:i:s')
+				];
+				$this->db->insert('job',$data);
+				$job_id = $this->db->insert_id();
+				$this->db->where('id',$job_id)->update('job',['job_id' => "JOB_".$job_id]);			
+			}
+		}
+
+		$this->db->where('id',$this->input->post('lead'))->update('leads',['status' => 2]);		
 
 		$this->session->set_flashdata('msg', 'Client Created');
 	    redirect(base_url('client/new_clients'));

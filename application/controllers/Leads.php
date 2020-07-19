@@ -50,7 +50,7 @@ class Leads extends CI_Controller
 
 		$services = [];
 		foreach ($this->input->post('services') as $key => $value) {
-			if($value != '' || $this->input->post('amount')[$key]){
+			if($value != '' || $this->input->post('amount')[$key] != ""){
 				$services[] = [explode('-',$value)[0],$this->input->post('amount')[$key]];
 			}
 		}
@@ -163,7 +163,7 @@ class Leads extends CI_Controller
 
 		$services = [];
 		foreach ($this->input->post('services') as $key => $value) {
-			if($value != '' || $this->input->post('amount')[$key]){
+			if($value != '' || $this->input->post('amount')[$key] != ""){
 				$services[] = [explode('-',$value)[0],$this->input->post('amount')[$key]];
 			}
 		}

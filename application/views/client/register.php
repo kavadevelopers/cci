@@ -42,8 +42,8 @@
 
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>Firm Name<span class="-req">*</span></label> 
-                            <input name="firm" type="text" placeholder="Firm Name" class="form-control form-control-sm" value="<?= set_value('firm'); ?>" required>
+                            <label>Firm Name</label> 
+                            <input name="firm" type="text" placeholder="Firm Name" class="form-control form-control-sm" value="<?= set_value('firm',$lead['firm']); ?>" >
                             <?= form_error('firm') ?>
                         </div>
                     </div>
@@ -52,22 +52,28 @@
 	                    <div class="row">
 
 	                    	<div class="col-md-3">
-		                        <div class="form-group">
-		                            <label>Mobile <span class="-req">*</span></label> 
-		                            <div class="mobile-body">
-		                            	<input type="text" name="mobile[]" class="form-control form-control-sm numbers mobile-key-up" minlength="10" autocomplete="off" maxlength="10" placeholder="Mobile" required>	
-		                            </div>
-		                        </div>
-		                    </div>
-
-		                    <div class="col-md-3">
-		                        <div class="form-group">
-		                            <label>Email</label> 
-		                            <div class="email-body">
-		                            	<input type="email" name="email[]" class="form-control form-control-sm email-key-up" placeholder="Email" autocomplete="off">	
-		                            </div>
-		                        </div>
-		                    </div>
+                                <div class="form-group">
+                                    <label>Mobile <span class="-req">*</span></label> 
+                                    <div class="mobile-body">
+                                        <?php foreach (explode(',', $lead['mobile']) as $key => $value) { ?>
+                                            <input type="text" name="mobile[]" class="form-control form-control-sm numbers mobile-key-up m-t2" minlength="10" autocomplete="off" maxlength="10" placeholder="Mobile" value="<?= $value ?>" <?= $key == '0'?'required':'' ?>>        
+                                        <?php } ?>
+                                        <input type="text" name="mobile[]" class="form-control form-control-sm numbers mobile-key-up m-t2" minlength="10" autocomplete="off" maxlength="10" placeholder="Mobile" >   
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Email</label> 
+                                    <div class="email-body">
+                                        <?php if($lead['email'] != ""){ foreach (explode(',', $lead['email']) as $key => $value) { ?>
+                                            <input type="email" name="email[]" class="form-control form-control-sm email-key-up m-t2" placeholder="Email" value="<?= $value ?>" autocomplete="off">    
+                                        <?php } } ?>
+                                        <input type="email" name="email[]" class="form-control form-control-sm email-key-up m-t2" placeholder="Email" autocomplete="off">
+                                    </div>
+                                </div>
+                            </div>
 
 		                    <div class="col-md-3">
 		                        <div class="form-group">
@@ -299,25 +305,65 @@
 
 		                    <div class="col-md-3">
 		                        <div class="form-group">
-		                            <label>Industry Remarks<span class="-req">*</span></label> 
+		                            <label>Industry Remarks</label> 
 		                            <textarea name="ind_remaarks" type="text" placeholder="Industry Remarks" class="form-control form-control-sm" value="" ></textarea>
 		                        </div>
 		                    </div>
 
 		                    <div class="col-md-3">
 		                        <div class="form-group">
-		                            <label>Profile Introduction<span class="-req">*</span></label> 
+		                            <label>Profile Introduction</label> 
 		                            <textarea name="profile_intro" type="text" placeholder="Profile Introduction" class="form-control form-control-sm" value="" ></textarea>
 		                        </div>
 		                    </div>
 
 		                    <div class="col-md-3">
 		                        <div class="form-group">
-		                            <label>Actual Turnover & Stock & Other<span class="-req">*</span></label> 
+		                            <label>Actual Turnover & Stock & Other</label> 
 		                            <textarea name="turnover_notes" type="text" placeholder="Actual Turnover & Stock & Other" class="form-control form-control-sm" value="" ></textarea>
 		                        </div>
 		                    </div>
 
+		                    <div class="col-md-12">
+		                    	<h4>Services</h4>
+		                    </div>
+
+		                    <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Services <span class="-req">*</span></label> 
+                                    <div class="service-body">
+                                        <?php foreach (json_decode($lead['services']) as $key => $value) { ?>
+                                            <select class="form-control form-control-sm service-change m-t2 select2" name="services[]" <?= $key == '0'?'required':'' ?>>
+                                                <option value="">-- Select Service --</option>
+                                                <?php foreach ($this->general_model->get_services() as $sekey => $sevalue) { ?> 
+                                                    <option value="<?= $sevalue['id'] ?>-<?=$sevalue['price']?>" <?= selected($sevalue['id'],$value[0]) ?>><?= $sevalue['name'] ?></option>
+                                                <?php } ?>
+                                            </select>       
+                                        <?php } ?>
+                                        <select class="form-control form-control-sm service-change m-t2 select2" name="services[]">
+                                            <option value="">-- Select Service --</option>
+                                            <?php foreach ($this->general_model->get_services() as $sekey => $sevalue) { ?> 
+                                                <option value="<?= $sevalue['id'] ?>-<?=$sevalue['price']?>"><?= $sevalue['name'] ?></option>
+                                            <?php } ?>
+                                        </select>   
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Amount </label> 
+                                    <div class="amount-body">
+                                        <?php foreach (json_decode($lead['services']) as $key => $value) { ?>
+                                            <input type="text" name="amount[]" class="form-control form-control-sm decimal-num m-t2" value="<?= $value[1] ?>" autocomplete="off" placeholder="Amount">      
+                                        <?php } ?>
+                                        <input type="text" name="amount[]" class="form-control form-control-sm decimal-num m-t2" autocomplete="off" placeholder="Amount">   
+                                    </div>
+                                </div>
+                            </div>
+
+                            <input type="hidden" name="lead" value="<?= $lead['id'] ?>">
+		                    <input type="hidden" name="branch" value="<?= $lead['branch'] ?>">
 	                    </div>
 	                </div>
 
@@ -332,3 +378,10 @@
         </form>
     </div>
 </div>
+
+
+<script type="text/javascript">
+    $(document).ready(function($) {
+        $('.service-body .select2-container').addClass('m-t2');  
+    });
+</script>
