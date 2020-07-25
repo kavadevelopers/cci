@@ -24,8 +24,12 @@ class Company extends CI_Controller
 	{
 		$this->form_validation->set_error_delimiters('<div class="val-error">', '</div>');
 		$this->form_validation->set_rules('name', 'Name','trim|required');
-		$this->form_validation->set_rules('gst', 'GST','trim|required');
-		$this->form_validation->set_rules('pan', 'PAN','trim|required');
+		$this->form_validation->set_rules('gst', 'GST','trim');
+		$this->form_validation->set_rules('pan', 'PAN','trim');
+		$this->form_validation->set_rules('prefix', 'Invoice Prefix','trim|required');
+		$this->form_validation->set_rules('payment_prefix', 'Payment Prefix','trim|required');
+		$this->form_validation->set_rules('add1', 'Address Line-1','trim|required');
+		$this->form_validation->set_rules('add2', 'Address Line-2','trim');
 
 		if ($this->form_validation->run() == FALSE)
 		{
@@ -35,9 +39,13 @@ class Company extends CI_Controller
 		else
 		{ 
 			$data = [
-				'name'		=> strtoupper($this->input->post('name')),
-				'gst'		=> strtoupper($this->input->post('gst')),
-				'pan'		=> strtoupper($this->input->post('pan'))
+				'name'				=> strtoupper($this->input->post('name')),
+				'gst'				=> strtoupper($this->input->post('gst')),
+				'pan'				=> strtoupper($this->input->post('pan')),
+				'prefix'			=> strtoupper($this->input->post('prefix')),
+				'receipt_prefix'	=> strtoupper($this->input->post('payment_prefix')),
+				'add1'				=> strtoupper($this->input->post('add1')),
+				'add2'				=> strtoupper($this->input->post('add2'))
 			];
 			$this->db->insert('company',$data);
 
@@ -65,8 +73,12 @@ class Company extends CI_Controller
 	{
 		$this->form_validation->set_error_delimiters('<div class="val-error">', '</div>');
 		$this->form_validation->set_rules('name', 'Name','trim|required');
-		$this->form_validation->set_rules('gst', 'GST','trim|required');
-		$this->form_validation->set_rules('pan', 'PAN','trim|required');
+		$this->form_validation->set_rules('gst', 'GST','trim');
+		$this->form_validation->set_rules('pan', 'PAN','trim');
+		$this->form_validation->set_rules('prefix', 'Invoice Prefix','trim|required');
+		$this->form_validation->set_rules('payment_prefix', 'Payment Prefix','trim|required');
+		$this->form_validation->set_rules('add1', 'Address Line-1','trim|required');
+		$this->form_validation->set_rules('add2', 'Address Line-2','trim');
 
 		if ($this->form_validation->run() == FALSE)
 		{
@@ -79,7 +91,11 @@ class Company extends CI_Controller
 			$data = [
 				'name'		=> strtoupper($this->input->post('name')),
 				'gst'		=> strtoupper($this->input->post('gst')),
-				'pan'		=> strtoupper($this->input->post('pan'))
+				'pan'		=> strtoupper($this->input->post('pan')),
+				'prefix'			=> strtoupper($this->input->post('prefix')),
+				'receipt_prefix'	=> strtoupper($this->input->post('payment_prefix')),
+				'add1'				=> strtoupper($this->input->post('add1')),
+				'add2'				=> strtoupper($this->input->post('add2'))
 			];
 			$this->db->where('id',$this->input->post('id'));
 			$this->db->update('company',$data);
