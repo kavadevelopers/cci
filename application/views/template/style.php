@@ -1,4 +1,7 @@
 <style type="text/css">
+	::-webkit-scrollbar {
+	display: none;
+	}
 	.dis-block{
 		display: block;
 	}
@@ -47,5 +50,23 @@
 
 	.table-no-padding td,.table-no-padding tH{
 		padding: 5px;
+	}
+
+	.ajaxLoader{
+		display: none;
+		position: absolute;
+	  	top: 0;
+	  	bottom: 0%;
+	  	left: 0;
+	  	right: 0%;
+	  	background-color: #cccccc87;
+	  	z-index: 999999;
+	}
+	.ajaxLoader .loader{
+		top: 50%;
+	    position: absolute;
+	    left: 50%;
+	    right: 50%;
+	    bottom: 50%;
 	}
 </style>

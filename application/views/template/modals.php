@@ -37,7 +37,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Lead Transfer</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Job Transfer</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -58,8 +58,60 @@
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" name="jobs" id="jobIds">
+                    <input type="hidden" name="type" id="typeJob">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Transfer</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal fade" id="jobEditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <form method="post" action="#" id="jobEditForm"> 
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Job - <span id="editJobId"></span></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">
+
+                        <div class="form-group">
+                            <h6 id="jobEditClientName">Client </h6>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Select Service <span class="-req">*</span></label> 
+                            <select class="form-control form-control-sm" id="jobEditService" required>
+                                <option value="">-- Select Service --</option>
+                                <?php foreach ($this->general_model->get_services() as $sekey => $sevalue) { ?> 
+                                    <option value="<?= $sevalue['id'] ?>"><?= $sevalue['name'] ?></option>
+                                <?php } ?>
+                            </select>   
+                        </div>
+                        <div class="form-group">
+                            <label>Price <span class="-req">*</span></label> 
+                            <input type="text" id="jobEditPrice" class="form-control form-control-sm decimal-num" autocomplete="off" placeholder="Price" required>   
+                        </div>
+                        <div class="form-group">
+                            <label>Importance <span class="-req">*</span></label>
+                            <select class="form-control" id="editJobImportance" required>
+                                <option value="">-- Select --</option>
+                                <option value="High">High</option>
+                                <option value="Medium">Medium</option>
+                                <option value="Low">Low</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="jobId">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="saveJobBtn">Save</button>
                 </div>
             </div>
         </div>
@@ -182,45 +234,56 @@
                 </div>
                 <div class="modal-body">
                     <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Remarks <span class="-req">*</span></label> 
-                            <textarea class="form-control" placeholder="Remarks" name="remarks" id="followup_remarks" required></textarea>
-                            <?= form_error('owner') ?>
-                        </div>
-                        <div class="form-group">
-                            <label>Status<span class="-req">*</span></label>
-                            <select class="form-control" name="status" id="jobStatus" required>
-                                <option value="">-- Select --</option>
-                                <?php foreach (getjobStatusList() as $key => $value) { ?>
-                                    <option value="<?= $key ?>"><?= $value ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 form-group">
-                                <label>Next Followup Date <span class="-req">*</span></label> 
-                                <input name="date" type="text" placeholder="Next Followup Date" class="form-control form-control-sm datepicker-new" value="<?= set_value('date',date('d-m-Y')); ?>" id="followup_date" readonly required>
+                        <div id="hideJobFollowupForm">
+                            <div class="form-group">
+                                <label>Remarks <span class="-req">*</span></label> 
+                                <textarea class="form-control" placeholder="Remarks" name="remarks" id="followup_remarks" required></textarea>
+                                <?= form_error('owner') ?>
                             </div>
-                            <div class="col-md-6 form-group">
-                                <label>Next Follow up Time</label> 
-                                <input name="nftime" type="text" placeholder="From" class="form-control form-control-sm hour-mask" value="" id="followup_timef">
-                                <input name="nttime" type="text" placeholder="To" class="form-control form-control-sm hour-mask" value="" id="followup_timet">
+                            <div class="form-group">
+                                <label>Status<span class="-req">*</span></label>
+                                <select class="form-control" name="status" id="jobStatus" required>
+                                    <option value="">-- Select --</option>
+                                    <?php foreach (getjobStatusList() as $key => $value) { ?>
+                                        <?php if($key <= 3){ ?>
+                                            <option value="<?= $key ?>"><?= $value ?></option>
+                                        <?php } ?>
+                                    <?php } ?>
+                                </select>
                             </div>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label>Next Followup Date <span class="-req">*</span></label> 
+                                    <input name="date" type="text" placeholder="Next Followup Date" class="form-control form-control-sm datepicker-new" value="<?= set_value('date',date('d-m-Y')); ?>" id="followup_date" readonly required>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>Next Follow up Time</label> 
+                                    <input name="nftime" type="text" placeholder="From" class="form-control form-control-sm hour-mask" value="" id="followup_timef">
+                                    <input name="nttime" type="text" placeholder="To" class="form-control form-control-sm hour-mask" value="" id="followup_timet">
+                                </div>
+                            </div>
+                            <div class="checkbox-fade fade-in-primary d-">
+                                <label>
+                                    <input type="checkbox" value="1" name="" id="followup_needed">
+                                    <span class="cr"><i class="cr-icon icofont icofont-ui-check txt-primary"></i></span>
+                                    <span class="text-inverse">Followup Needed ?</span>
+                                </label>
+                            </div>
+                            <div class="form-group text-right">
+                                <button type="submit" class="btn btn-primary" id="followup_save">Save</button>
+                            </div>
+                            <input type="hidden" name="id" id="id_jobModel">
+                            <input type="hidden" name="type" id="type_followup_job">
+                            <input type="hidden" name="cus" id="type_followup_jobdone">
+                            <input type="hidden" name="message" id="message_followup_job">
                         </div>
-                        <div class="form-group text-right">
-                            <button type="submit" class="btn btn-primary" id="followup_save">Save</button>
-                        </div>
-                        <input type="hidden" name="id" id="id_jobModel">
-                        <input type="hidden" name="type" id="type_followup_job">
-                        <input type="hidden" name="cus" id="type_followup_jobdone">
-                        <input type="hidden" name="message" id="message_followup_job">
-
                         <table class="table table-bordered table-mini table-no-padding" id="jobfollowup_table" style="max-width: 100%; display: none;">
                             <thead>
                                 <th class="text-center">Next Followup</th>
                                 <th class="text-center">Date</th>
                                 <th>Remarks</th>
                                 <th class="text-center">Is Done ?</th>
+                                <th class="text-center">Followup ?</th>
                                 <?php if(get_user()['user_type'] == '0' || get_user()['user_type'] == '1'){ ?>
                                     <th>Followup By</th>
                                 <?php } ?>
@@ -239,3 +302,150 @@
     </form>
 </div>
 <?php } ?>
+
+<div class="modal fade" id="add_payment_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <form method="post" action="<?= base_url('payment/save') ?>">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Payment</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Date <span class="-req">*</span></label> 
+                                <input name="date" type="text" placeholder="Date" class="form-control form-control-sm datepicker" value="<?= set_value('date',date('d-m-Y')); ?>" readonly required>
+                                <?= form_error('date') ?>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Amount <span class="-req">*</span></label> 
+                            <input type="text" name="amount" class="form-control form-control-sm decimal-num" autocomplete="off" placeholder="Amount" required>   
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Select Client <span class="-req">*</span></label> 
+                                <select class="form-control form-control-sm addPaymentClient" name="client" required>
+                                    <option value="">-- Select --</option>
+                                    <?php foreach ($this->general_model->getFilteredClients() as $bkey => $bvalue) { ?>
+                                        <option value="<?= $bvalue['id'] ?>"><?= $bvalue['fname'] ?> <?= $bvalue['mname'] ?> <?= $bvalue['lname'] ?> - <?= $bvalue['mobile'] ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Remarks</label> 
+                                <textarea class="form-control" name="remarks" placeholder="Remarks"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-plus"></i> Add</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal fade" id="edit_payment_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <form method="post" action="<?= base_url('payment/update') ?>">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Payment</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Date <span class="-req">*</span></label> 
+                                <input name="date" type="text" placeholder="Date" class="form-control form-control-sm datepicker" id="editPaymentDate" value="<?= set_value('date',date('d-m-Y')); ?>" readonly required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Amount <span class="-req">*</span></label> 
+                            <input type="text" name="amount" class="form-control form-control-sm decimal-num" id="editPaymentAmount" autocomplete="off" placeholder="Amount" required>   
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Select Client <span class="-req">*</span></label> 
+                                <select class="form-control form-control-sm editPaymentClient" name="client" required id="editPaymentClient">
+                                    <option value="">-- Select --</option>
+                                    <?php foreach ($this->general_model->getFilteredClients() as $bkey => $bvalue) { ?>
+                                        <option value="<?= $bvalue['id'] ?>"><?= $bvalue['fname'] ?> <?= $bvalue['mname'] ?> <?= $bvalue['lname'] ?> - <?= $bvalue['mobile'] ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Remarks</label> 
+                                <textarea class="form-control" name="remarks" placeholder="Remarks" id="editPaymentRemarks"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="id" id="editPaymentId">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<div class="modal fade" id="add_todo_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <form method="post" action="<?= base_url('todo/save') ?>">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add To-Do</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>For <span class="-req">*</span></label> 
+                            <select class="form-control form-control-sm select2n" name="owner" required>
+                                <option value="">-- Select --</option>
+                                <option value="<?= get_user()['id'] ?>" selected>Me</option>
+                                <?php foreach ($this->general_model->get_todo_users() as $bkey => $bvalue) { ?>
+                                    <option value="<?= $bvalue['id'] ?>"><?= $bvalue['name'] ?> - <?= getRole($bvalue['user_type']) ?> - <?= _user_type($bvalue['id']) ?></option>
+                                <?php } ?>
+                            </select>
+                            <?= form_error('owner') ?>
+                        </div>
+                        <div class="form-group">
+                            <label>Date <span class="-req">*</span></label> 
+                            <input name="date" type="text" placeholder="Date" class="form-control form-control-sm datepicker" value="<?= set_value('date',date('d-m-Y')); ?>" readonly required>
+                        </div>
+                        <div class="form-group">
+                            <label>Remarks <span class="-req">*</span></label> 
+                            <textarea class="form-control" name="remarks" placeholder="Remarks" required></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+    

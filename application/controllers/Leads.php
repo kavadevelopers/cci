@@ -62,6 +62,18 @@ class Leads extends CI_Controller
 			}
 		}	
 
+		if($this->input->post('nftime') != ""){
+			$ftime = timeConverter($this->input->post('nftime'));
+		}else{
+			$ftime = null;
+		}
+
+		if($this->input->post('nttime') != ""){
+			$ttime = timeConverter($this->input->post('nttime'));
+		}else{
+			$ttime = null;
+		}
+
 		$data = [
 			'owner'							=> $this->input->post('owner'),
 			'branch'						=> $this->input->post('branch'),
@@ -78,8 +90,8 @@ class Leads extends CI_Controller
 			'importance'					=> $this->input->post('importance'),
 			'remarks'						=> $this->input->post('remarks'),
 			'next_followup_date'			=> dd($this->input->post('ndate')),
-			'tfrom'							=> dt($this->input->post('nftime')),
-			'tto'							=> dt($this->input->post('nttime')),
+			'tfrom'							=> $ftime,
+			'tto'							=> $ttime,
 			'source'						=> $this->input->post('source'),
 			'occupation'					=> $this->input->post('occupation'),
 			'quotation'						=> $this->input->post('special_quote'),
@@ -102,25 +114,28 @@ class Leads extends CI_Controller
 
 
 	    foreach ($_FILES['file']['name'] as $key => $value) {
-	    	$fname = microtime(true).".".pathinfo($_FILES['file']['name'][$key], PATHINFO_EXTENSION);
-	    	$_FILES['doc']['name'] 		= $fname;
-	    	$_FILES['doc']['type'] 		= $_FILES['file']['type'][$key];
-	    	$_FILES['doc']['tmp_name'] 	= $_FILES['file']['tmp_name'][$key];
-	    	$_FILES['doc']['error'] 	= $_FILES['file']['error'][$key];
-	    	$_FILES['doc']['size'] 		= $_FILES['file']['size'][$key];
+	    	if($_FILES['file']['name'] != ""){
+		    	$fname = microtime(true).".".pathinfo($_FILES['file']['name'][$key], PATHINFO_EXTENSION);
+		    	$_FILES['doc']['name'] 		= $fname;
+		    	$_FILES['doc']['type'] 		= $_FILES['file']['type'][$key];
+		    	$_FILES['doc']['tmp_name'] 	= $_FILES['file']['tmp_name'][$key];
+		    	$_FILES['doc']['error'] 	= $_FILES['file']['error'][$key];
+		    	$_FILES['doc']['size'] 		= $_FILES['file']['size'][$key];
 
-	    	$config['file_name'] = $fileName;
-	    	$this->upload->initialize($config);
-	    	if($this->upload->do_upload('doc')){
-	    		$data = [
-		        	'filename'	=> $fname,
-		        	'for' 		=> 'Lead',
-		        	'type' 		=> pathinfo($_FILES['file']['name'][$key], PATHINFO_EXTENSION),
-		        	'for_id' 	=> $id
-		        ];
+		    	$config['file_name'] = $fileName;
+		    	$this->upload->initialize($config);
+		    	if($this->upload->do_upload('doc')){
+		    		$data = [
+		    			'name'		=> $this->input->post('fileName')[$key],
+			        	'filename'	=> $fname,
+			        	'for' 		=> 'Lead',
+			        	'type' 		=> pathinfo($_FILES['file']['name'][$key], PATHINFO_EXTENSION),
+			        	'for_id' 	=> $id
+			        ];
 
-		        $this->db->insert('files',$data);
-	    	}
+			        $this->db->insert('files',$data);
+		    	}
+		    }
 	    }
 
 		$this->session->set_flashdata('msg', 'Lead Added');
@@ -175,6 +190,18 @@ class Leads extends CI_Controller
 			}
 		}	
 
+		if($this->input->post('nftime') != ""){
+			$ftime = timeConverter($this->input->post('nftime'));
+		}else{
+			$ftime = null;
+		}
+
+		if($this->input->post('nttime') != ""){
+			$ttime = timeConverter($this->input->post('nttime'));
+		}else{
+			$ttime = null;
+		}
+		
 		$data = [
 			'owner'							=> $this->input->post('owner'),
 			'branch'						=> $this->input->post('branch'),
@@ -191,8 +218,8 @@ class Leads extends CI_Controller
 			'importance'					=> $this->input->post('importance'),
 			'remarks'						=> $this->input->post('remarks'),
 			'next_followup_date'			=> dd($this->input->post('ndate')),
-			'tfrom'							=> dt($this->input->post('nftime')),
-			'tto'							=> dt($this->input->post('nttime')),
+			'tfrom'							=> $ftime,
+			'tto'							=> $ttime,
 			'source'						=> $this->input->post('source'),
 			'occupation'					=> $this->input->post('occupation'),
 			'quotation'						=> $this->input->post('special_quote'),
@@ -212,30 +239,35 @@ class Leads extends CI_Controller
 
 
 	    foreach ($_FILES['file']['name'] as $key => $value) {
-	    	$fname = microtime(true).".".pathinfo($_FILES['file']['name'][$key], PATHINFO_EXTENSION);
-	    	$_FILES['doc']['name'] 		= $fname;
-	    	$_FILES['doc']['type'] 		= $_FILES['file']['type'][$key];
-	    	$_FILES['doc']['tmp_name'] 	= $_FILES['file']['tmp_name'][$key];
-	    	$_FILES['doc']['error'] 	= $_FILES['file']['error'][$key];
-	    	$_FILES['doc']['size'] 		= $_FILES['file']['size'][$key];
+	    	if($_FILES['file']['name'] != ""){
+		    	$fname = microtime(true).".".pathinfo($_FILES['file']['name'][$key], PATHINFO_EXTENSION);
+		    	$_FILES['doc']['name'] 		= $fname;
+		    	$_FILES['doc']['type'] 		= $_FILES['file']['type'][$key];
+		    	$_FILES['doc']['tmp_name'] 	= $_FILES['file']['tmp_name'][$key];
+		    	$_FILES['doc']['error'] 	= $_FILES['file']['error'][$key];
+		    	$_FILES['doc']['size'] 		= $_FILES['file']['size'][$key];
 
-	    	$config['file_name'] = $fileName;
-	    	$this->upload->initialize($config);
-	    	if($this->upload->do_upload('doc')){
-	    		$data = [
-		        	'filename'	=> $fname,
-		        	'for' 		=> 'Lead',
-		        	'type' 		=> pathinfo($_FILES['file']['name'][$key], PATHINFO_EXTENSION),
-		        	'for_id' 	=> $id
-		        ];
+		    	$config['file_name'] = $fileName;
+		    	$this->upload->initialize($config);
+		    	if($this->upload->do_upload('doc')){
+		    		$data = [
+		    			'name'		=> $this->input->post('fileName')[$key],
+			        	'filename'	=> $fname,
+			        	'for' 		=> 'Lead',
+			        	'type' 		=> pathinfo($_FILES['file']['name'][$key], PATHINFO_EXTENSION),
+			        	'for_id' 	=> $id
+			        ];
 
-		        $this->db->insert('files',$data);
-	    	}
+			        $this->db->insert('files',$data);
+		    	}
+		    }
 	    }
 
 		$this->session->set_flashdata('msg', 'Lead Updated');
 		if($this->input->post('dump') == 1){
 			redirect(base_url('leads/dump_leads'));	
+		}else if($this->input->post('dump') == 2){
+			redirect(base_url('leads/converted_leads'));	
 		}else{
 	    	redirect(base_url('leads'));
 	    }
@@ -262,18 +294,36 @@ class Leads extends CI_Controller
 	   	redirect(base_url('leads'));
 	}
 
-	public function delete($id = false)
+	public function delete($id = false,$type = false)
 	{
 		if($id){
 			if($this->general_model->get_lead($id)){
 				$this->db->where('id',$id)->update('leads',['df' => 'deleted']);
 				$this->session->set_flashdata('msg', 'Lead Deleted');
-	    		redirect(base_url('leads'));			
+				if(!$type){
+	    			redirect(base_url('leads'));			
+	    		}else if($type == 1){
+	    			redirect(base_url('leads/dump_leads'));			
+	    		}else if($type == 2){
+	    			redirect(base_url('leads/converted_leads'));			
+	    		}
 			}else{
-				redirect(base_url('leads'));	
+				if(!$type){
+	    			redirect(base_url('leads'));			
+	    		}else if($type == 1){
+	    			redirect(base_url('leads/dump_leads'));			
+	    		}else if($type == 2){
+	    			redirect(base_url('leads/converted_leads'));			
+	    		}
 			}
 		}else{
-			redirect(base_url('leads'));
+			if(!$type){
+    			redirect(base_url('leads'));			
+    		}else if($type == 1){
+    			redirect(base_url('leads/dump_leads'));			
+    		}else if($type == 2){
+    			redirect(base_url('leads/converted_leads'));			
+    		}
 		}
 	}
 
@@ -310,6 +360,24 @@ class Leads extends CI_Controller
 		$this->load->theme('leads/dump',$data);
 	}
 
+	public function converted_leads()
+	{
+		$data['_title']		= "Converted Leads";
+		if(get_user()['user_type'] == '1'){
+			$data['leads']		= $this->db->get_where('leads',['df' => '','status !=' => '0','branch' => get_user()['branch']])->result_array();
+		}
+		else if(get_user()['user_type'] == '2'){
+			$data['leads']		= $this->db->get_where('leads',['df' => '','status !=' => '0','owner' => get_user()['id']])->result_array();
+		}
+		else if(get_user()['user_type'] == '3'){
+			$data['leads']		= $this->db->get_where('leads',['df' => '','status !=' => '0','owner' => get_user()['id']])->result_array();
+		}
+		else{
+			$data['leads']		= $this->db->get_where('leads',['df' => '','status !=' => '0'])->result_array();
+		}
+		$this->load->theme('leads/converted',$data);
+	}
+
 	public function edit_dump($id = false)
 	{
 		if($id){
@@ -318,6 +386,24 @@ class Leads extends CI_Controller
 				$data['lead']		= $this->general_model->get_lead($id);
 				$data['_title']		= "Edit Lead - ".$data['lead']['lead'];	
 				$data['dump']		= 1;
+				$this->load->theme('leads/edit',$data);
+
+			}else{
+				redirect(base_url('leads'));	
+			}
+		}else{
+			redirect(base_url('leads'));
+		}
+	}
+
+	public function edit_converted($id = false)
+	{
+		if($id){
+			if($this->general_model->get_lead($id)){
+				
+				$data['lead']		= $this->general_model->get_lead($id);
+				$data['_title']		= "Edit Lead - ".$data['lead']['lead'];	
+				$data['dump']		= 2;
 				$this->load->theme('leads/edit',$data);
 
 			}else{

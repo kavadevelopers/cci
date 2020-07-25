@@ -19,15 +19,15 @@
                 	<div class="col-md-3">
                         <div class="form-group">
                             <label>First Name<span class="-req">*</span></label> 
-                            <input name="fname" type="text" placeholder="First Name" class="form-control form-control-sm" value="<?= set_value('fname'); ?>" required>
+                            <input name="fname" type="text" placeholder="First Name" class="form-control form-control-sm" value="<?= set_value('fname',$lead['customer']); ?>" required>
                             <?= form_error('fname') ?>
                         </div>
                     </div>
 
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>Middle Name<span class="-req">*</span></label> 
-                            <input name="mname" type="text" placeholder="Middle Name" class="form-control form-control-sm" value="<?= set_value('mname'); ?>" required>
+                            <label>Middle Name</label> 
+                            <input name="mname" type="text" placeholder="Middle Name" class="form-control form-control-sm" value="<?= set_value('mname'); ?>">
                             <?= form_error('mname') ?>
                         </div>
                     </div>
@@ -117,7 +117,7 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>Address Line-2</label> 
-                            <input name="add2" type="text" placeholder="Address Line-2" class="form-control form-control-sm" value="<?= set_value('add2'); ?>" required>
+                            <input name="add2" type="text" placeholder="Address Line-2" class="form-control form-control-sm" value="<?= set_value('add2'); ?>" >
                             <?= form_error('add2') ?>
                         </div>
                     </div>
@@ -197,8 +197,8 @@
 
 		                    <div class="col-md-3">
 		                        <div class="form-group">
-		                            <label>Health Insurance<span class="-req">*</span></label> 
-		                            <select class="form-control form-control-sm" name="health_insurance" required>
+		                            <label>Health Insurance</label> 
+		                            <select class="form-control form-control-sm" name="health_insurance">
 		                                <option value="">-- Select --</option>
 		                                <option value="YES">YES</option>
 		                                <option value="NO">NO</option>
@@ -208,8 +208,8 @@
 
 		                    <div class="col-md-3">
 		                        <div class="form-group">
-		                            <label>Life Insurance<span class="-req">*</span></label> 
-		                            <select class="form-control form-control-sm" name="life_insurance" required>
+		                            <label>Life Insurance</label> 
+		                            <select class="form-control form-control-sm" name="life_insurance">
 		                                <option value="">-- Select --</option>
 		                                <option value="YES">YES</option>
 		                                <option value="NO">NO</option>
@@ -269,7 +269,7 @@
 		                    <div class="col-md-3">
 		                        <div class="form-group">
 		                            <label>Occupation<span class="-req">*</span></label> 
-		                            <select class="form-control form-control-sm" name="occupation" required>
+		                            <select class="form-control form-control-sm occupation-onchange" name="occupation" required>
 		                                <option value="">-- Select Occupation --</option>
 		                                <option value="BUSINESS" <?= selected($lead['occupation'],"BUSINESS") ?>>BUSINESS</option>
 		                                <option value="JOB" <?= selected($lead['occupation'],"JOB") ?>>JOB</option>
@@ -281,8 +281,8 @@
 
 		                    <div class="col-md-3">
 		                        <div class="form-group">
-		                            <label>Industry<span class="-req">*</span></label> 
-		                            <select class="form-control form-control-sm select2" name="industry" required>
+		                            <label>Industry <span class="-req industry-required">*</span></label> 
+		                            <select class="form-control form-control-sm customer-industry-select2" name="industry" required>
 		                            	<option value="">-- Select Industry --</option>
 		                            	<?php foreach ($this->general_model->list_industries() as $skey => $svalue) { ?>
 		                            		<option value="<?= $svalue['id'] ?>"><?= $svalue['name'] ?></option>
@@ -293,8 +293,8 @@
 
 		                    <div class="col-md-3">
 		                        <div class="form-group">
-		                            <label>Sub Industry<span class="-req">*</span></label> 
-		                            <select class="form-control form-control-sm select2" name="sub_industry" required>
+		                            <label>Sub Industry<span class="-req sub-industry-required">*</span></label> 
+		                            <select class="form-control form-control-sm select2 customer-sub-industry-select2" name="sub_industry" required>
 		                            	<option value="">-- Select Sub Industry --</option>
 		                            	<?php foreach ($this->general_model->list_subindustry() as $skey => $svalue) { ?>
 		                            		<option value="<?= $svalue['id'] ?>"><?= $svalue['name'] ?></option>
@@ -363,7 +363,8 @@
                             </div>
 
                             <input type="hidden" name="lead" value="<?= $lead['id'] ?>">
-		                    <input type="hidden" name="branch" value="<?= $lead['branch'] ?>">
+                            <input type="hidden" name="branch" value="<?= $lead['branch'] ?>">
+		                    <input type="hidden" name="owner" value="<?= $lead['owner'] ?>">
 	                    </div>
 	                </div>
 

@@ -1,86 +1,52 @@
 <div class="page-body">
-   	<?php if(get_user()['user_type'] == '0'){ ?>
-	   	<div class="row">
-	   		<?php foreach ($this->db->get_where('branch',['df' => ''])->result_array() as $key => $value) { ?>
-				<div class="col-md-6 col-xl-3">
-					<div class="card user-widget-card bg-c-green">
-						<div class="card-block">
-							<i class="feather icon-file-text bg-simple-c-green card1-icon"></i>
-							<h4><?= $this->db->get_where('leads',['df' => '','dump' => '','branch'	=> $value['id']])->num_rows(); ?></h4>
-							<p><?= $value['name'] ?>'s Active Leads</p>
-							<a href="<?= base_url('leads') ?>" class="more-info">More Info</a>
-						</div>
-					</div>
-				</div>
-	   		<?php } ?>
-	   	</div>
 
 
-	   	<div class="row">
-	   		<?php foreach ($this->db->get_where('branch',['df' => ''])->result_array() as $key => $value) { ?>
-				<div class="col-md-6 col-xl-3">
-					<div class="card user-widget-card bg-c-yellow">
-						<div class="card-block">
-							<i class="feather icon-file-text bg-simple-c-yellow card1-icon"></i>
-							<h4><?= $this->db->get_where('leads',['df' => '','dump' => 'yes','branch'	=> $value['id']])->num_rows(); ?></h4>
-							<p><?= $value['name'] ?>'s Dump Leads</p>
-							<a href="<?= base_url('leads/dump_leads') ?>" class="more-info">More Info</a>
-						</div>
-					</div>
-				</div>
-	   		<?php } ?>
-	   	</div>
-   	<?php } ?>
-
-   	<?php if(get_user()['user_type'] == '1'){ ?>
-   		<div class="row">
-   			<div class="col-md-6 col-xl-3">
-					<div class="card user-widget-card bg-c-green">
-						<div class="card-block">
-							<i class="feather icon-file-text bg-simple-c-green card1-icon"></i>
-							<h4><?= $this->db->get_where('leads',['df' => '','dump' => '','branch'	=> get_user()['branch']])->num_rows(); ?></h4>
-							<p>Active Leads</p>
-							<a href="<?= base_url('leads') ?>" class="more-info">More Info</a>
-						</div>
-					</div>
-				</div>
-			<div class="col-md-6 col-xl-3">
-				<div class="card user-widget-card bg-c-yellow">
-					<div class="card-block">
-						<i class="feather icon-file-text bg-simple-c-yellow card1-icon"></i>
-						<h4><?= $this->db->get_where('leads',['df' => '','dump' => 'yes','branch'	=> get_user()['branch']])->num_rows(); ?></h4>
-						<p>Dump Leads</p>
-						<a href="<?= base_url('leads/dump_leads') ?>" class="more-info">More Info</a>
-					</div>
-				</div>
-			</div>
-	   	</div>
-	<?php } ?>   
-
-	<?php if(get_user()['user_type'] == '3'){ ?>
-   		<div class="row">
-   			<div class="col-md-6 col-xl-3">
-					<div class="card user-widget-card bg-c-green">
-						<div class="card-block">
-							<i class="feather icon-file-text bg-simple-c-green card1-icon"></i>
-							<h4><?= $this->db->get_where('leads',['df' => '','dump' => '','owner'	=> get_user()['id']])->num_rows(); ?></h4>
-							<p>Active Leads</p>
-							<a href="<?= base_url('leads') ?>" class="more-info">More Info</a>
-						</div>
-					</div>
-				</div>
-			<div class="col-md-6 col-xl-3">
-				<div class="card user-widget-card bg-c-yellow">
-					<div class="card-block">
-						<i class="feather icon-file-text bg-simple-c-yellow card1-icon"></i>
-						<h4><?= $this->db->get_where('leads',['df' => '','dump' => 'yes','owner'	=> get_user()['id']])->num_rows(); ?></h4>
-						<p>Dump Leads</p>
-						<a href="<?= base_url('leads/dump_leads') ?>" class="more-info">More Info</a>
-					</div>
-				</div>
-			</div>
-	   	</div>
-	<?php } ?>   	
+   	<div class="row">
+   		<div class="col-md-6">
+   			<div class="card">
+   				<div class="card-header">
+   					<div class="row"> 
+	                    <div class="col-md-6">
+	                    	<h5>To Do List</h5>
+	                    </div>
+	                    <div class="col-md-6 text-right">
+				            <button class="btn btn-primary btn-sm" type="button" id="addTodo">
+				                <i class="fa fa-plus"></i> Add
+				            </button>
+				        </div>
+			        </div>
+                </div>
+                <div class="card-block" style="max-height: 500px; overflow-y: scroll;">
+                	<table class="table table-striped table-bordered table-mini">
+		                <thead>
+		                    <tr>
+		                        <th class="text-center">Date</th>
+		                        <th>Remarks</th>
+		                        <th>For</th>
+		                        <th>From</th>
+		                        <th class="text-center">Action</th>
+		                    </tr>
+		                </thead>
+		                <tbody>
+		                    <?php foreach ($todo as $key => $value) { ?>
+		                        <tr>
+		                            <td class="text-center"><?= vd($value['date']) ?></td>
+		                            <td><?= nl2br($value['remarks']) ?></td>
+		                            <td><?= $this->general_model->_get_user($value['to'])['name'] ?></td>
+		                            <td><?= $this->general_model->_get_user($value['from'])['name'] ?></td>
+		                            <td class="text-center">
+		                                <button class="btn btn-danger btn-mini btn-delete delete-todo" data-id="<?= $value['id'] ?>" title="Delete">
+		                                    <i class="fa fa-trash"></i>
+		                                </button>
+		                            </td>
+		                        </tr>
+		                    <?php } ?>
+		                </tbody>
+		            </table>
+                </div>
+   			</div>
+   		</div>
+   	</div>
 	
 </div>
 

@@ -1,4 +1,26 @@
 <script type="text/javascript">
+	$(document).ready(function() {
+		if (!Notification) {
+		  	alert('Desktop notifications not available in your browser. Try Chromium.');
+		 	return;
+		}
+		if (Notification.permission !== 'granted'){
+		  	Notification.requestPermission();
+		}
+	});
+	function notifyMe(title,string,link) {
+ 		if (Notification.permission !== 'granted')
+  			Notification.requestPermission();
+ 		else {
+  			var notification = new Notification(title, {
+	   			icon: '<?= base_url() ?>asset/images/favicon.ico',
+	   			body: string,
+	  		});
+	  		notification.onclick = function() {
+	   			window.open(link);
+	  		};
+ 		}
+	}
 	$(function () {
 		$('.btn-delete').click(function() {
 			if(confirm('Are you sure you want to delete this?')){
@@ -126,6 +148,7 @@
 
 		$(document).on('click','.add-attechment-row',function(){
 			textbox = '<tr>';
+				textbox += '<td><input type="text" name="fileName[]" class="form-control" placeholder="File Name"></td>';
 				textbox += '<td><input type="file" name="file[]" class="form-control fileupload-change" onchange="readFile(this)"></td>';
 				textbox += '<td class="text-center"><button type="button" class="btn btn-danger btn-mini remove-row"><i class="fa fa-remove"></i></button></td>';
 			textbox += '</tr>';
@@ -217,10 +240,14 @@
 		$(document).on('click', '.add-job-followup', function(event) {
 			_this = $(this);
 			_this.html('<i class="fa fa-circle-o-notch fa-spin"></i> Please Wait');
+			$('#jobFollowupThis').val(_this);
 			$("#id_jobModel").val(_this.data('id'));
 			$("#type_followup_job").val(_this.data('type'));
 			$('#message_followup_job').val(_this.data('stop'));
-			$('#jobStatus').val(_this.data('status'))
+			$('#jobStatus').val(_this.data('status'));
+			if(_this.data('status') >= 3){
+				$('#hideJobFollowupForm').hide();
+			}
 			$.ajax({
                 type: "POST",
                 url : "<?= base_url('followup/job_get'); ?>",
@@ -291,11 +318,16 @@
 
 		$('#jobfollowupForm').submit(function(event) {
 			event.preventDefault();
+			if($("#followup_needed").prop('checked') == true){
+			    needed = 1;
+			}else{
+				needed = 0;
+			}
 			if($('#type_followup_jobdone').val() != '1'){				
 				$.ajax({
 	                type: "POST",
 	                url : "<?= base_url('followup/saveJob'); ?>",
-	                data : "remarks="+$('#followup_remarks').val()+"&date="+$('#followup_date').val()+"&ftime="+$('#followup_timef').val()+"&ttime="+$('#followup_timet').val()+"&id="+$('#id_jobModel').val()+"&type="+$('#type_followup_job').val()+"&status="+$('#jobStatus').val(),
+	                data : "remarks="+$('#followup_remarks').val()+"&date="+$('#followup_date').val()+"&ftime="+$('#followup_timef').val()+"&ttime="+$('#followup_timet').val()+"&id="+$('#id_jobModel').val()+"&type="+$('#type_followup_job').val()+"&status="+$('#jobStatus').val()+"&needed="+needed,
 	                cache : false,
 	                dataType: "JSON",
 	                beforeSend: function() {
@@ -312,7 +344,6 @@
 	                    $('#followup_timet').val("");
 						$('#jobfollowup_body').prepend(out[0]);
 						$('#jobfollowup_table').show();
-
 						$('#status-'+$('#id_jobModel').val()).html(out[1]);
 	                }
 	            });
@@ -347,11 +378,214 @@
 			  	$('.select2n').select2({
 				    dropdownParent: $('#jobTransferModel .modal-content')
 				});
+				$('#typeJob').val($(this).data('type'));
 			  	$('#jobIds').val(str.substring(0, str.length - 1));
 			}else{
 				PNOTY("Please Select any job",'error');  
 			}
-		})
+		});
+
+		$(document).on('change','.occupation-onchange',function(){
+			_this = $(this);
+			if(_this.val() == "JOB" || _this.val() == "OTHER"){
+				$('.industry-required').hide();
+				$('.sub-industry-required').hide();
+				$('.customer-industry-select2').select2('destroy');
+				$('.customer-industry-select2').removeAttr('required');
+				$('.customer-industry-select2').select2();
+				$('.customer-sub-industry-select2').select2('destroy');
+				$('.customer-sub-industry-select2').removeAttr('required');
+				$('.customer-sub-industry-select2').select2();
+			}else{
+				$('.industry-required').show();
+				$('.sub-industry-required').show();
+				$('.customer-industry-select2').attr('required',true);
+				$('.customer-industry-select2').select2();
+				$('.customer-sub-industry-select2').attr('required',true);
+				$('.customer-sub-industry-select2').select2();
+			}
+		});
+
+		$('.edit-job').click(function(event) {
+			$('#jobEditModal').modal('show');
+			$('#editJobId').html("#"+$(this).data('job_id'));
+			$('#jobEditService').val($(this).data('service'));
+			$('#jobId').val($(this).data('job'));
+			$('#jobEditPrice').val($(this).data('price'));
+			$('#editJobImportance').val($(this).data('importance'));
+			$('#jobEditClientName').html("Client - "+$(this).data('client'));
+			$('#jobEditService').select2({
+			    dropdownParent: $('#jobEditModal .modal-content')
+			});
+		});
+
+		$('#jobEditForm').submit(function(e) {
+			e.preventDefault();
+			$.ajax({
+                type: "POST",
+                url : "<?= base_url('job/update'); ?>",
+                data : "id="+$('#jobId').val()+"&service="+$('#jobEditService').val()+"&price="+$('#jobEditPrice').val()+"&importance="+$('#editJobImportance').val(),
+                cache : false,
+                dataType: "JSON",
+                beforeSend: function() {
+                    $('#saveJobBtn').attr('disabled','true');
+                    $('#saveJobBtn').html('<i class="fa fa-circle-o-notch fa-spin"></i> Please Wait');
+                },
+                success: function(out)
+                {
+                	PNOTY("Job Updated",'success');  
+                	$('#saveJobBtn').removeAttr('disabled');
+                    $('#saveJobBtn').html('Save');
+                    $('#jobPrice'+$('#jobId').val()).html(out['price']);
+                    $('#jobService'+$('#jobId').val()).html(out['service']);
+                    $('#jobImportance'+$('#jobId').val()).html(out['importance']);
+                    $('#jobEditModal').modal('hide');
+                }
+            });
+		});
+
+
+		$('.generateFullBill').click(function(event) {
+			var _this = $(this);
+			$.ajax({
+                type: "POST",
+                url : "<?= base_url('generate_bill/all'); ?>",
+                data : "client="+_this.data('client'),
+                cache : false,
+                beforeSend: function() {
+                    _this.attr('disabled','true');
+                    _this.html('<i class="fa fa-circle-o-notch fa-spin"></i> Please Wait');
+                },
+                success: function(out)
+                {
+                	PNOTY("Bill Generated",'success');  
+                	_this.closest('table').remove();
+                }
+            });
+		});
+
+		$('.generateBill').click(function(event) {
+			var _this = $(this);
+			$.ajax({
+                type: "POST",
+                url : "<?= base_url('generate_bill/single'); ?>",
+                data : "job="+_this.data('job'),
+                cache : false,
+                beforeSend: function() {
+                    _this.attr('disabled','true');
+                    _this.html('<i class="fa fa-circle-o-notch fa-spin"></i> Please Wait');
+                },
+                success: function(out)
+                {
+                	PNOTY("Bill Generated",'success');  
+                	tbody = _this.closest('tbody');
+                	if(tbody.children('tr').length == 1){
+                		_this.closest('table').remove();		
+                	}else{
+                		_this.closest('tr').remove();
+                	}
+                }
+            });
+		});
+
+		$(document).on('click','.add-payment',function(){
+			$('#add_payment_model').modal('show');
+			$('.addPaymentClient').select2({
+			    dropdownParent: $('#add_payment_model .modal-content')
+			});
+		});
+
+		$(document).on('click','.edit-payment',function(){
+			var _this = $(this);
+			$('#edit_payment_model').modal('show');
+			$('#editPaymentDate').val(_this.data('date'));
+			$('#editPaymentAmount').val(_this.data('amount'));
+			$('#editPaymentClient').val(_this.data('client'));
+			$('#editPaymentRemarks').val(_this.data('remarks'));
+			$('#editPaymentId').val(_this.data('id'));
+
+			$('.editPaymentClient').select2({
+			    dropdownParent: $('#edit_payment_model .modal-content')
+			});
+		});
+
+		$(document).on('click','.approve-payment',function(){
+			var _this = $(this);
+			$.ajax({
+                type: "POST",
+                url : "<?= base_url('request/payment_approve'); ?>",
+                data : "id="+_this.data('id'),
+                cache : false,
+                beforeSend: function() {
+                    _this.attr('disabled','true');
+                    _this.html('<i class="fa fa-circle-o-notch fa-spin"></i> Please Wait');
+                },
+                success: function(out)
+                {
+                	PNOTY("Payment Approved",'success');  
+                	_this.closest('tr').remove();
+                }
+            });
+		});
+
+		$('#addInfoTab').submit(function(event) {
+			event.preventDefault();
+			var _this = $('#addGroupSubmitBtn');
+			$.ajax({
+                type: "POST",
+                url : "<?= base_url('client/add_group'); ?>",
+                data : "main="+$('#addGroupChild').val()+"&child="+$('#addGroupMain').val()+"&relation="+$('#addGroupRelation').val()+"&remarks="+$('#addGroupRemarks').val(),
+                cache : false,
+                dataType: "JSON",
+                beforeSend: function() {
+                    _this.attr('disabled','true');
+                    _this.html('<i class="fa fa-circle-o-notch fa-spin"></i> Please Wait');
+                },
+                success: function(out)
+                {
+                	PNOTY("Group Member Added",'success');  
+                	str = "<tr>";
+                	str += '<td class="text-center">'+out['group']+'</td>';
+                	str += '<td>'+out['name']+'</td>';
+                	str += '<td class="text-center">'+out['relation']+'</td>';
+                	str += '<td class="text-center">'+out['client']+'</td>';
+                	str += '<td>'+out['remarks']+'</td>';
+                	str += "</tr>";
+                	$('#addGroupTbody').append(str);
+                	_this.removeAttr('disabled');
+                    _this.html('<i class="fa fa-plus"></i>');
+                }
+            });
+		});
+
+		$(document).on('click','#addTodo',function(){
+			$('#add_todo_modal').modal('show');
+			$('.select2n').select2({
+			    dropdownParent: $('#add_todo_modal .modal-content')
+			});
+		});
+
+		$(document).on('click','.delete-todo',function(){
+			var _this = $(this);
+			$.ajax({
+                type: "POST",
+                url : "<?= base_url('todo/delete'); ?>",
+                data : "id="+_this.data('id'),
+                cache : false,
+                beforeSend: function() {
+                    _this.attr('disabled','true');
+                    _this.html('<i class="fa fa-circle-o-notch fa-spin"></i> Please Wait');
+                },
+                success: function(out)
+                {
+                	PNOTY("To-Do Deleted",'success');  
+                	_this.closest('tr').remove();
+                }
+            });
+		});
+
+		$('.customer-industry-select2').select2();
+		$('.customer-sub-industry-select2').select2();
 	})
 
 
@@ -365,4 +599,23 @@
 			$('.other-area').removeAttr('required');
 		}
 	}
+</script>
+
+
+
+<script type="text/javascript">
+	setInterval(function(){ 
+	    $.ajax({
+            type: "POST",
+            url : "<?= base_url('followup/getNotifications'); ?>",
+            cache : false,
+            dataType : "json",
+            success: function(out)
+            {
+            	$.each(out, function(key,value) {
+				   notifyMe(value['title'],value['desc'],value['url']);
+				});
+            }
+        });
+	}, 30000);
 </script>

@@ -92,13 +92,14 @@ class Client extends CI_Controller
 			'turnover_notes'	=> strtoupper($this->input->post('turnover_notes')),
 			'turnover_notes'	=> strtoupper($this->input->post('turnover_notes')),
 			'created_by'		=> get_user()['id'],
-			'created_at'		=> date('Y-m-d H:i:s')
+			'created_at'		=> date('Y-m-d H:i:s'),
+			'owner'				=> $this->input->post('owner')
 		];
 
 		$this->db->insert('client',$data);
 		$customer_id = $this->db->insert_id();
 
-		$this->db->where('id',$customer_id)->update('client',['c_id' => "CLIENT_".$customer_id]);
+		$this->db->where('id',$customer_id)->update('client',['c_id' => "CLIENT_".$customer_id,'group' => 'GROUP_'.$customer_id]);
 
 
 		foreach ($this->input->post('services') as $key => $value) {
@@ -133,5 +134,35 @@ class Client extends CI_Controller
 
 		$this->session->set_flashdata('msg', 'Client Created');
 	    redirect(base_url('client/new_clients'));
+	}
+
+
+	public function view($id = false)
+	{
+		if($id){
+			if($this->general_model->_get_client($id)){
+				$data['_title']		= "View Client";	
+				$data['client']		= $this->general_model->_get_client($id);
+				$this->load->theme('client/view',$data);
+			}else{
+				redirect(base_url('client'));			
+			}
+		}else{
+			redirect(base_url('client'));
+		}
+	}
+
+	public function add_group()
+	{
+		$data = [
+			'main'		=> $this->input->post('main'),
+			'child'		=> $this->input->post('child'),
+			'relation'		=> strtoupper($this->input->post('relation')),
+			'remarks'		=> $this->input->post('remarks')
+		];
+		$this->db->insert('grouping',$data);
+		$main = $this->general_model->_get_client($this->input->post('main'));
+		$child = $this->general_model->_get_client($this->input->post('child'));
+		echo json_encode(['group' => $main['group'],'name' => $child['fname'].' '.$child['mname'].' '.$child['lname'],'relation' => strtoupper($this->input->post('relation')),'remarks' => nl2br($this->input->post('remarks')),'client' => $child['c_id']]);
 	}
 }

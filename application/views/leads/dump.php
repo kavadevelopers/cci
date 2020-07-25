@@ -60,7 +60,7 @@
                                 <a href="<?= base_url('leads/edit_dump/').$value['id'] ?>" class="btn btn-primary btn-mini" title="Edit">
                                     <i class="fa fa-pencil"></i>
                                 </a>
-                                <a href="<?= base_url('leads/delete/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete" title="Delete">
+                                <a href="<?= base_url('leads/delete/').$value['id'].'/1' ?>" class="btn btn-danger btn-mini btn-delete" title="Delete">
                                     <i class="fa fa-trash"></i>
                                 </a>
                                 <a href="<?= base_url('leads/normal/').$value['id'] ?>" class="btn btn-warning btn-mini" title="Transfer To Normal">

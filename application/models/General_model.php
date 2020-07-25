@@ -92,6 +92,28 @@ class General_model extends CI_Model
 		}
 	}
 
+	public function get_todo_users()
+	{
+		if(get_user()['user_type'] == '0'){
+			return $this->db->get_where('user',['df' => ''])->result_array();
+		}
+		else if(get_user()['user_type'] == '1'){
+			return $this->db->get_where('user',['df' => '','branch' => get_user()['branch']])->result_array();
+		}
+		else if(get_user()['user_type'] == '2'){
+			if(get_user()['type'] == '1'){
+				return $this->db->get_where('user',['df' => '','branch' => get_user()['branch'],'type >' => 1 ])->result_array();
+			}else if(get_user()['type'] == '2'){
+				return $this->db->get_where('user',['df' => '','branch' => get_user()['branch'],'type >' => 2 ])->result_array();
+			}else{
+				return [];
+			}
+		}
+		else if(get_user()['user_type'] == '3'){
+			return [];
+		}
+	}
+
 	public function get_job_owners()
 	{
 		if(get_user()['user_type'] == '1'){
@@ -119,6 +141,11 @@ class General_model extends CI_Model
 	public function get_subindustry($id)
 	{
 		return $this->db->get_where('sub_industry',['id'	=> $id,'df' => ''])->row_array();
+	}
+
+	public function _get_subindustry($id)
+	{
+		return $this->db->get_where('sub_industry',['id'	=> $id])->row_array();
 	}
 
 	public function list_subindustry()
@@ -206,23 +233,139 @@ class General_model extends CI_Model
 		}
 	}
 
+	public function getFilteredClients()
+	{
+		if(get_user()['user_type'] == 0 || get_user()['user_type'] == 2){
+			return $this->db->get_where('client',['status' => '0'])->result_array();
+		}else if(get_user()['user_type'] == 1){
+			return $this->db->get_where('client',['branch' => get_user()['branch'],'status' => '0'])->result_array();
+		}else if(get_user()['user_type'] == 3){
+			return $this->db->get_where('client',['status' => '0','owner' => get_user()['id']])->result_array();
+		}
+	}
+
 	public function _get_client($id)
 	{
 		return $this->db->get_where('client',['id' => $id])->row_array();
 	}
 
+	public function _get_invoice($id)
+	{
+		return $this->db->get_where('invoice',['id' => $id])->row_array();
+	}
+
+	public function _get_payment($id)
+	{
+		return $this->db->get_where('payment',['id' => $id])->row_array();
+	}
+
 	public function get_jobs()
 	{
+		$myId = get_user()['id'];
+		$myBranch = get_user()['branch'];
 		if(get_user()['user_type'] == 0){
 			$this->db->order_by('status','asc');
-			return $this->db->get_where('job')->result_array();
+			return $this->db->get_where('job',['status <' => 3])->result_array();
 		}else if(get_user()['user_type'] == 1){
 			$this->db->order_by('status','asc');
-			return $this->db->get_where('client',['branch' => get_user()['branch']])->result_array();
+			return $this->db->get_where('job',['branch' => $myBranch,'status <' => 3])->result_array();	
 		}else{
 			$this->db->order_by('status','asc');
-			return $this->db->get_where('client',['owner' => get_user()['id']])->result_array();
+			return $this->db->get_where('job',['owner' => $myId,'status <' => 3])->result_array();
 		}
+	}
+
+	public function get_workDone()
+	{
+		$myId = get_user()['id'];
+		$myBranch = get_user()['branch'];
+		if(get_user()['user_type'] == 0){
+			$this->db->order_by('status','asc');
+			return $this->db->get_where('job',['status' => 3])->result_array();
+		}else if(get_user()['user_type'] == 1){
+			$this->db->order_by('status','asc');
+			return $this->db->get_where('job',['branch' => $myBranch,'status' => 3])->result_array();
+		}else{
+			$this->db->order_by('status','asc');
+			return $this->db->get_where('job',['owner' => $myId,'status' => 3])->result_array();
+		}
+	}
+
+	public function get_PaidJob()
+	{
+		$myId = get_user()['id'];
+		$myBranch = get_user()['branch'];
+		if(get_user()['user_type'] == 0){
+			$this->db->order_by('status','asc');
+			return $this->db->get_where('job',['status' => 5])->result_array();
+		}else if(get_user()['user_type'] == 1){
+			$this->db->order_by('status','asc');
+			return $this->db->get_where('job',['branch' => $myBranch,'status' => 5])->result_array();
+		}else{
+			$this->db->order_by('status','asc');
+			return $this->db->get_where('job',['owner' => $myId,'status' => 5])->result_array();
+		}
+	}
+
+	public function get_BilledJob()
+	{
+		$myId = get_user()['id'];
+		$myBranch = get_user()['branch'];
+		if(get_user()['user_type'] == 0){
+			$this->db->order_by('status','asc');
+			return $this->db->get_where('job',['status' => 4])->result_array();
+		}else if(get_user()['user_type'] == 1){
+			$this->db->order_by('status','asc');
+			return $this->db->get_where('job',['branch' => $myBranch,'status' => 4])->result_array();
+		}else{
+			$this->db->order_by('status','asc');
+			return $this->db->get_where('job',['owner' => $myId,'status' => 4])->result_array();
+		}
+	}
+
+	public function getInvoices()
+	{
+		if(get_user()['user_type'] == 0 || get_user()['user_type'] == 2){
+			return $this->db->order_by('id','desc')->get_where('invoice')->result_array();	
+		}else if(get_user()['user_type'] == 1){
+			return $this->db->order_by('id','desc')->get_where('invoice',['branch' => get_user()['branch']])->result_array();	
+		}else if(get_user()['user_type'] == 3){
+			$clients = $this->db->get_where('client',['owner' => get_user()['id']])->result_array();
+			$cli = [];
+			foreach ($clients as $key => $value) {
+				array_push($cli, $value['id']);
+			}
+			$this->db->where_in('client',$cli);
+			return $this->db->order_by('id','desc')->get_where('invoice')->result_array();	
+		}
+	}
+
+	public function getPayments()
+	{
+		if(get_user()['user_type'] == 0 || get_user()['user_type'] == 2){
+			return $this->db->order_by('id','desc')->get_where('payment')->result_array();	
+		}else if(get_user()['user_type'] == 1){
+			return $this->db->order_by('id','desc')->get_where('payment',['branch' => get_user()['branch']])->result_array();	
+		}else if(get_user()['user_type'] == 3){
+			$clients = $this->db->get_where('client',['owner' => get_user()['id']])->result_array();
+			$cli = [];
+			foreach ($clients as $key => $value) {
+				array_push($cli, $value['id']);
+			}
+			$this->db->where_in('client',$cli);
+			return $this->db->order_by('id','desc')->get_where('payment')->result_array();	
+		}
+	}
+
+	public function getToDo()
+	{
+		$myId = get_user()['id'];
+		$this->db->order_by('date','asc');
+		$this->db->group_start();
+			$this->db->where('to',$myId);
+			$this->db->or_where('from',$myId);
+		$this->db->group_end();
+		return $this->db->get('todo')->result_array();
 	}
 }
 ?>

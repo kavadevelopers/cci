@@ -280,12 +280,16 @@
                                 <table class="table table-bordered table-mini">
                                     <thead>
                                         <tr>
+                                            <th>File Name</th>
                                             <th>File</th>
                                             <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody class="body-attchment">
                                         <tr>
+                                            <td>
+                                                <input type="text" name="fileName[]" class="form-control" placeholder="File Name">
+                                            </td>
                                             <td>
                                                 <input type="file" name="file[]" class="form-control fileupload-change" onchange="readFile(this)">
                                             </td>
@@ -296,7 +300,7 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="2" class="text-right">
+                                            <td colspan="3" class="text-right">
                                                 <button type="button" class="btn btn-info btn-mini add-attechment-row"><i class="fa fa-plus"></i> Add Row</button>
                                             </td>
                                         </tr>
@@ -321,6 +325,9 @@
                                             <?php if($value['type'] == 'pdf'){ ?>
                                                 <img src="<?= base_url('asset/images/pdf.jpg') ?>" class="grid-images" style="width: 100%;"> 
                                             <?php } ?>
+                                            <div class="row">
+                                                <marquee scrollamount="2"><?=  $value['name'] ?></marquee>
+                                            </div>
                                             <div class="row" style="background: #ccc; text-align: center;">
                                                 <p style="text-align: center; width: 100%; margin: 0; font-size: 16px;">
                                                     <a href="<?= base_url('uploads/doc/').$value['filename'] ?>" target="_blank" title="Download" download><i class="fa fa-download"></i></a> &nbsp;&nbsp;

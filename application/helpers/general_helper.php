@@ -34,6 +34,51 @@ function vt($time){
     return date('h:i A',strtotime($time));   
 }
 
+function rs()
+{
+    return "₹ ";
+}  
+
+function timeConverter($str){
+    $arr = explode(":", $str);
+    $new = "";
+    foreach ($arr as $key => $value) {
+        if($key != 0){
+            $c = ":";
+        }else{
+            $c = "";
+        }
+        $value = trim($value,"_");
+        if($value != ""){
+            if(strlen($value) == 2){
+                $new .= $c.$value;
+            }else{
+                $new .= $c."0".$value;
+            }
+        }else{
+            $new .= $c."00";
+        }
+    }
+    return dt($new);
+}
+
+function get_from_to($from,$to){
+    $ret = "";
+    if(!empty($from)){
+        $ret .= "<br><small>".vt($from);
+    }else{
+        $ret .= "<br><small> NA ";
+    }
+
+    if(!empty($to)){
+        $ret .= " - ".vt($to)."</small>";
+    }else{
+        $ret .= " - NA";
+    }
+
+    return $ret;
+}
+
 function get_setting()
 {
 	$ci=& get_instance();
@@ -129,11 +174,11 @@ function getjobStatus($s){
     }else if($s == "2"){
         return "WORK IN PROGRESS";
     }else if($s == "3"){
-        return "WORK COMPLETED";
+        return "WORK DONE & PANDING FOR BILLING";
     }else if($s == "4"){
-        return "PANDING FOR BILLING";
+        return "BILLED";
     }else{
-        return "PAYMENT RECEIVED";
+        return "PAID";
     }
 }
 
@@ -142,10 +187,20 @@ function getjobStatusList(){
         '0' => "WORK PENDING",
         '1' => "DOCUMENTS RECEIVED",
         '2' => "WORK IN PROGRESS",
-        '3' => "WORK COMPLETED",
-        '4' => "PANDING FOR BILLING",
-        '5' => "PAYMENT RECEIVED"
+        '3' => "WORK DONE & PANDING FOR BILLING",
+        '4' => "BILLED",
+        '5' => "PAID"
     ];
+}
+
+function invoice()
+{
+    return "1";
+}
+
+function payment()
+{
+    return "2";
 }
 
 function selected($val,$val2,$val3 = false){

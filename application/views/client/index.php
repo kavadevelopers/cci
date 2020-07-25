@@ -56,7 +56,11 @@
                                     <p class="text-center"><?= _vdatetime($value['created_at']) ?></p>
                                 </td>
                             <?php } ?>
-                            <td></td>
+                            <td class="text-center">
+                                <a href="<?= base_url('client/view/').$value['id'] ?>" class="btn btn-primary btn-mini" title="View">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                            </td>
                         </tr>
                     <?php } ?>
                 </tbody>

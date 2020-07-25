@@ -82,9 +82,7 @@
                             </td>
                             <td class="text-center" id="fdate-<?= $value['id'] ?>">
                                 <?= vd($value['next_followup_date']) ?>
-                                <?php if($value['tfrom'] != ""){ ?>
-                                    <br><?= vt($value['tfrom']) ?> - <?= vt($value['tto']) ?>
-                                <?php } ?>
+                                <?= get_from_to($value['tfrom'],$value['tto']) ?>
                             </td>
                             <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){ ?>
                                 <td>

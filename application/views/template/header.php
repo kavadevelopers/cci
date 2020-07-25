@@ -95,6 +95,19 @@
             </div>
         </div>
     </div>
+
+    <div class="ajaxLoader">
+        <div class="loader animation-start">
+            <span class="circle delay-1 size-2"></span>
+            <span class="circle delay-2 size-4"></span>
+            <span class="circle delay-3 size-6"></span>
+            <span class="circle delay-4 size-7"></span>
+            <span class="circle delay-5 size-7"></span>
+            <span class="circle delay-6 size-6"></span>
+            <span class="circle delay-7 size-4"></span>
+            <span class="circle delay-8 size-2"></span>
+        </div>
+    </div>
     <!-- Pre-loader end -->
     <div id="pcoded" class="pcoded">
         <div class="pcoded-overlay-box"></div>
@@ -154,7 +167,7 @@
                                             </li>
                                         <?php } ?>
                                         <li>
-                                            <a href="#" class="dis-block">
+                                            <a href="<?= base_url('profile') ?>" class="dis-block">
                                                 <i class="feather icon-user"></i> Profile
                                             </a>
                                         </li>
