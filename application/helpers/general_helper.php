@@ -201,7 +201,7 @@ function daysBeetweenDates($date){
     $now = time();
     $your_date = strtotime($date);
     $datediff = $now - $your_date;
-    return round($datediff / (60 * 60 * 24)) + 1;
+    return round($datediff / (60 * 60 * 24)) - 1;
 }
 
 function invoice()
