@@ -77,7 +77,7 @@
                                 <tr>
                                     <td class="text-right"></td>
                                     <td class="text-right"></td>
-                                    <td class="text-right"></td>
+                                    <th class="text-right">Total:</th>
                                     <td class="text-right"><?= moneyFormatIndia($debit_total) ?></td>
                                     <td class="text-right"><?= moneyFormatIndia($credit_total) ?></td>
                                 </tr>
