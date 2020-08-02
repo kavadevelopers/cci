@@ -30,7 +30,10 @@
 		                <tbody>
 		                    <?php foreach ($todo as $key => $value) { ?>
 		                        <tr>
-		                            <td class="text-center"><?= vd($value['date']) ?></td>
+		                            <td class="text-center">
+		                            	<?= vd($value['date']) ?>
+		                            	<?= get_from_to($value['ftime'],$value['ttime']) ?>        
+		                            </td>
 		                            <td><?= nl2br($value['remarks']) ?></td>
 		                            <td><?= $this->general_model->_get_user($value['to'])['name'] ?></td>
 		                            <td><?= $this->general_model->_get_user($value['from'])['name'] ?></td>
