@@ -79,6 +79,11 @@ class Company extends CI_Controller
 		$this->form_validation->set_rules('payment_prefix', 'Payment Prefix','trim|required');
 		$this->form_validation->set_rules('add1', 'Address Line-1','trim|required');
 		$this->form_validation->set_rules('add2', 'Address Line-2','trim');
+		$this->form_validation->set_rules('bank', 'Bank Name','trim|required');
+		$this->form_validation->set_rules('ac_name', 'Account Holder Name','trim|required');
+		$this->form_validation->set_rules('ac_no', 'Account No.','trim|required');
+		$this->form_validation->set_rules('ifsc', 'IFSC Code','trim|required');
+		$this->form_validation->set_rules('upi', 'G-PAY,PAYTM,PHONE-PAY MOBILE','trim|required');
 
 		if ($this->form_validation->run() == FALSE)
 		{
@@ -95,10 +100,40 @@ class Company extends CI_Controller
 				'prefix'			=> strtoupper($this->input->post('prefix')),
 				'receipt_prefix'	=> strtoupper($this->input->post('payment_prefix')),
 				'add1'				=> strtoupper($this->input->post('add1')),
-				'add2'				=> strtoupper($this->input->post('add2'))
+				'add2'				=> strtoupper($this->input->post('add2')),
+				'bank'				=> strtoupper($this->input->post('bank')),
+				'ac_name'				=> strtoupper($this->input->post('ac_name')),
+				'ac_no'				=> strtoupper($this->input->post('ac_no')),
+				'ifsc'				=> strtoupper($this->input->post('ifsc')),
+				'upi'				=> strtoupper($this->input->post('upi'))
 			];
 			$this->db->where('id',$this->input->post('id'));
 			$this->db->update('company',$data);
+			
+			$config['upload_path'] = './uploads/company/';
+		    $config['allowed_types']	= '*';
+		    $config['max_size']      = '0';
+		    $config['overwrite']     = FALSE;
+		    $this->load->library('upload', $config);
+			if($_FILES['file']['name'] != ""){
+		    	$fname = microtime(true).".".pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
+		    	$_FILES['doc']['name'] 		= $fname;
+		    	$_FILES['doc']['type'] 		= $_FILES['file']['type'];
+		    	$_FILES['doc']['tmp_name'] 	= $_FILES['file']['tmp_name'];
+		    	$_FILES['doc']['error'] 	= $_FILES['file']['error'];
+		    	$_FILES['doc']['size'] 		= $_FILES['file']['size'];
+
+		    	
+		    	$this->upload->initialize($config);
+		    	if($this->upload->do_upload('doc')){
+		    		$this->db->where('id',$this->input->post('id'));
+					$this->db->update('company',['letter_head' => $fname]);
+		    	}
+
+		    	if(file_exists(FCPATH.'uploads/company/'.$this->input->post('oldFile'))){
+		            unlink(FCPATH.'/uploads/company/'.$this->input->post('oldFile'));   
+		        }
+		    }
 
 			$this->session->set_flashdata('msg', 'Company Saved');
 	        redirect(base_url('company'));

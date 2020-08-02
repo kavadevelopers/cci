@@ -77,6 +77,32 @@
 			}
 		});	
 
+		$(document).on('change','.cus-service-change', function(){
+			if($(this).val() != ""){
+				$('.cus-amount-body').children().eq(($(this).index() / 2)).val($(this).val().split("-")[1]);
+				$('.cus-qty-body').children().eq(($(this).index() / 2)).val(1);
+			}else{
+				$('.cus-amount-body').children().eq(($(this).index() / 2)).val("");
+				$('.cus-qty-body').children().eq(($(this).index() / 2)).val("");
+			}
+			if($('.cus-service-body select').last().val() != ""){
+				textbox = '<select class="form-control form-control-sm cus-service-change m-t2 select2" name="services[]">';
+					textbox += '<option value="">-- Select Service --</option>';
+					textbox += '<?php foreach ($this->general_model->get_services() as $sekey => $sevalue) { ?>';
+					textbox += '<option value="<?= $sevalue['id'] ?>-<?=$sevalue['price']?>"><?= $sevalue['name'] ?></option>';
+					textbox += '<?php } ?>';	                    					
+				textbox += '</select>';	                    					        				
+				$('.cus-service-body').append(textbox);
+				$('.cus-service-change').select2();
+				$('.select2-container').addClass('m-t2');
+				textbox = '<input type="text" name="amount[]" class="form-control form-control-sm decimal-num mobile-key-up m-t2" autocomplete="off" placeholder="Amount" >';
+				$('.cus-amount-body').append(textbox);
+
+				textbox = '<input type="text" name="qty[]" class="form-control form-control-sm numbers m-t2" value="" autocomplete="off" placeholder="Quantity">';
+				$('.cus-qty-body').append(textbox);
+			}
+		});	
+
 		$(document).on('change','.language-change', function(){
 			if($('.language-body').children().last().val() != ""){
 				textbox = '<select class="form-control form-control-sm language-change m-t2" name="prefered_language[]">';
@@ -449,17 +475,21 @@
 			var _this = $(this);
 			$.ajax({
                 type: "POST",
-                url : "<?= base_url('generate_bill/all'); ?>",
+                url : "<?= base_url('generate_bill/getJobs'); ?>",
                 data : "client="+_this.data('client'),
                 cache : false,
+                dataType : "json",
                 beforeSend: function() {
                     _this.attr('disabled','true');
                     _this.html('<i class="fa fa-circle-o-notch fa-spin"></i> Please Wait');
                 },
                 success: function(out)
                 {
-                	PNOTY("Bill Generated",'success');  
-                	_this.closest('table').remove();
+                	$('#generateAllBillAppend').html(out['list']);
+                	$('#generateAllBillClient').val(out['client']);
+                	$('#generateAllBillModal').modal('show');
+                	_this.removeAttr('disabled');
+                    _this.html('Generate Full Bill');
                 }
             });
 		});
@@ -468,22 +498,24 @@
 			var _this = $(this);
 			$.ajax({
                 type: "POST",
-                url : "<?= base_url('generate_bill/single'); ?>",
+                url : "<?= base_url('generate_bill/getJob'); ?>",
                 data : "job="+_this.data('job'),
                 cache : false,
+                dataType : "json",
                 beforeSend: function() {
                     _this.attr('disabled','true');
                     _this.html('<i class="fa fa-circle-o-notch fa-spin"></i> Please Wait');
                 },
                 success: function(out)
                 {
-                	PNOTY("Bill Generated",'success');  
-                	tbody = _this.closest('tbody');
-                	if(tbody.children('tr').length == 1){
-                		_this.closest('table').remove();		
-                	}else{
-                		_this.closest('tr').remove();
-                	}
+                	$('#generateBillService').val(out['service']);
+                	$('#generateBillService').attr("title",out['service']);
+                	$('#generateBillPrice').val(out['price']);
+                	$('#generateBillQty').val(out['qty']);
+                	$('#generateBillJob').val(out['job']);
+                	$('#generateBillModal').modal('show');
+                	_this.removeAttr('disabled');
+                    _this.html('Generate Bill');
                 }
             });
 		});
@@ -502,6 +534,8 @@
 			$('#editPaymentAmount').val(_this.data('amount'));
 			$('#editPaymentClient').val(_this.data('client'));
 			$('#editPaymentRemarks').val(_this.data('remarks'));
+			$('#editPaymentType').val(_this.data('pay_type'));
+			$('#editPaymentPayRemarks').val(_this.data('pay_remarks'));
 			$('#editPaymentId').val(_this.data('id'));
 
 			$('.editPaymentClient').select2({
@@ -586,6 +620,7 @@
 
 		$('.customer-industry-select2').select2();
 		$('.customer-sub-industry-select2').select2();
+		
 	})
 
 
@@ -605,17 +640,70 @@
 
 <script type="text/javascript">
 	setInterval(function(){ 
-	    $.ajax({
+	    getNotification();
+	    getTodoNotification();
+	}, 30000);
+
+	$(function(){
+		$('#zeroNotificationCounter').click(function(){
+			$('#notificationCounter').html(0);
+			setTimeout(function() { $('#newNotification').hide(); }, 5000);
+			
+		})
+
+		$('#zeroTodoCounter').click(function(event) {
+			$('#todoCounter').html(0);
+			setTimeout(function() { $('#newTodo').hide(); }, 5000);
+		});
+	})
+
+	function redirectUrl(url = ""){
+		window.location = url;
+	}
+
+	function getNotification(){
+		$.ajax({
             type: "POST",
             url : "<?= base_url('followup/getNotifications'); ?>",
             cache : false,
             dataType : "json",
             success: function(out)
             {
-            	$.each(out, function(key,value) {
+            	$.each(out[0], function(key,value) {
 				   notifyMe(value['title'],value['desc'],value['url']);
 				});
+
+				if(out[2] != 0){
+					$('#notificationList li:eq(0)').after(out[1]);
+					counter = parseFloat($('#notificationCounter').html());
+					counter += out[2];
+					$('#notificationCounter').html(counter);
+					$('#newNotification').show();
+				}
             }
         });
-	}, 30000);
+	}
+
+	function getTodoNotification(){
+		$.ajax({
+            type: "POST",
+            url : "<?= base_url('followup/getTodoNotification'); ?>",
+            cache : false,
+            dataType : "json",
+            success: function(out)
+            {
+            	$.each(out[0], function(key,value) {
+				   //notifyMe(value['title'],value['desc'],value['url']);
+				});
+            	console.log(out);
+				if(out[2] != 0){
+					$('#todoList li:eq(0)').after(out[1]);
+					counter = parseFloat($('#todoCounter').html());
+					counter += out[2];
+					$('#todoCounter').html(counter);
+					$('#newTodo').show();
+				}
+            }
+        });
+	}
 </script>

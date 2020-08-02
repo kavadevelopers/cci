@@ -12,7 +12,7 @@
 
 <div class="page-body">
     <div class="card">
-        <form method="post" action="<?= base_url('company/update') ?>">
+        <form method="post" action="<?= base_url('company/update') ?>" enctype="multipart/form-data">
             <div class="card-block">
                 <div class="row">
 
@@ -72,7 +72,59 @@
                         </div>
                     </div>
 
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Letter Head</label>
+                            <input type="file" name="file" class="form-control fileupload-change" onchange="readFileImage(this)">
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Bank Name <span class="-req">*</span></label>
+                            <input name="bank" type="text" placeholder="Bank" class="form-control" value="<?= set_value('bank',$company['bank']); ?>">
+                            <?= form_error('bank') ?>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Account Holder Name <span class="-req">*</span></label>
+                            <input name="ac_name" type="text" placeholder="Account Holder Name" class="form-control" value="<?= set_value('ac_name',$company['ac_name']); ?>">
+                            <?= form_error('ac_name') ?>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Account No. <span class="-req">*</span></label>
+                            <input name="ac_no" type="text" placeholder="Account No." class="form-control" value="<?= set_value('ac_no',$company['ac_no']); ?>">
+                            <?= form_error('ac_no') ?>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>IFSC Code <span class="-req">*</span></label>
+                            <input name="ifsc" type="text" placeholder="IFSC Code" class="form-control" value="<?= set_value('ifsc',$company['ifsc']); ?>">
+                            <?= form_error('ifsc') ?>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>G-PAY,PAYTM,PHONE-PAY MOBILE <span class="-req">*</span></label>
+                            <input name="upi" type="text" placeholder="G-PAY,PAYTM,PHONE-PAY MOBILE" minlength="10" maxlength="10" class="form-control numbers" value="<?= set_value('upi',$company['upi']); ?>">
+                            <?= form_error('upi') ?>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <img src="<?= base_url('uploads/company/').$company['letter_head'] ?>" style="width: 50%; border: 1px solid #ccc;">
+                    </div>
+
                     <input type="hidden" name="id" value="<?= $company['id'] ?>">
+                    <input type="hidden" name="oldFile" value="<?= $company['letter_head'] ?>">
                 </div>
             </div>
 

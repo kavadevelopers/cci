@@ -22,6 +22,7 @@
                         <th class="text-center">#</th>
                         <th class="text-center">Date</th>
                         <th>Customer Name</th>
+                        <th class="text-left">Payment Type</th>
                         <th class="text-right">Amount</th>
                         <th>Remarks</th>
                         <th class="text-center">Approved</th>
@@ -38,6 +39,7 @@
                             <td class="text-center"><?= $value['invoice'] ?></td>
                             <td class="text-center"><?= vd($value['date']) ?></td>
                             <td><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?></td>
+                            <td class="text-left"><?= $value['pay_type'] ?><?= $value['pay_remarks'] != "" ? '<br>'.$value['pay_remarks']:''; ?></td>
                             <td class="text-right"><?= $value['amount'] ?></td>
                             <td><?= nl2br($value['remarks']) ?></td>
                             <td class="text-center">
@@ -52,7 +54,7 @@
                             <?php } ?>
                             <td class="text-center">
                                 <?php if($value['status'] != 1){ ?>
-                                    <button class="btn btn-primary btn-mini edit-payment" data-id="<?= $value['id'] ?>" data-client="<?= $value['client'] ?>" data-date="<?= vd($value['date']) ?>" data-amount="<?= $value['amount'] ?>" data-remarks="<?= $value['remarks'] ?>" title="Edit">
+                                    <button class="btn btn-primary btn-mini edit-payment" data-id="<?= $value['id'] ?>" data-client="<?= $value['client'] ?>" data-date="<?= vd($value['date']) ?>" data-amount="<?= $value['amount'] ?>" data-remarks="<?= $value['remarks'] ?>" data-pay_type="<?= $value['pay_type'] ?>" data-pay_remarks="<?= $value['pay_remarks'] ?>" title="Edit">
                                         <i class="fa fa-pencil"></i>
                                     </button>
                                     <a href="<?= base_url('payment/delete/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete" title="Delete">

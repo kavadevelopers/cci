@@ -32,6 +32,11 @@ class General_model extends CI_Model
 		return $this->db->get_where('source',['id'	=> $id,'df' => ''])->row_array();
 	}
 
+	public function _get_source($id)
+	{
+		return $this->db->get_where('source',['id'	=> $id])->row_array();
+	}
+
 	public function get_branch($id)
 	{
 		return $this->db->get_where('branch',['id'	=> $id,'df' => ''])->row_array();
@@ -233,6 +238,24 @@ class General_model extends CI_Model
 		}
 	}
 
+	public function get_cancel_clients()
+	{
+		if(get_user()['user_type'] == 0){
+			return $this->db->get_where('client',['status' => '9'])->result_array();
+		}else{
+			return $this->db->get_where('client',['branch' => get_user()['branch'],'status' => '9'])->result_array();
+		}
+	}
+
+	public function get_inactive_clients()
+	{
+		if(get_user()['user_type'] == 0){
+			return $this->db->get_where('client',['status' => '8'])->result_array();
+		}else{
+			return $this->db->get_where('client',['branch' => get_user()['branch'],'status' => '8'])->result_array();
+		}
+	}
+
 	public function getFilteredClients()
 	{
 		if(get_user()['user_type'] == 0 || get_user()['user_type'] == 2){
@@ -366,6 +389,28 @@ class General_model extends CI_Model
 			$this->db->or_where('from',$myId);
 		$this->db->group_end();
 		return $this->db->get('todo')->result_array();
+	}
+
+	public function getOutStandingClient($client_id)
+	{
+		$query = $this->db->select_sum('credit')->from('transaction')->where('client', $client_id)->get();
+		$ocredit = $query->row()->credit;
+
+		$query = $this->db->select_sum('debit')->from('transaction')->where('client', $client_id)->get();
+		$odebit = $query->row()->debit;
+
+
+		if($odebit > $ocredit){
+			$tra = $this->db->order_by('id','desc')->get_where('transaction',['client' => $client_id,'type' => invoice()])->row_array();
+			$days = daysBeetweenDates($tra['date']);
+			return [number_format($odebit - $ocredit,2),$days];
+		}else if($odebit < $ocredit){
+			$tra = $this->db->order_by('id','desc')->get_where('transaction',['client' => $client_id,'type' => payment()])->row_array();
+			$days = daysBeetweenDates($tra['date']);
+			return [number_format($odebit - $ocredit ,2),$days];
+		}else{
+			return [0,0];
+		}
 	}
 }
 ?>

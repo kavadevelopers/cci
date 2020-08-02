@@ -79,6 +79,9 @@
             PNOTY(string,'error');
             return false;
         }
+        $(function(){
+            $('.select2-container').addClass('m-t2');
+        })
     </script>
 
 	</body>

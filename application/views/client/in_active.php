@@ -60,12 +60,11 @@
                                 <a href="<?= base_url('client/view/').$value['id'] ?>" class="btn btn-primary btn-mini" title="View">
                                     <i class="fa fa-eye"></i>
                                 </a>
-                                <a href="<?= base_url('client/cancel/').$value['id'] ?>" class="btn btn-danger btn-mini" title="Transfer To Cancel">
-                                    <i class="fa fa-ban"></i>
-                                </a>
-                                <a href="<?= base_url('client/in_activate/').$value['id'] ?>" class="btn btn-warning btn-mini" title="Transfer To In Active">
-                                    <i class="fa fa-toggle-off"></i>
-                                </a>
+                                <?php if(get_user()['user_type'] == '0' || get_user()['user_type'] == '1'){ ?>
+                                    <a href="<?= base_url('client/active/').$value['id'] ?>/2" class="btn btn-info btn-mini" title="Transfer To Active">
+                                        <i class="fa fa-toggle-on"></i>
+                                    </a>
+                                <?php } ?>
                             </td>
                         </tr>
                     <?php } ?>

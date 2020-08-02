@@ -16,9 +16,23 @@ class Todo extends CI_Controller
 
 	public function save()
 	{
+
+		if($this->input->post('ftime') != ""){
+			$ftime = timeConverter($this->input->post('ftime'));
+		}else{
+			$ftime = null;
+		}
+
+		if($this->input->post('ttime') != ""){
+			$ttime = timeConverter($this->input->post('ttime'));
+		}else{
+			$ttime = null;
+		}
 		$data = [
 			'to'	=> $this->input->post('owner'),
 			'from'	=> get_user()['id'],
+			'ftime'	=> $ftime,
+			'ttime'	=> $ttime,
 			'remarks'	=>  $this->input->post('remarks'),
 			'date'	=>  dd($this->input->post('date'))
 		];

@@ -5,7 +5,7 @@ class Pdf extends CI_Controller
 	{
 		parent::__construct();
 		$this->auth->check_session();
-		$this->load->library('tcpdf/tcpdf');
+		$this->load->library('tcpdf/invoice');
 	}
 
 	public function invoice($id = false)
@@ -13,15 +13,19 @@ class Pdf extends CI_Controller
 		if($id){
 			if($this->general_model->_get_invoice($id)){
 				$invoice = $this->general_model->_get_invoice($id);
-				$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+				$company = $this->general_model->_get_company($invoice['company']);
+				$pdf = new Invoice(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+				$invoiceData['image'] = base_url('uploads/company/').$company['letter_head'];
+				$invoiceData['extention'] = getFileExtension($company['letter_head']);
+				$pdf->set($invoiceData);
+				$pdf->SetMargins(10, 35, 10);
 		        $pdf->SetCreator(PDF_CREATOR);
 		        $pdf->SetAuthor('Kava Developers');
 		        $pdf->SetTitle('Invoice - #'.$invoice['inv']);
 		        $pdf->SetSubject('Invoice - #'.$invoice['inv']);
 		        $pdf->SetKeywords('PDF');
 		        $pdf->SetFontSize(11);
-		        $pdf->setPrintHeader(false);
-		        $pdf->setPrintFooter(false);
+		        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 		        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 		        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 		        $pdf->AddPage();

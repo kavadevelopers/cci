@@ -34,10 +34,22 @@
                                         <span class="pcoded-mtext">New Client</span>
                                     </a>
                                 </li>
-                                <li class="<?= $this->uri->segment(2) != 'new_clients' && $this->uri->segment(2) != 'new_client_register' ?menu(1,["client"])[0]:''; ?>">
+                                <li class="<?= $this->uri->segment(2) != 'new_clients' && $this->uri->segment(2) != 'new_client_register' && $this->uri->segment(2) != 'canceled'  && $this->uri->segment(2) != 'in_active' ?menu(1,["client"])[0]:''; ?>">
                                     <a href="<?= base_url('client') ?>">
                                         <span class="pcoded-micon"><i class="fa fa-user-circle-o"></i></span>
-                                        <span class="pcoded-mtext">Clients</span>
+                                        <span class="pcoded-mtext">Active</span>
+                                    </a>
+                                </li>
+                                <li class="<?= menu(2,["in_active"])[0]; ?>">
+                                    <a href="<?= base_url('client/in_active') ?>">
+                                        <span class="pcoded-micon"><i class="fa fa-user"></i></span>
+                                        <span class="pcoded-mtext">In-Active</span>
+                                    </a>
+                                </li>
+                                <li class="<?= menu(2,["canceled"])[0]; ?>">
+                                    <a href="<?= base_url('client/canceled') ?>">
+                                        <span class="pcoded-micon"><i class="fa fa-user"></i></span>
+                                        <span class="pcoded-mtext">Cancel</span>
                                     </a>
                                 </li>
                             </ul>
@@ -79,33 +91,37 @@
                         </li>
                     </ul>
 
-                    <ul class="pcoded-item pcoded-left-item">
-                        <li class="<?= menu(1,["generate_bill"])[0]; ?>">
-                            <a href="<?= base_url('generate_bill') ?>">
-                                <span class="pcoded-micon"><i class="fa fa-address-card"></i></span>
-                                <span class="pcoded-mtext">Generate Bill</span>
-                            </a>
-                        </li>
-                    </ul>
-
                     
                 <?php } ?>
 
                 <ul class="pcoded-item pcoded-left-item">
-                    <li class="<?= menu(1,["invoices"])[0]; ?>">
-                        <a href="<?= base_url('invoices') ?>">
+                    <li class="pcoded-hasmenu <?= menu(1,["generate_bill","invoices","payment"])[2]; ?>">
+                        <a href="javascript:void(0)">
                             <span class="pcoded-micon"><i class="fa fa-newspaper-o"></i></span>
-                            <span class="pcoded-mtext">Invoices</span>
-                        </a>
-                    </li>
-                </ul>
-
-                <ul class="pcoded-item pcoded-left-item">
-                    <li class="<?= menu(1,["payment"])[0]; ?>">
-                        <a href="<?= base_url('payment') ?>">
-                            <span class="pcoded-micon"><i class="fa fa-money"></i></span>
-                            <span class="pcoded-mtext">Payment</span>
-                        </a>
+                            <span class="pcoded-mtext">Billing</span>
+                         </a>   
+                        <ul class="pcoded-submenu">
+                            <?php if($this->session->userdata('user_type') != "3"){ ?>
+                                <li class="<?= menu(1,["generate_bill"])[0]; ?>">
+                                    <a href="<?= base_url('generate_bill') ?>">
+                                        <span class="pcoded-micon"><i class="fa fa-address-card"></i></span>
+                                        <span class="pcoded-mtext">Generate Bill</span>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                            <li class="<?= menu(1,["invoices"])[0]; ?>">
+                                <a href="<?= base_url('invoices') ?>">
+                                    <span class="pcoded-micon"><i class="fa fa-newspaper-o"></i></span>
+                                    <span class="pcoded-mtext">Invoices</span>
+                                </a>
+                            </li>
+                            <li class="<?= menu(1,["payment"])[0]; ?>">
+                                <a href="<?= base_url('payment') ?>">
+                                    <span class="pcoded-micon"><i class="fa fa-money"></i></span>
+                                    <span class="pcoded-mtext">Payment</span>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
 

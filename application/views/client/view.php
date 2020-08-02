@@ -3,7 +3,16 @@
         <div class="col-md-6">
             <div class="page-header-title">
                 <div class="d-inline">
-                    <h4><?= $_title ?></h4>
+                    <h4><?= $client['fname'] .' '.$client['mname'].' '.$client['lname'] ?></h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 text-right">
+            <div class="page-header-title">
+                <div class="d-inline">
+                    <h4 class="text-right">
+                        OUTSTANDING : RS. <?= $this->general_model->getOutStandingClient($client['id'])[0]; ?> SINCE <?= $this->general_model->getOutStandingClient($client['id'])[1]; ?> DAYS
+                    </h4>
                 </div>
             </div>
         </div>

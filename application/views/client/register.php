@@ -163,8 +163,8 @@
 
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>Pin<span class="-req">*</span></label> 
-                            <input name="pin" type="text" placeholder="Pin" maxlength="6" minlength="6" class="form-control form-control-sm" value="<?= set_value('pin'); ?>" required>
+                            <label>Pin</label> 
+                            <input name="pin" type="text" placeholder="Pin" maxlength="6" minlength="6" class="form-control form-control-sm" value="<?= set_value('pin'); ?>" >
                             <?= form_error('pin') ?>
                         </div>
                     </div>
@@ -188,9 +188,9 @@
 
 		                    <div class="col-md-3">
 		                        <div class="form-group">
-		                        	<label>Prefered Time To Call<span class="-req">*</span></label> 
+		                        	<label>Prefered Time To Call</label> 
 		                        	<div class="time-body">
-		                        		<input name="time_to_call[]" type="text" placeholder="Add From To Time Here" class="form-control form-control-sm from-to-time" value="" required>
+		                        		<input name="time_to_call[]" type="text" placeholder="Add From To Time Here" class="form-control form-control-sm from-to-time" value="" >
 		                        	</div>
 		                        </div>
 		                    </div>
@@ -324,6 +324,18 @@
 		                        </div>
 		                    </div>
 
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Source <span class="-req">*</span></label> 
+                                    <select class="form-control form-control-sm select2" name="source" required>
+                                        <option value="">-- Select Source --</option>
+                                        <?php foreach ($this->general_model->get_sources() as $sekey => $sevalue) { ?> 
+                                            <option value="<?= $sevalue['id'] ?>" <?= selected($lead['source'], $sevalue['id']) ?>><?= $sevalue['name'] ?></option>
+                                        <?php } ?>
+                                    </select>   
+                                </div>
+                            </div>
+
 		                    <div class="col-md-12">
 		                    	<h4>Services</h4>
 		                    </div>
@@ -331,16 +343,16 @@
 		                    <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Services <span class="-req">*</span></label> 
-                                    <div class="service-body">
+                                    <div class="cus-service-body">
                                         <?php foreach (json_decode($lead['services']) as $key => $value) { ?>
-                                            <select class="form-control form-control-sm service-change m-t2 select2" name="services[]" <?= $key == '0'?'required':'' ?>>
+                                            <select class="form-control form-control-sm cus-service-change m-t2 select2" name="services[]" <?= $key == '0'?'required':'' ?>>
                                                 <option value="">-- Select Service --</option>
                                                 <?php foreach ($this->general_model->get_services() as $sekey => $sevalue) { ?> 
                                                     <option value="<?= $sevalue['id'] ?>-<?=$sevalue['price']?>" <?= selected($sevalue['id'],$value[0]) ?>><?= $sevalue['name'] ?></option>
                                                 <?php } ?>
                                             </select>       
                                         <?php } ?>
-                                        <select class="form-control form-control-sm service-change m-t2 select2" name="services[]">
+                                        <select class="form-control form-control-sm cus-service-change m-t2 select2" name="services[]">
                                             <option value="">-- Select Service --</option>
                                             <?php foreach ($this->general_model->get_services() as $sekey => $sevalue) { ?> 
                                                 <option value="<?= $sevalue['id'] ?>-<?=$sevalue['price']?>"><?= $sevalue['name'] ?></option>
@@ -352,8 +364,20 @@
 
                             <div class="col-md-3">
                                 <div class="form-group">
+                                    <label>Quantity </label> 
+                                    <div class="cus-qty-body">
+                                        <?php foreach (json_decode($lead['services']) as $key => $value) { ?>
+                                            <input type="text" name="qty[]" class="form-control form-control-sm numbers m-t2" value="1" autocomplete="off" placeholder="Quantity">      
+                                        <?php } ?>
+                                        <input type="text" name="qty[]" class="form-control form-control-sm numbers m-t2" autocomplete="off" placeholder="Quantity">   
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
                                     <label>Amount </label> 
-                                    <div class="amount-body">
+                                    <div class="cus-amount-body">
                                         <?php foreach (json_decode($lead['services']) as $key => $value) { ?>
                                             <input type="text" name="amount[]" class="form-control form-control-sm decimal-num m-t2" value="<?= $value[1] ?>" autocomplete="off" placeholder="Amount">      
                                         <?php } ?>

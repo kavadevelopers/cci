@@ -58,8 +58,12 @@ class Client extends CI_Controller
 			}
 		}
 
+		$lead = $this->general_model->_get_lead($this->input->post('lead'));
+		$source = $this->general_model->_get_source($lead['source']);
+
 		$data = [
 			'lead'		=> $this->input->post('lead'),
+			'company'		=> $source['company'],
 			'branch'		=> $this->input->post('branch'),
 			'fname'		=> strtoupper($this->input->post('fname')),
 			'mname'		=> strtoupper($this->input->post('mname')),
@@ -106,6 +110,12 @@ class Client extends CI_Controller
 			if($value != ''){
 				$service = explode('-',$value)[0];
 				$price = $this->input->post('amount')[$key];
+				if($this->input->post('qty')[$key] != ""){
+					$qty = $this->input->post('qty')[$key];
+				}else{
+					$qty = 1;
+				}
+				
 				$this->db->order_by('rand()');
 			    $this->db->limit(1);
 			    $this->db->where('user_type','2');
@@ -115,6 +125,7 @@ class Client extends CI_Controller
 					'branch'		=> $this->input->post('branch'),
 					'service'		=> $service,
 					'price'			=> $price,
+					'qty'			=> $qty,
 					'client'		=> $customer_id,
 					'status'		=> 0,
 					'owner'			=> $user['id'],
@@ -150,6 +161,64 @@ class Client extends CI_Controller
 		}else{
 			redirect(base_url('client'));
 		}
+	}
+
+	public function cancel($id = false)
+	{
+		if($id){
+			if($this->general_model->_get_client($id)){
+				$this->db->where('id',$id);
+				$this->db->update('client',['status' => 9]);
+				$this->session->set_flashdata('msg', 'Client Cancel Success');
+	    		redirect(base_url('client'));
+			}else{
+				redirect(base_url('client'));			
+			}
+		}else{
+			redirect(base_url('client'));
+		}
+	}
+
+	public function in_activate($id = FALSE)
+	{
+		if($id){
+			if($this->general_model->_get_client($id)){
+				$this->db->where('id',$id);
+				$this->db->update('client',['status' => 8]);
+				$this->session->set_flashdata('msg', 'Client In Activated');
+	    		redirect(base_url('client'));
+			}else{
+				redirect(base_url('client'));			
+			}
+		}else{
+			redirect(base_url('client'));
+		}
+	}
+
+	public function active($id,$type)
+	{
+		$this->db->where('id',$id);
+		$this->db->update('client',['status' => 0]);
+		$this->session->set_flashdata('msg', 'Client Activated');
+		if($type == '1'){
+			redirect(base_url('client/canceled'));
+		}else if($type == '2'){
+			redirect(base_url('client/in_active'));
+		}
+	}
+
+	public function canceled()
+	{
+		$data['_title']		= "Cancled Clients";	
+		$data['client']		= $this->general_model->get_cancel_clients();
+		$this->load->theme('client/cancel',$data);
+	}
+
+	public function in_active()
+	{
+		$data['_title']		= "In-Active Clients";	
+		$data['client']		= $this->general_model->get_inactive_clients();
+		$this->load->theme('client/in_active',$data);
 	}
 
 	public function add_group()

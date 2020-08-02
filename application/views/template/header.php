@@ -139,14 +139,28 @@
                         <ul class="nav-right">
                             <li class="header-notification">
                                 <div class="dropdown-primary dropdown">
-                                    <div class="dropdown-toggle" data-toggle="dropdown">
-                                        <i class="feather icon-bell"></i>
-                                        <span class="badge bg-c-pink">5</span>
+                                    <div class="dropdown-toggle" data-toggle="dropdown" id="zeroTodoCounter">
+                                        <i class="feather icon-bookmark"></i>
+                                        <span class="badge bg-c-pink" id="todoCounter">0</span>
                                     </div>
-                                    <ul class="show-notification notification-view dropdown-menu" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
+                                    <ul class="show-notification notification-view dropdown-menu notifyMy" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut" id="todoList">
+                                        <li>
+                                            <h6>To-Do Notifications</h6>
+                                            <label class="label label-warning" id="newTodo" style="display: none;">New</label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="header-notification">
+                                <div class="dropdown-primary dropdown">
+                                    <div class="dropdown-toggle" data-toggle="dropdown" id="zeroNotificationCounter">
+                                        <i class="feather icon-bell"></i>
+                                        <span class="badge bg-c-pink" id="notificationCounter">0</span>
+                                    </div>
+                                    <ul class="show-notification notification-view dropdown-menu notifyMy" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut" id="notificationList">
                                         <li>
                                             <h6>Notifications</h6>
-                                            <label class="label label-danger">New</label>
+                                            <label class="label label-danger" id="newNotification" style="display: none;">New</label>
                                         </li>
                                     </ul>
                                 </div>

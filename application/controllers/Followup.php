@@ -76,7 +76,7 @@ class Followup extends CI_Controller
 		$fId = $this->db->insert_id();
 
 		$status = $this->input->post('cus') == '1'?1:0;
-		$this->db->where('id',$this->input->post('id'))->update('leads',['next_followup_date' => dd($this->input->post('date')),'tfrom'	=> $ftime,'tto' => $ttime,'status'	=> $status]);
+		$this->db->where('id',$this->input->post('id'))->update('leads',['next_followup_date' => dd($this->input->post('date')),'tfrom'	=> $ftime,'tto' => $ttime,'status'	=> $status,'fstatus' => 0]);
 
 
 		$followup = $this->db->get_where('followup',['id' => $fId])->row_array();
@@ -188,7 +188,7 @@ class Followup extends CI_Controller
 
 	public function getNotifications()
 	{
-		$array = [];
+		$array = []; $strArray = ""; $leadcounter = 0;
 		if(get_user()['user_type'] == "3"){
 			$this->db->where('owner',get_user()['id']);
 			$this->db->where('df','');
@@ -211,6 +211,28 @@ class Followup extends CI_Controller
 				array_push($array, $ar);
 				$this->db->where('id',$value['id'])->update('leads',['fstatus' => 1]);
 			}
+
+			
+			foreach ($data as $key => $value) {
+				$leadcounter++;
+				if($value['tfrom'] != null){
+					$desc = "Followup At ".vt($value['tfrom']);
+				}else{
+					$desc = "New Followup";
+				}
+				$url = base_url('followup/lead');
+				$list = "";
+	    		$list .= "<li onclick='redirectUrl(".'"'.$url.'"'.");'><div class='media'>";
+                    $list .= '<div class="media-body">';
+                        $list .= '<h5 class="notification-user">'."#".$value['lead'].date('Y-m-d H:i:s').'</h5>';
+                        $list .= '<p class="notification-msg">'.$desc.'</p>';
+                        $list .= '<span class="notification-time timeago" date="'.date('Y-m-d H:i:s').'">'.time_elapsed_string(date('Y-m-d H:i:s')).'</span>';
+                    $list .= '</div>';
+                $list .= '</div></li>';
+    			$list .= '<div class="dropdown-divider"></div>';
+				$strArray .= $list;
+				$this->db->where('id',$value['id'])->update('leads',['fstatus' => 1]);
+			}			
 		}
 
 		if(get_user()['user_type'] == "2"){
@@ -236,7 +258,54 @@ class Followup extends CI_Controller
 		}
 
 
-		echo json_encode($array);
+		echo json_encode([$array,$strArray,$leadcounter]);
+	}
+
+	public function getTodoNotification()
+	{
+		$this->db->where('to',get_user()['id']);
+		$this->db->where('status',0);
+		$this->db->where('fstatus',0);
+		$this->db->where('date',date('Y-m-d'));
+		$this->db->where('ftime <=',date('H:i:s'));
+		$data = $this->db->get('todo')->result_array();
+		$array = []; $strArray = ""; $todocounter = 0;
+		foreach ($data as $key => $value) {
+			if($value['ftime'] != null){
+				$desc = "Task At ".vt($value['ftime']);
+			}else{
+				$desc = "New Task";
+			}
+			$ar = [
+				'title'	=> $desc,
+				'desc'	=> $value['remarks'],
+				'url'	=> base_url('todo')
+			];
+			array_push($array, $ar);
+			$this->db->where('id',$value['id'])->update('todo',['fstatus' => 1]);
+		}
+
+		foreach ($data as $key => $value) {
+			$todocounter++;
+			if($value['ftime'] != null){
+				$desc = "Task At ".vt($value['ftime']);
+			}else{
+				$desc = "New Task";
+			}
+			$url = base_url('todo');
+			$list = "";
+    		$list .= "<li onclick='redirectUrl(".'"'.$url.'"'.");'><div class='media'>";
+                $list .= '<div class="media-body">';
+                    $list .= '<h5 class="notification-user">'.$desc.'</h5>';
+                    $list .= '<p class="notification-msg">'.$value['remarks'].'</p>';
+                    $list .= '<span class="notification-time timeago" date="'.date('Y-m-d H:i:s').'">'.time_elapsed_string(date('Y-m-d H:i:s')).'</span>';
+                $list .= '</div>';
+            $list .= '</div></li>';
+			$list .= '<div class="dropdown-divider"></div>';
+			$strArray .= $list;
+			$this->db->where('id',$value['id'])->update('todo',['fstatus' => 1]);
+		}		
+		echo json_encode([$array,$strArray,$todocounter]);
 	}
 }
 

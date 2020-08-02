@@ -33,6 +33,8 @@ class Payment extends CI_Controller
 			'branch'		=> $client['branch'],
 			'company'		=> $client['company'],
 			'amount'		=> $this->input->post('amount'),
+			'pay_type'		=> $this->input->post('payment_type'),
+			'pay_remarks'		=> $this->input->post('pay_remarks'),
 			'remarks'		=> $this->input->post('remarks'),
 			'status'		=> $status,
 			'created_by'	=> get_user()['id'],
@@ -70,6 +72,8 @@ class Payment extends CI_Controller
 			'client'		=> $this->input->post('client'),
 			'branch'		=> $client['branch'],
 			'company'		=> $client['company'],
+			'pay_type'		=> $this->input->post('payment_type'),
+			'pay_remarks'		=> $this->input->post('pay_remarks'),
 			'amount'		=> $this->input->post('amount'),
 			'remarks'		=> $this->input->post('remarks')
 		];

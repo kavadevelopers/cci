@@ -7,11 +7,11 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6 text-right">
+        <!-- <div class="col-md-6 text-right">
             <a href="<?= base_url('company/add') ?>" class="btn btn-info btn-sm">
                 <i class="fa fa-plus"></i> Add
             </a>
-        </div>
+        </div> -->
     </div>
 </div>
 
@@ -39,9 +39,9 @@
                                 <a href="<?= base_url('company/edit/').$value['id'] ?>" class="btn btn-primary btn-mini">
                                     <i class="fa fa-pencil"></i>
                                 </a>
-                                <a href="<?= base_url('company/delete/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete">
+                                <!-- <a href="<?= base_url('company/delete/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete">
                                     <i class="fa fa-trash"></i>
-                                </a>
+                                </a> -->
                             </td>
                         </tr>
                     <?php } ?>

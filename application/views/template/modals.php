@@ -326,6 +326,20 @@
                             <label>Amount <span class="-req">*</span></label> 
                             <input type="text" name="amount" class="form-control form-control-sm decimal-num" autocomplete="off" placeholder="Amount" required>   
                         </div>
+                        <div class="col-md-6">
+                            <label>Payment Type <span class="-req">*</span></label> 
+                            <select class="form-control" name="payment_type" required>
+                                <option value="">-- Select --</option>
+                                <option value="Cash">Cash</option>
+                                <option value="Bank">Bank</option>
+                                <option value="UPI">UPI</option>
+                                <option value="Cheque">Cheque</option>
+                            </select> 
+                        </div>
+                        <div class="col-md-6">
+                            <label>Payment Remarks </label> 
+                            <input type="text" name="pay_remarks" class="form-control form-control-sm" autocomplete="off" placeholder="Payment Remarks" > 
+                        </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Select Client <span class="-req">*</span></label> 
@@ -375,6 +389,20 @@
                         <div class="col-md-6">
                             <label>Amount <span class="-req">*</span></label> 
                             <input type="text" name="amount" class="form-control form-control-sm decimal-num" id="editPaymentAmount" autocomplete="off" placeholder="Amount" required>   
+                        </div>
+                        <div class="col-md-6">
+                            <label>Payment Type <span class="-req">*</span></label> 
+                            <select class="form-control" name="payment_type" id="editPaymentType" required>
+                                <option value="">-- Select --</option>
+                                <option value="Cash">Cash</option>
+                                <option value="Bank">Bank</option>
+                                <option value="UPI">UPI</option>
+                                <option value="Cheque">Cheque</option>
+                            </select> 
+                        </div>
+                        <div class="col-md-6">
+                            <label>Payment Remarks </label> 
+                            <input type="text" name="pay_remarks" class="form-control form-control-sm" id="editPaymentPayRemarks" autocomplete="off" placeholder="Payment Remarks" > 
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
@@ -429,9 +457,16 @@
                             </select>
                             <?= form_error('owner') ?>
                         </div>
-                        <div class="form-group">
-                            <label>Date <span class="-req">*</span></label> 
-                            <input name="date" type="text" placeholder="Date" class="form-control form-control-sm datepicker" value="<?= set_value('date',date('d-m-Y')); ?>" readonly required>
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label>Date <span class="-req">*</span></label> 
+                                <input name="date" type="text" placeholder="Date" class="form-control form-control-sm datepicker" value="<?= set_value('date',date('d-m-Y')); ?>" readonly required>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Time</label> 
+                                <input name="ftime" type="text" placeholder="From" class="form-control form-control-sm hour-mask" value="">
+                                <input name="ttime" type="text" placeholder="To" class="form-control form-control-sm hour-mask" value="">
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>Remarks <span class="-req">*</span></label> 
@@ -448,4 +483,86 @@
     </form>
 </div>
 
+<div class="modal fade" id="generateBillModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <form method="post" action="<?= base_url('generate_bill/single') ?>">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Generate Bill</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                              <div class="form-group">
+                                <label>Service <span class="-req">*</span></label> 
+                                <input name="" type="text" placeholder="Service" class="form-control form-control-sm" id="generateBillService" value="" readonly>
+                            </div>
+                        </div>    
+                        <div class="col-md-4">
+                              <div class="form-group">
+                                <label>Qty <span class="-req">*</span></label> 
+                                <input name="qty" type="text" placeholder="Qty" class="form-control form-control-sm numbers" id="generateBillQty" value="" required>
+                            </div>
+                        </div>    
+                        <div class="col-md-4">
+                              <div class="form-group">
+                                <label>Price <span class="-req">*</span></label>
+                                <input name="price" type="text" placeholder="Price" class="form-control form-control-sm decimal-num" id="generateBillPrice" value="" required>
+                            </div>
+                        </div>    
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Remarks</label> 
+                                <textarea class="form-control" name="remarks" placeholder="Remarks" ></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="job" id="generateBillJob">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Generate</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal fade" id="generateAllBillModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <form method="post" action="<?= base_url('generate_bill/all') ?>">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Generate Bill</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row" id="generateAllBillAppend">
+                           
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Remarks</label> 
+                                <textarea class="form-control" name="remarks" placeholder="Remarks" ></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="client" id="generateAllBillClient">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Generate</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
     

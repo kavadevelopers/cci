@@ -20,8 +20,13 @@ class Generate_bill extends CI_Controller
 
 	public function all()
 	{
-
 		$date = date('Y-m-d');
+
+		foreach ($this->input->post('jobId') as $key => $value) {
+			$this->db->where('id',$this->input->post('jobId')[$key]);
+			$this->db->update('job',['price' => $this->input->post('price')[$key],'qty' => $this->input->post('qty')[$key]]);
+		}
+
 
 		$this->db->where('status','3');
 		$this->db->where('client',$this->input->post('client'));
@@ -38,6 +43,7 @@ class Generate_bill extends CI_Controller
 			'branch'			=> $client['branch'],
 			'client'			=> $this->input->post('client'),
 			'date'				=> $date,
+			'remarks'			=> $this->input->post('remarks'),
 			'created_at'		=> date('Y-m-d H:i:s'),
 			'created_by'		=> get_user()['id']
 		];
@@ -45,13 +51,13 @@ class Generate_bill extends CI_Controller
 		$inv_id = $this->db->insert_id();
 		$total = 0;
 		foreach ($jobs as $key => $value) {
-			$total += $value['price'];
+			$total += $value['price'] * $value['qty'];
 
 			$data = [
-				'service'			=> $this->input->post('client'),
+				'service'			=> $value['service'],
 				'price'				=> $value['price'],
-				'qty'				=> "1.00",
-				'total'				=> $value['price'],
+				'qty'				=> $value['qty'],
+				'total'				=> $value['price'] * $value['qty'],
 				'invoice'			=> $inv_id
 			];
 			$this->db->insert('invoice_details',$data);
@@ -84,11 +90,17 @@ class Generate_bill extends CI_Controller
 			'debit'		=> $total,
 		];
 		$this->db->insert('transaction',$data);
+
+		$this->session->set_flashdata('msg', 'Bill Generated');
+	    redirect(base_url('generate_bill'));
 	}
 
 	public function single()
 	{
 		$date = date('Y-m-d');
+
+		$this->db->where('id',$this->input->post('job'));
+		$this->db->update('job',['price' => $this->input->post('price'),'qty' => $this->input->post('qty')]);
 
 		$this->db->where('id',$this->input->post('job'));
 		$jobs = $this->db->get('job')->row_array();
@@ -103,6 +115,7 @@ class Generate_bill extends CI_Controller
 			'company'			=> $client['company'],
 			'branch'			=> $client['branch'],
 			'client'			=> $client['id'],
+			'remarks'			=> $this->input->post('remarks'),
 			'date'				=> $date,
 			'created_at'		=> date('Y-m-d H:i:s'),
 			'created_by'		=> get_user()['id']
@@ -110,13 +123,13 @@ class Generate_bill extends CI_Controller
 		$this->db->insert('invoice',$data);
 		$inv_id = $this->db->insert_id();
 		$total = 0;
-		$total += $jobs['price'];
+		$total += $jobs['price'] * $jobs['qty'];
 
 		$data = [
-			'service'			=> $client['id'],
+			'service'			=> $jobs['service'],
 			'price'				=> $jobs['price'],
-			'qty'				=> "1.00",
-			'total'				=> $jobs['price'],
+			'qty'				=> $jobs['qty'],
+			'total'				=> $jobs['price'] * $jobs['qty'],
 			'invoice'			=> $inv_id
 		];
 		$this->db->insert('invoice_details',$data);
@@ -148,6 +161,57 @@ class Generate_bill extends CI_Controller
 			'debit'		=> $total,
 		];
 		$this->db->insert('transaction',$data);
+
+		$this->session->set_flashdata('msg', 'Bill Generated');
+	    redirect(base_url('generate_bill'));
+	}
+
+
+	public function getJob()
+	{
+		$this->db->where('id',$this->input->post('job'));
+		$jobs = $this->db->get('job')->row_array();
+
+		$service = $this->general_model->_get_service($jobs['service']);
+
+		echo json_encode(['job' => $this->input->post('job'),'qty' => $jobs['qty'],'price' => $jobs['price'],'service' => $service['name']]);
+	}
+
+	public function getJobs()
+	{
+		$this->db->where('status','3');
+		$this->db->where('client',$this->input->post('client'));
+		$jobs = $this->db->get('job')->result_array();
+
+
+		$str = "";
+		foreach ($jobs as $key => $job) {
+			$service = $this->general_model->_get_service($job['service']);
+			$ar = 	[
+						'job' => $this->input->post('job'),
+						'qty' => $job['qty'],
+						'price' => $job['price'],
+						'service' => $service['name']
+				];	
+			
+			$str .= '<div class="col-md-4"><input type="hidden" value="'.$job['id'].'" name="jobId[]">';
+				$str .= '<div class="form-group">';
+					$str .= '<label>Service <span class="-req">*</span></label> ';
+					$str .= '<input name="" type="text" placeholder="Service" class="form-control form-control-sm" id="" value="'.$service["name"].'" title="'.$service["name"].'" readonly>';
+					$str .= '</div></div>';
+			$str .= '<div class="col-md-4">';
+                $str .= '<div class="form-group">';
+                    $str .= '<label>Qty <span class="-req">*</span></label>';
+                    $str .= '<input name="qty[]" type="text" placeholder="Qty" class="form-control form-control-sm numbers" id="" value="'.$job['qty'].'" required>';
+					$str .= '</div></div> ';
+			$str .= '<div class="col-md-4">';
+                $str .= '<div class="form-group">';
+                    $str .= '<label>Price <span class="-req">*</span></label>';
+                    $str .= '<input name="price[]" type="text" placeholder="Price" class="form-control form-control-sm decimal-num" id="" value="'.$job['price'].'" required>';
+                	$str .= '</div></div>';
+		}
+
+		echo json_encode(['client' => $this->input->post('client'),'list' => $str]);
 	}
 }
 

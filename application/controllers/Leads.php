@@ -122,7 +122,7 @@ class Leads extends CI_Controller
 		    	$_FILES['doc']['error'] 	= $_FILES['file']['error'][$key];
 		    	$_FILES['doc']['size'] 		= $_FILES['file']['size'][$key];
 
-		    	$config['file_name'] = $fileName;
+		    	$config['file_name'] = $fname;
 		    	$this->upload->initialize($config);
 		    	if($this->upload->do_upload('doc')){
 		    		$data = [
@@ -247,7 +247,7 @@ class Leads extends CI_Controller
 		    	$_FILES['doc']['error'] 	= $_FILES['file']['error'][$key];
 		    	$_FILES['doc']['size'] 		= $_FILES['file']['size'][$key];
 
-		    	$config['file_name'] = $fileName;
+		    	$config['file_name'] = $fname;
 		    	$this->upload->initialize($config);
 		    	if($this->upload->do_upload('doc')){
 		    		$data = [

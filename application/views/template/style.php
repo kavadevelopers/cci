@@ -1,6 +1,23 @@
 <style type="text/css">
-	::-webkit-scrollbar {
+	/*::-webkit-scrollbar {
 	display: none;
+	}*/
+	.notifyMy li{
+		padding: 2px 5px;
+		border-bottom: 1px solid #ccc;
+	}
+	.notifyMy{
+		max-height: 350px;
+	    overflow-y: scroll !important;
+	}
+	.header-navbar .navbar-wrapper .navbar-container .header-notification .show-notification .notification-msg{
+		margin-bottom: 0;
+	}
+	.main-body .page-wrapper {
+    	padding: 5px;
+    }
+    .main-body .page-wrapper .page-header {
+	    margin-bottom: 12px;
 	}
 	.dis-block{
 		display: block;
