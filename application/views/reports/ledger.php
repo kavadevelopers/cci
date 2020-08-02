@@ -20,24 +20,25 @@
             <div class="card">
                 <form method="post" action="<?= base_url('reports/ledger_result') ?>">
                     <div class="card-block">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label>Client <span class="-req">*</span></label>
+                                    <select class="form-control form-control-sm select2" name="client" required>
+                                        <option value="">-- Select --</option>
+                                        <?php foreach ($this->general_model->getFilteredClients() as $key => $value) { ?>
+                                            <option value="<?= $value['id'] ?>" <?= $value['id'] == $client?'selected':''; ?>><?= $value['c_id'].' - '.$value['fname'].' '.$value['mname'].' '.$value['lname'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <?= form_error('client') ?>
+                                </div>
+                            </div>   
 
-                        <div class="col-md-8">
-                            <div class="form-group">
-                                <label>Client <span class="-req">*</span></label>
-                                <select class="form-control form-control-sm select2" name="client" required>
-                                    <option value="">-- Select --</option>
-                                    <?php foreach ($this->general_model->getFilteredClients() as $key => $value) { ?>
-                                        <option value="<?= $value['id'] ?>" <?= $value['id'] == $client?'selected':''; ?>><?= $value['c_id'].' - '.$value['fname'].' '.$value['mname'].' '.$value['lname'] ?></option>
-                                    <?php } ?>
-                                </select>
-                                <?= form_error('client') ?>
+                            <div class="col-md-4">
+                                <button class="btn btn-success">
+                                    <i class="fa fa-eye"></i> Show
+                                </button>    
                             </div>
-                        </div>   
-
-                        <div class="col-md-4">
-                            <button class="btn btn-success">
-                                <i class="fa fa-eye"></i> Show
-                            </button>    
                         </div>
 
                     </div>
