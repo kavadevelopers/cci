@@ -48,6 +48,14 @@
                         </div>
                     </div>
 
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Renual In Month <span class="-req">*</span></label>
+                            <input name="renual" type="text" placeholder="Renual In Month" class="form-control numbers" value="<?= set_value('renual',$service['renual']); ?>">
+                            <?= form_error('renual') ?>
+                        </div>
+                    </div>
+
                     <input type="hidden" name="id" value="<?= $service['id'] ?>">
                 </div>
             </div>

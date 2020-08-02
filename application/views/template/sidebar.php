@@ -188,7 +188,7 @@
                 <?php } ?>
 
 
-                <?php if($this->session->userdata('user_type') == "1" || $this->session->userdata('user_type') == "3"){ ?>
+                <?php if($this->session->userdata('user_type') == "0" || $this->session->userdata('user_type') == "1" || $this->session->userdata('user_type') == "3"){ ?>
                     <ul class="pcoded-item pcoded-left-item">
                         <li class="pcoded-hasmenu <?= menu(1,["followup"])[2]; ?>">
                             <a href="javascript:void(0)">
@@ -202,11 +202,35 @@
                                         <span class="pcoded-mtext">Lead</span>
                                     </a>
                                 </li>
+                                <?php if($this->session->userdata('user_type') == "0"){ ?>
+                                    <li class="<?= menu(2,["job"])[0]; ?>">
+                                        <a href="<?= base_url('followup/job') ?>">
+                                            <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                            <span class="pcoded-mtext">Job</span>
+                                        </a>
+                                    </li>
+                                <?php } ?>
                             </ul>
                         </li>
                     </ul>
-                <?php } ?>                    
+                <?php } ?>   
 
+                <ul class="pcoded-item pcoded-left-item">
+                    <li class="pcoded-hasmenu <?= menu(1,["reports"])[2]; ?>">
+                        <a href="javascript:void(0)">
+                            <span class="pcoded-micon"><i class="fa fa-window-restore"></i></span>
+                            <span class="pcoded-mtext">Reports</span>
+                         </a>   
+                        <ul class="pcoded-submenu">
+                            <li class="<?= menu(2,["ledger"])[0]; ?>">
+                                <a href="<?= base_url('reports/ledger') ?>">
+                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                    <span class="pcoded-mtext">Ledger</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
 
                 <?php if($this->session->userdata('user_type') == "0"){ ?>
                     <div class="pcoded-navigatio-lavel">Master's Management</div>
@@ -324,6 +348,13 @@
                             <a href="<?= base_url('source') ?>">
                                 <span class="pcoded-micon"><i class="fa fa-share-square"></i></span>
                                 <span class="pcoded-mtext">Source</span>
+                            </a>
+                        </li>
+
+                        <li class="<?= menu(1,["document"])[0]; ?>">
+                            <a href="<?= base_url('document/folder') ?>">
+                                <span class="pcoded-micon"><i class="fa fa-folder-open-o"></i></span>
+                                <span class="pcoded-mtext">Document Folder</span>
                             </a>
                         </li>
                     <?php } ?>

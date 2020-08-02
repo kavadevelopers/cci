@@ -10,13 +10,27 @@ class Followup extends CI_Controller
 	public function lead()
 	{
 		$data['_title']		= "Lead Followup";
-		$this->db->where('owner',$this->session->userdata('id'));
+		if(get_user()['user_type'] != '0'){
+			$this->db->where('owner',$this->session->userdata('id'));
+		}
 		$this->db->where('df',"");
 		$this->db->where('dump',"");
 		$this->db->where('status',0);
 		$this->db->where('next_followup_date <=', date('Y-m-d'));
 		$data['leads']		= $this->db->get('leads')->result_array();
 		$this->load->theme('followup/lead',$data);	
+	}
+
+	public function job()
+	{
+		$data['_title']		= "Job Followup";
+		if(get_user()['user_type'] != '0'){
+			$this->db->where('owner',$this->session->userdata('id'));
+		}
+		$this->db->where('fstatus',0);
+		$this->db->where('f_date <=', date('Y-m-d'));
+		$data['jobs']		= $this->db->get('job')->result_array();
+		$this->load->theme('followup/job',$data);	
 	}
 
 	public function get()
@@ -95,6 +109,28 @@ class Followup extends CI_Controller
 		$lead = $this->db->get_where('leads',['id' => $this->input->post('id')])->row_array();
 		$date_str = vd($lead['next_followup_date']).get_from_to($lead['tfrom'],$lead['tto']);
 		echo json_encode([$str,$date_str]);
+
+
+		if($this->input->post('cus') == '1'){
+			$lead = $this->general_model->_get_lead($this->input->post('id'));
+			$source = $this->general_model->_get_source($lead['source']);
+
+			$client_count = $this->db->get_where('client',['branch' => $lead['branch']])->num_rows();
+
+			$data = [
+				'c_id'				=> "0".$lead['branch'].getClientId($client_count + 1),
+				'lead'				=> $this->input->post('id'),
+				'group'				=> "GROUP_0".$lead['branch'].getClientId($client_count + 1),
+				'company'			=> $source['company'],
+				'branch'			=> $lead['branch'],
+				'fname'				=> strtoupper($lead['customer']),
+				'created_by'		=> get_user()['id'],
+				'created_at'		=> date('Y-m-d H:i:s'),
+				'owner'				=> $lead['owner'],
+				'status'			=> 1
+			];
+			$this->db->insert('client',$data);
+		}
 	}
 
 	public function saveJob()

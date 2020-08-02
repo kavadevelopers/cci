@@ -38,6 +38,9 @@
                                 <a href="<?= base_url('pdf/invoice/').$value['id'] ?>" target="_blank" class="btn btn-primary btn-mini" title="PDF">
                                     <i class="fa fa-file-pdf-o"></i>
                                 </a>
+                                <a href="<?= base_url('pdf/invoiceD/').$value['id'] ?>" target="_blank" class="btn btn-secondary btn-mini" title="Download PDF">
+                                    <i class="fa fa-download"></i>
+                                </a>
                             </td>
                         </tr>
                     <?php } ?>

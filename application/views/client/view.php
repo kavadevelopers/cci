@@ -3,7 +3,7 @@
         <div class="col-md-6">
             <div class="page-header-title">
                 <div class="d-inline">
-                    <h4><?= $client['fname'] .' '.$client['mname'].' '.$client['lname'] ?></h4>
+                    <h4>#<?= $client['c_id'] ?> - <?= $client['fname'] .' '.$client['mname'].' '.$client['lname'] ?></h4> 
                 </div>
             </div>
         </div>
@@ -32,6 +32,11 @@
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#profileTab" role="tab">Profile</a>
                         </li>
+                        <?php if(count(json_decode($client['contact_persons'])) > 0){ ?>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#contactPerson" role="tab">Contact Persons</a>
+                            </li>
+                        <?php } ?>
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#addInfoTab" role="tab">Additional Information</a>
                         </li>
@@ -50,13 +55,42 @@
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#docTab" role="tab">Documents</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-danger" href="<?= base_url('client') ?>"><i class="fa fa-arrow-left"></i> Back</a>
+                        </li>
                     </ul>
                     <div class="tab-content tabs card-block">
+                        <?php if(count(json_decode($client['contact_persons'])) > 0){ ?>
+                            <div class="tab-pane" id="contactPerson" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table class="table table-bordered small-table-kava">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Mobile</th>
+                                                    <th>Address</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php foreach (json_decode($client['contact_persons']) as $key => $value) { ?>
+                                                    <tr>
+                                                        <td><?= $value->name ?></td>
+                                                        <td><?= $value->mobile ?></td>
+                                                        <td><?= $value->name ?></td>
+                                                    </tr>
+                                                <?php } ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>    
+                        <?php } ?>
                     	<div class="tab-pane active" id="basicTab" role="tabpanel">
 	                        <div class="row">
 	                        	<div class="col-md-6">
 	                        		<div class="table-responsive">
-                                        <table class="table m-0">
+                                        <table class="table m-0 small-table-kava">
                                             <tbody>
                                                 <tr>
                                                     <th scope="row">Full Name</th>
@@ -83,12 +117,16 @@
                                                     <td><?= $client['add2'] ?></td>
                                                 </tr>
                                                 <tr>
-                                                    <th scope="row">Area</th>
+                                                    <th scope="row">Area/Village</th>
                                                     <td><?= $this->general_model->_get_area($client['area'])['name'] ?></td>
                                                 </tr>
                                                 <tr>
-                                                    <th scope="row">City</th>
+                                                    <th scope="row">City/Taluka</th>
                                                     <td><?= $this->general_model->_get_city($client['city'])['name'] ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">District</th>
+                                                    <td><?= $client['district'] ?></td>
                                                 </tr>
                                                 <tr>
                                                     <th scope="row">State</th>
@@ -104,8 +142,16 @@
 	                        	</div>
 	                        	<div class="col-md-6">
 	                        		<div class="table-responsive">
-                                        <table class="table m-0">
+                                        <table class="table m-0 small-table-kava">
                                             <tbody>
+                                                <tr>
+                                                    <th scope="row">CLIENT ID</th>
+                                                    <td><?= $client['c_id'] ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Client Type</th>
+                                                    <td><?= $this->general_model->_get_client_type($client['client_type'])['name'] ?></td>
+                                                </tr>
                                                 <tr>
                                                     <th scope="row">PAN</th>
                                                     <td><?= $client['pan'] ?></td>
@@ -154,7 +200,7 @@
 	                        <div class="row">
 	                        	<div class="col-md-6">
 	                        		<div class="table-responsive">
-                                        <table class="table m-0">
+                                        <table class="table m-0 small-table-kava">
                                             <tbody>
                                                 <tr>
                                                     <th scope="row">Occupation</th>
@@ -172,21 +218,37 @@
                                                     <th scope="row">Industry Remarks</th>
                                                     <td><?= nl2br($client['ind_remarks']) ?></td>
                                                 </tr>
+                                                <tr>
+                                                    <th scope="row">Created By</th>
+                                                    <td><?= $this->general_model->_get_user($client['created_by'])['name'] ?></td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
 	                        	</div>
 	                        	<div class="col-md-6">
 	                        		<div class="table-responsive">
-                                        <table class="table m-0">
+                                        <table class="table m-0 small-table-kava">
                                             <tbody>
                                                 <tr>
                                                     <th scope="row">Profile Introduction</th>
-                                                    <td><?= $client['profile_intro'] ?></td>
+                                                    <td><?= nl2br($client['profile_intro']) ?></td>
                                                 </tr>
                                                 <tr>
                                                     <th scope="row">Actual Turnover & Stock & Other</th>
-                                                    <td><?= $client['turnover_notes'] ?></td>
+                                                    <td><?= nl2br($client['turnover_notes']) ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Future Specific Goal</th>
+                                                    <td><?= nl2br($client['goal']) ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Special Quotation</th>
+                                                    <td><?= nl2br($client['quotation']) ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Created At</th>
+                                                    <td><?= _vdatetime($client['created_at']) ?></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -387,7 +449,134 @@
 	                        	<div class="col-md-12">
 	                        		<div class="table-responsive">
 
-                                        
+                                        <?php if($client['lead'] != ""){ ?>
+                                            <?php $lead = $this->general_model->_get_lead($client['lead']);
+                                            $docs = $this->db->get_where('files',['for' => 'Lead' , 'for_id' => $lead['id']])->result_array() ?>
+                                            <?php if($docs){ ?>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <h5>Lead</h5>
+                                                    <div class="row col-md-12">
+                                                        <?php foreach ($docs as $key => $value) { ?>
+                                                            <div class="col-md-2 remove-file" style="padding: 20px;">
+                                                                <?php if($value['type'] == 'png' || $value['type'] == 'jpg' || $value['type'] == 'jpeg'){ ?>
+                                                                    <img src="<?= base_url('uploads/doc/').$value['filename'] ?>" class="grid-images" style="width: 100%;"> 
+                                                                <?php } ?>
+                                                                <?php if($value['type'] == 'docx'){ ?>
+                                                                    <img src="<?= base_url('asset/images/word.jpg') ?>" class="grid-images" style="width: 100%;"> 
+                                                                <?php } ?>
+                                                                <?php if($value['type'] == 'csv' || $value['type'] == 'xlsx'){ ?>
+                                                                    <img src="<?= base_url('asset/images/excel.jpg') ?>" class="grid-images" style="width: 100%;"> 
+                                                                <?php } ?>
+                                                                <?php if($value['type'] == 'pdf'){ ?>
+                                                                    <img src="<?= base_url('asset/images/pdf.jpg') ?>" class="grid-images" style="width: 100%;"> 
+                                                                <?php } ?>
+                                                                <div class="row">
+                                                                    <marquee scrollamount="2" style="text-align: center;"><?=  $value['name'] ?></marquee>
+                                                                </div>
+                                                                <div class="row" style="background: #ccc; text-align: center;">
+                                                                    <p style="text-align: center; width: 100%; margin: 0; font-size: 16px;">
+                                                                        <a href="<?= base_url('uploads/doc/').$value['filename'] ?>" target="_blank" title="Download" download><i class="fa fa-download"></i></a> &nbsp;&nbsp;
+                                                                        <a href="javascript:;" type="button" class="remove-file-lead" data-id="<?= $value['id'] ?>" title="Delete"><i class="fa fa-trash"></i></a>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        <?php } ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php } } ?>
+
+
+                                        <?php  
+                                        $this->db->distinct();
+                                        $this->db->select('folder');
+                                        $this->db->where('client', $client['id']); 
+                                        $docs = $this->db->get('documents')->result_array();
+                                        ?>
+
+                                        <?php foreach ($docs as $dkey => $dvalue) { ?>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <h5><?= $this->general_model->_get_doc_folder($dvalue['folder'])['name']; ?></h5>
+                                                    <div class="row col-md-12">
+                                                        <?php $documents = $this->general_model->_get_documents_by_folder($dvalue['folder'],$client['id']) ?>
+                                                        <?php foreach ($documents as $dokey => $dovalue) { ?>
+                                                            <div class="col-md-2 remove-file" style="padding: 20px;">
+                                                                <?php if($dovalue['type'] == 'png' || $dovalue['type'] == 'jpg' || $dovalue['type'] == 'jpeg'){ ?>
+                                                                    <img src="<?= base_url('uploads/doc/').$dovalue['file'] ?>" class="grid-images" style="width: 100%;"> 
+                                                                <?php } ?>
+                                                                <?php if($dovalue['type'] == 'docx'){ ?>
+                                                                    <img src="<?= base_url('asset/images/word.jpg') ?>" class="grid-images" style="width: 100%;"> 
+                                                                <?php } ?>
+                                                                <?php if($dovalue['type'] == 'csv' || $dovalue['type'] == 'xlsx'){ ?>
+                                                                    <img src="<?= base_url('asset/images/excel.jpg') ?>" class="grid-images" style="width: 100%;"> 
+                                                                <?php } ?>
+                                                                <?php if($dovalue['type'] == 'pdf'){ ?>
+                                                                    <img src="<?= base_url('asset/images/pdf.jpg') ?>" class="grid-images" style="width: 100%;"> 
+                                                                <?php } ?>
+                                                                <div class="row">
+                                                                    <marquee scrollamount="2" style="text-align: center;"><?=  $dovalue['name'] ?></marquee>
+                                                                </div>
+                                                                <div class="row" style="background: #ccc; text-align: center;">
+                                                                    <p style="text-align: center; width: 100%; margin: 0; font-size: 16px;">
+                                                                        <a href="<?= base_url('uploads/doc/').$dovalue['file'] ?>" target="_blank" title="Download" download><i class="fa fa-download"></i></a> &nbsp;&nbsp;
+                                                                        <a href="javascript:;" type="button" class="remove-file-lead" data-id="<?= $dovalue['id'] ?>" title="Delete"><i class="fa fa-trash"></i></a>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        <?php } ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php } ?>
+
+
+                                        <form method="post" action="<?= base_url('client/uploadDoc/').$client['id'] ?>" enctype="multipart/form-data">
+                                            <table class="table table-bordered table-mini">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Folder Name</th>
+                                                        <th>File Name</th>
+                                                        <th>File</th>
+                                                        <th class="text-center">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="body-attchment-client">
+                                                    <tr>
+                                                        <td>
+                                                            <select class="form-control form-control-sm select2" name="folder[]" required>
+                                                                <option value="">-- Select Folder Name --</option>
+                                                                <?php foreach ($this->general_model->get_folder_name() as $key => $value) { ?>
+                                                                    <option value="<?= $value['id'] ?>"><?= $value['name'] ?></option>
+                                                                <?php } ?>
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" name="fileName[]" class="form-control" placeholder="File Name" required>
+                                                        </td>
+                                                        <td>
+                                                            <input type="file" name="file[]" class="form-control fileupload-change" onchange="readFile(this)" required>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <button type="button" class="btn btn-danger btn-mini remove-row"><i class="fa fa-remove"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td colspan="4" class="text-right">
+                                                            <button type="button" class="btn btn-info btn-mini add-attechment-row-client"><i class="fa fa-plus"></i> Add Row</button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="4" class="text-right">
+                                                            <button type="submit" class="btn btn-info btn-mini"><i class="fa fa-upload"></i> Upload</button>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </form>
 
 	                        		</div>
 	                        	</div>
@@ -399,65 +588,147 @@
 	                        	<div class="col-md-12">
 	                        		<div class="table-responsive">
 
-	                        			<table class="table m-0">
-                                            <tbody>
-                                                <tr>
-                                                    <th scope="row">Group ID : <?= $client['group'] ?></th>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                        <?php $parentGet = $this->db->get_where('grouping',['child' => $client['id']])->row_array() ?>
+                                        <?php if($parentGet){ ?>
+                                            <div class="col-md-12">
+                                                <h5>Parent Group</h5>
+                                                <br>
 
-                                        <form type="post" id="addGroupForm">
-	                                        <table class="table table-striped table-bordered table-mini">
-								                <thead>
-								                    <tr>
-								                        <th class="text-center">#</th>
-								                        <th>Name</th>
-								                        <th class="text-center">Relation</th>
-								                        <th class="text-center">Client Id</th>
-								                        <th>Remarks</th>
-								                    </tr>
-								                </thead>
-								                <tbody id="addGroupTbody">
-								                	<?php $group = $this->db->get_where('grouping',['main' => $client['id']])->result_array(); ?>
-								                    <?php foreach ($group as $key => $value) { ?>
-								                    	<?php $nclient = $this->general_model->_get_client($value['child']); ?>
-									                	<tr>
-									                		<td class="text-center"><?= $client['group'] ?></td>
-									                		<td><?= $nclient['fname'].' '.$nclient['mname'].' '.$nclient['lname'] ?></td>
-									                		<td class="text-center"><?= $value['relation'] ?></td>
-									                		<td class="text-center"><?= $nclient['c_id'] ?></td>
-									                		<td><?= nl2br($value['remarks']) ?></td>
-									                	</tr>
-								                	<?php } ?>
-								                </tbody>
-								                <tfoot>
-								                	<tr>
-								                		<td>
-								                			<input type="text" name="" class="form-control" value="<?= $client['group'] ?>" readonly>
-								                			<input type="hidden" id="addGroupChild" class="form-control" value="<?= $client['id'] ?>" readonly>
-								                		</td>
-								                		<td>
-								                			<select class="form-control form-control-sm select2" id="addGroupMain" required>
-							                                    <option value="">-- Select Child Client--</option>
-							                                    <?php foreach ($this->general_model->getFilteredClients() as $bkey => $bvalue) { ?>
-							                                        <option value="<?= $bvalue['id'] ?>"><?= $bvalue['fname'] ?> <?= $bvalue['mname'] ?> <?= $bvalue['lname'] ?> - <?= $bvalue['mobile'] ?></option>
-							                                    <?php } ?>
-							                                </select>
-								                		</td>
-								                		<td>
-								                			<input type="text" id="addGroupRelation" class="form-control" placeholder="Relation" value=""  required>
-								                		</td>
-								                		<td>
-								                			<textarea class="form-control" id="addGroupRemarks" placeholder="remarks"></textarea>
-								                		</td>
-								                		<td>
-								                			<button class="btn btn-mini btn-success" type="submit" id="addGroupSubmitBtn"><i class="fa fa-plus"></i></button>
-								                		</td>
-								                	</tr>
-								                </tfoot>
-								            </table>
-							            </form>
+                                                <table class="table table-striped table-bordered table-mini">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-center">Parent Client</th>
+                                                            <th>Child Name</th>
+                                                            <th class="text-center">Relation</th>
+                                                            <th class="text-center">Child Id</th>
+                                                            <th>Remarks</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php $group = $this->db->get_where('grouping',['main' => $parentGet['main']])->result_array(); ?>
+                                                        <?php foreach ($group as $key => $value) { ?>
+                                                            <?php $nclient = $this->general_model->_get_client($value['child']); ?>
+                                                            <tr>
+                                                                <td class="text-center"><?= $client['group'] ?></td>
+                                                                <td><?= $nclient['fname'].' '.$nclient['mname'].' '.$nclient['lname'] ?></td>
+                                                                <td class="text-center"><?= $value['relation'] ?></td>
+                                                                <td class="text-center"><?= $nclient['c_id'] ?></td>
+                                                                <td><?= nl2br($value['remarks']) ?></td>
+                                                            </tr>
+                                                        <?php } ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>               
+                                        <?php } ?>                         
+
+                                        <div class="col-md-12">
+                                            <h5>Child Group</h5>
+                                            <br>
+                                            <form type="post" id="addGroupForm">
+    	                                        <table class="table table-striped table-bordered table-mini">
+    								                <thead>
+    								                    <tr>
+    								                        <th class="text-center">Parent Client</th>
+                                                            <th>Child Name</th>
+                                                            <th class="text-center">Relation</th>
+                                                            <th class="text-center">Child Id</th>
+                                                            <th>Remarks</th>
+    								                    </tr>
+    								                </thead>
+    								                <tbody id="addGroupTbody">
+    								                	<?php $group = $this->db->get_where('grouping',['main' => $client['id']])->result_array(); ?>
+    								                    <?php foreach ($group as $key => $value) { ?>
+    								                    	<?php $nclient = $this->general_model->_get_client($value['child']); ?>
+    									                	<tr>
+    									                		<td class="text-center"><?= $client['group'] ?></td>
+    									                		<td><?= $nclient['fname'].' '.$nclient['mname'].' '.$nclient['lname'] ?></td>
+    									                		<td class="text-center"><?= $value['relation'] ?></td>
+    									                		<td class="text-center"><?= $nclient['c_id'] ?></td>
+    									                		<td><?= nl2br($value['remarks']) ?></td>
+    									                	</tr>
+    								                	<?php } ?>
+    								                </tbody>
+    								                <tfoot>
+    								                	<tr>
+    								                		<td>
+    								                			<input type="text" name="" class="form-control" value="<?= $client['group'] ?>" readonly>
+    								                			<input type="hidden" id="addGroupChild" class="form-control" value="<?= $client['id'] ?>" readonly>
+    								                		</td>
+    								                		<td>
+    								                			<select class="form-control form-control-sm select2" id="addGroupMain" required>
+    							                                    <option value="">-- Select Child Client--</option>
+    							                                    <?php foreach ($this->general_model->getFilteredClients() as $bkey => $bvalue) { ?>
+    							                                        <option value="<?= $bvalue['id'] ?>"><?= $bvalue['fname'] ?> <?= $bvalue['mname'] ?> <?= $bvalue['lname'] ?> - <?= $bvalue['mobile'] ?></option>
+    							                                    <?php } ?>
+    							                                </select>
+    								                		</td>
+    								                		<td>
+    								                			<input type="text" id="addGroupRelation" class="form-control" placeholder="Relation" value=""  required>
+    								                		</td>
+    								                		<td>
+    								                			<textarea class="form-control" id="addGroupRemarks" placeholder="remarks"></textarea>
+    								                		</td>
+    								                		<td>
+    								                			<button class="btn btn-mini btn-success" type="submit" id="addGroupSubmitBtn"><i class="fa fa-plus"></i></button>
+    								                		</td>
+    								                	</tr>
+    								                </tfoot>
+    								            </table>
+    							            </form>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <form method="post" action="<?= base_url('client/add_family_person') ?>">
+                                            <h5>Earning Person In Family</h5>
+                                            <br>
+                                            <table class="table table-striped table-bordered table-mini">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center">#</th>
+                                                        <th>Name</th>
+                                                        <th class="text-center">Relation</th>
+                                                        <th class="text-center">Mobile</th>
+                                                        <th class="text-center">Email</th>
+                                                        <th>Filling ITR</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php $fMamber = $this->db->get_where('family',['client' => $client['id']])->result_array(); ?>
+                                                    <?php foreach ($fMamber as $fmkey => $fmvalue) { ?>
+                                                        <tr>
+                                                            <td><?= $fmkey + 1 ?></td>
+                                                            <td><?= $fmvalue['name'] ?></td>
+                                                            <td style="text-align: center;"><?= $fmvalue['relation'] ?></td>
+                                                            <td style="text-align: center;"><?= $fmvalue['mobile'] ?></td>
+                                                            <td><?= $fmvalue['email'] ?></td>
+                                                            <td style="text-align: center;"><?= $fmvalue['itr'] ?></td>
+                                                        </tr>
+                                                    <?php } ?>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td><input type="text" name="name" class="form-control form-control-sm" placeholder="Name" required></td>
+                                                        <td><input type="text" name="relation" class="form-control form-control-sm" placeholder="Relation" required></td>
+                                                        <td><input type="text" name="mobile" class="form-control form-control-sm numbers" maxlength="10" minlength="10" placeholder="Mobile" required></td>
+                                                        <td><input type="email" name="email" class="form-control form-control-sm" placeholder="Email" required></td>
+                                                        <td>
+                                                            <select name="itr" class="form-control" required>
+                                                                <option value="">Select</option>
+                                                                <option value="YES">YES</option>
+                                                                <option value="NO">NO</option>
+                                                            </select>
+                                                            <input type="hidden" name="client" value="<?= $client['id'] ?>">
+                                                        </td>
+                                                        <td>
+                                                            <button class="btn btn-mini btn-success" type="submit"><i class="fa fa-plus"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            </form>
+                                        </div>
+
+
 	                        		</div>
 	                        	</div>
 	                        </div>
@@ -473,7 +744,6 @@
 
 
 <script type="text/javascript">
-
 	$(document).on('click','.nav-item', function(){
 		$('.tab-pane').removeClass('active');
 		$('#'+$(this).children('.nav-link').attr('href').substr(1)).addClass('active');

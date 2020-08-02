@@ -181,6 +181,25 @@
 			$('.body-attchment').append(textbox);
 		});
 
+		$(document).on('click','.add-attechment-row-client',function(){
+			textbox = '<tr>';
+				textbox += '<td>';
+                    textbox += '<select class="form-control form-control-sm select2" name="folder[]" required>';
+                        textbox += '<option value="">-- Select Folder Name --</option>';
+                        textbox += '<?php foreach ($this->general_model->get_folder_name() as $key => $value) { ?>';
+                            textbox += '<option value="<?= $value['id'] ?>"><?= $value['name'] ?></option>';
+                        textbox += '<?php } ?>';
+                    textbox += '</select>';
+                textbox += '</td>';
+				textbox += '<td><input type="text" name="fileName[]" class="form-control" placeholder="File Name"></td>';
+				textbox += '<td><input type="file" name="file[]" class="form-control fileupload-change" onchange="readFile(this)"></td>';
+				textbox += '<td class="text-center"><button type="button" class="btn btn-danger btn-mini remove-row"><i class="fa fa-remove"></i></button></td>';
+			textbox += '</tr>';
+
+			$('.body-attchment-client').append(textbox);
+			$('.select2').select2();
+		});
+
 
 		$(document).on('change','.gst_client',function(){
 			_this = $(this);
@@ -562,7 +581,24 @@
             });
 		});
 
-		$('#addInfoTab').submit(function(event) {
+		$('.add_contact_personRow').click(function(event) {
+			var str = "";
+			str += '<tr><td>';
+				str += '<input type="text" name="con_name[]" class="form-control form-control-sm" placeholder="Name">';
+			str += '</td><td>';
+				str += '<input type="text" name="con_mobile[]" class="form-control form-control-sm numbers" placeholder="Mobile" minlength="10" maxlength="10" >';
+			str += '</td><td>';
+				str += '<textarea class="form-control" placeholder="Address" name="con_address[]"></textarea>';
+			str += '</td><td class="text-center">';
+				str += '<button class="btn btn-danger btn-mini remove_contact_personRow" type="button"><i class="fa fa-minus"></i></button>';
+			str += '</td></tr>';
+			$('#contact_person_row').append(str);
+		});
+		$(document).on('click','.remove_contact_personRow',function(){
+			$(this).closest('tr').remove();
+		});
+
+		$('#addGroupForm').submit(function(event) {
 			event.preventDefault();
 			var _this = $('#addGroupSubmitBtn');
 			$.ajax({

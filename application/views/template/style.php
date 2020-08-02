@@ -86,4 +86,7 @@
 	    right: 50%;
 	    bottom: 50%;
 	}
+	.small-table-kava td,.small-table-kava th{
+		padding: 5px;
+	}
 </style>

@@ -42,10 +42,12 @@
                                     <?= $mvalue ?>
                                 <?php } ?>
                             </td>
-                            <td class="text-center"> 
-                                <button type="button" class="btn btn-info btn-mini add-followup" data-id="<?= $value['id'] ?>" data-stop="Lead Already Converted To Customer" data-type="lead" title="Add Followup">
-                                    <i class="fa fa-plus"></i>
-                                </button>
+                            <td class="text-center">
+                                <?php if(get_user()['user_type'] != "0"){ ?> 
+                                    <button type="button" class="btn btn-info btn-mini add-followup" data-id="<?= $value['id'] ?>" data-stop="Lead Already Converted To Customer" data-type="lead" title="Add Followup">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                <?php } ?>
                             </td>
                         </tr>
                     <?php } ?>

@@ -124,9 +124,9 @@
 
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>Area<span class="-req">*</span></label> 
+                            <label>Area/Village<span class="-req">*</span></label> 
                             <select class="form-control form-control-sm select2" name="area" required>
-                            	<option value="">-- Select Area --</option>
+                            	<option value="">-- Select Area/Village --</option>
                             	<?php foreach ($this->general_model->get_areas() as $akey => $avalue) { ?>
                             		<option value="<?= $avalue['id'] ?>" <?= selected($lead['area'],$avalue['id']) ?>><?= $avalue['name'] ?></option>
                             	<?php } ?>
@@ -137,14 +137,22 @@
 
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>City<span class="-req">*</span></label> 
+                            <label>City/Taluka<span class="-req">*</span></label> 
                             <select class="form-control form-control-sm select2" name="city" required>
-                            	<option value="">-- Select City --</option>
+                            	<option value="">-- Select City/Taluka --</option>
                             	<?php foreach ($this->general_model->get_cities() as $ckey => $cvalue) { ?>
                             		<option value="<?= $cvalue['id'] ?>" <?= selected($cvalue['id'],$lead['city'],1) ?>><?= $cvalue['name'] ?></option>
                             	<?php } ?>
                             </select>
                             <?= form_error('city') ?>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>District</label> 
+                            <input name="district" type="text" placeholder="District" class="form-control form-control-sm" value="<?= set_value('district'); ?>" >
+                            <?= form_error('district') ?>
                         </div>
                     </div>
 
@@ -310,19 +318,7 @@
 		                        </div>
 		                    </div>
 
-		                    <div class="col-md-3">
-		                        <div class="form-group">
-		                            <label>Profile Introduction</label> 
-		                            <textarea name="profile_intro" type="text" placeholder="Profile Introduction" class="form-control form-control-sm" value="" ></textarea>
-		                        </div>
-		                    </div>
-
-		                    <div class="col-md-3">
-		                        <div class="form-group">
-		                            <label>Actual Turnover & Stock & Other</label> 
-		                            <textarea name="turnover_notes" type="text" placeholder="Actual Turnover & Stock & Other" class="form-control form-control-sm" value="" ></textarea>
-		                        </div>
-		                    </div>
+		                    
 
                             <div class="col-md-3">
                                 <div class="form-group">
@@ -333,6 +329,46 @@
                                             <option value="<?= $sevalue['id'] ?>" <?= selected($lead['source'], $sevalue['id']) ?>><?= $sevalue['name'] ?></option>
                                         <?php } ?>
                                     </select>   
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Client Type <span class="-req">*</span></label> 
+                                    <select class="form-control form-control-sm select2" name="client_type" required>
+                                        <option value="">-- Select --</option>
+                                        <?php foreach ($this->general_model->get_client_types() as $sekey => $sevalue) { ?> 
+                                            <option value="<?= $sevalue['id'] ?>" ><?= $sevalue['name'] ?></option> 
+                                        <?php } ?>
+                                    </select>   
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Profile Introduction</label> 
+                                    <textarea name="profile_intro" type="text" placeholder="Profile Introduction" class="form-control form-control-sm" value="" ></textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Actual Turnover & Stock & Other</label> 
+                                    <textarea name="turnover_notes" type="text" placeholder="Actual Turnover & Stock & Other" class="form-control form-control-sm" value="" ></textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Future Specific Goal</label> 
+                                    <textarea name="goal" type="text" placeholder="Future Specific Goal" class="form-control form-control-sm" value="" ></textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Special Quotation</label> 
+                                    <textarea name="quotation" type="text" placeholder="Special Quotation" class="form-control form-control-sm" value="" ></textarea>
                                 </div>
                             </div>
 
@@ -386,9 +422,48 @@
                                 </div>
                             </div>
 
+                            <div class="col-md-12">
+                                <h4>Contact Persons</h4>
+                            </div>
+                            <div class="col-md-12">
+                                <table class="table table-bordered table-mini">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Mobile</th>
+                                            <th>Address</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="contact_person_row">
+                                        <tr>
+                                            <td>
+                                                <input type="text" name="con_name[]" class="form-control form-control-sm" placeholder="Name">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="con_mobile[]" class="form-control form-control-sm numbers" placeholder="Mobile" minlength="10" maxlength="10" >
+                                            </td>
+                                            <td>
+                                                <textarea class="form-control" placeholder="Address" name="con_address[]"></textarea>
+                                            </td>
+                                            <td>
+                                                
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="4" class="text-right">
+                                                <button class="btn btn-info btn-mini add_contact_personRow" type="button"><i class="fa fa-plus"></i> Add Row</button>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
                             <input type="hidden" name="lead" value="<?= $lead['id'] ?>">
                             <input type="hidden" name="branch" value="<?= $lead['branch'] ?>">
-		                    <input type="hidden" name="owner" value="<?= $lead['owner'] ?>">
+                            <input type="hidden" name="owner" value="<?= $lead['owner'] ?>">
+		                    <input type="hidden" name="client_id" value="<?= $client['id'] ?>">
 	                    </div>
 	                </div>
 
@@ -397,7 +472,7 @@
             <div class="card-footer text-right">
                 <a href="<?= base_url('client/new_clients') ?>" class="btn btn-danger"><i class="fa fa-arrow-left"></i> Back</a>
                 <button class="btn btn-success" type="submit">
-                    <i class="fa fa-plus"></i> Add
+                    <i class="fa fa-save"></i> Save
                 </button>
             </div>
         </form>

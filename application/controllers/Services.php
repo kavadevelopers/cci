@@ -28,6 +28,7 @@ class Services extends CI_Controller
 		$this->form_validation->set_rules('wightage', 'Weightage','trim|required');
 		$this->form_validation->set_rules('time', 'Time To Complete','trim|required');
 		$this->form_validation->set_rules('price', 'Price','trim|required');
+		$this->form_validation->set_rules('renual', 'Renual In Month','trim|required');
 
 		if ($this->form_validation->run() == FALSE)
 		{
@@ -40,7 +41,8 @@ class Services extends CI_Controller
 				'name'		=> $this->input->post('name'),
 				'weight'	=> $this->input->post('wightage'),
 				'time'		=> $this->input->post('time'),
-				'price'		=> $this->input->post('price')
+				'price'		=> $this->input->post('price'),
+				'renual'		=> $this->input->post('renual')
 			];
 			$this->db->insert('services',$data);
 
@@ -71,6 +73,7 @@ class Services extends CI_Controller
 		$this->form_validation->set_rules('wightage', 'Weightage','trim|required');
 		$this->form_validation->set_rules('time', 'Time To Complete','trim|required');
 		$this->form_validation->set_rules('price', 'Price','trim|required');
+		$this->form_validation->set_rules('renual', 'Renual In Month','trim|required');
 
 		if ($this->form_validation->run() == FALSE)
 		{
@@ -84,7 +87,8 @@ class Services extends CI_Controller
 				'name'		=> $this->input->post('name'),
 				'weight'	=> $this->input->post('wightage'),
 				'time'		=> $this->input->post('time'),
-				'price'		=> $this->input->post('price')
+				'price'		=> $this->input->post('price'),
+				'renual'		=> $this->input->post('renual')
 			];
 			$this->db->where('id',$this->input->post('id'));
 			$this->db->update('services',$data);

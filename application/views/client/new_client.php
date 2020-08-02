@@ -29,12 +29,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($leads as $key => $value) { ?>
+                    <?php foreach ($clients as $key => $value) { $lead = $this->general_model->_get_lead($value['lead']); ?>
                         <tr>
-                            <td class="text-center"><?= $value['lead'] ?></td>
-                            <td class="text-center"><?= vd($value['date']) ?></td>
+                            <td class="text-center"><?= $value['c_id'] ?></td>
+                            <td class="text-center"><?= vd($value['created_at']) ?></td>
                             <td>
-                                <?= $value['customer'] ?>
+                                <?= $value['fname'] ?>
                                 <?= $value['firm'] != ''?'<br>-'.$value['firm']:'' ?>        
                             </td>
                             <td class="">
@@ -47,7 +47,7 @@
                                 <?php } ?>
                             </td>
                             <td class="">
-                                <?php foreach (json_decode($value['services']) as $mkey => $mvalue) { ?>
+                                <?php foreach (json_decode($lead['services']) as $mkey => $mvalue) { ?>
                                     <?php if($mkey > 0){ ?><br><?php } ?>
                                     <?= $this->general_model->_get_service($mvalue[0])['name'] ?>
                                 <?php } ?>

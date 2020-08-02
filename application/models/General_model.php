@@ -228,6 +228,31 @@ class General_model extends CI_Model
 		return $this->db->get_where('leads',['id'	=> $id])->row_array();	
 	}
 
+	public function get_client_types()
+	{
+		return $this->db->get_where('client_type',['df' => ''])->result_array();
+	}
+
+	public function _get_client_type($id)
+	{
+		return $this->db->get_where('client_type',['id' => $id])->row_array();
+	}
+
+	public function get_folder_name()
+	{
+		return $this->db->get_where('document_folders',['df'	=> ''])->result_array();
+	}
+
+
+	public function _get_doc_folder($id)
+	{
+		return $this->db->get_where('document_folders',['id'	=> $id])->row_array();
+	}
+
+	public function _get_documents_by_folder($folder,$client)
+	{
+		return $this->db->get_where('documents',['folder'	=> $folder,'client' => $client])->result_array();
+	}
 
 	public function get_clients()
 	{

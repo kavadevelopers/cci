@@ -214,6 +214,77 @@ function payment()
     return "2";
 }
 
+function typestring($str){
+    if($str == 1){
+        return "Invoice";
+    }else if($str == 2){
+        return "Payment";
+    }
+}
+
+function ledamtd($debit,$credit){
+    if($credit == 0){
+        return "";
+    }
+    else{
+        return moneyFormatIndia($credit);   
+    }
+}
+
+function ledamtc($debit,$credit){
+    if($debit == 0){
+        return "";
+    }
+    else{
+        return moneyFormatIndia($debit);   
+    }
+}
+
+function tledamtd($debit,$credit){
+    if($credit == 0){
+        return 0;
+    }
+    else{
+        return $credit;   
+    }
+}
+
+function tledamtc($debit,$credit){
+    if($debit == 0){
+        return 0;
+    }
+    else{
+        return $debit;   
+    }
+}
+
+function vch_no($type,$tra_id)
+{   
+    $CI =& get_instance();
+    if($type == "1"){
+        $invoice = $CI->db->get_where('invoice',['id' => $tra_id])->row_array();
+        return $invoice['inv'];
+    }else if($type == "2"){
+        $invoice = $CI->db->get_where('payment',['id' => $tra_id])->row_array();
+        return $invoice['invoice'];
+    }
+}
+
+function moneyFormatIndia($amount): string {
+    list ($number, $decimal) = explode('.', sprintf('%.2f', floatval($amount)));
+
+    $sign = $number < 0 ? '-' : '';
+
+    $number = abs($number);
+
+    for ($i = 3; $i < strlen($number); $i += 3)
+    {
+        $number = substr_replace($number, ',', -$i, 0);
+    }
+
+    return $sign . $number . '.' . $decimal;
+}
+
 function selected($val,$val2,$val3 = false){
     $ret = "";
     if($val == $val2){
@@ -226,6 +297,28 @@ function selected($val,$val2,$val3 = false){
         }
     }
     return $ret;
+}
+
+function getClientId($num){
+    if(strlen($num) == 1)
+    {
+        return "00000".$num;
+    }else if(strlen($num) == 2)
+    {
+        return "0000".$num;
+    }else if(strlen($num) == 3)
+    {
+        return "000".$num;
+    }else if(strlen($num) == 4)
+    {
+        return "00".$num;
+    }
+    else if(strlen($num) == 5)
+    {
+        return "0".$num;
+    }else {
+        return $num;
+    }
 }   
 
 function time_elapsed_string($datetime, $full = false) {

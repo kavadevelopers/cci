@@ -17,7 +17,7 @@ class Client extends CI_Controller
 	public function new_clients()
 	{
 		$data['_title']		= "New Clients";
-		$data['leads']		= $this->db->get_where('leads',['df' => '','dump' => '','status' => '1'])->result_array();
+		$data['clients']		= $this->db->get_where('client',['status' => '1'])->result_array();
 		$this->load->theme('client/new_client',$data);	
 	}
 
@@ -25,6 +25,7 @@ class Client extends CI_Controller
 	{
 		$data['_title']		= "Register Client";
 		$data['lead']		= $this->general_model->_get_lead($id);
+		$data['client']		= $this->general_model->_get_client($id);
 		$this->load->theme('client/register',$data);		
 	}
 
@@ -58,13 +59,24 @@ class Client extends CI_Controller
 			}
 		}
 
+		$contact_persons = [];
+		foreach ($this->input->post('con_name') as $key => $value) {
+			if($this->input->post('con_name')[$key] != "" && $this->input->post('con_mobile')[$key] != "" && $this->input->post('con_address')[$key] != ""){
+				$ar = [
+					'name' => $this->input->post('con_name')[$key],
+					'mobile' => $this->input->post('con_mobile')[$key],
+					'address' => $this->input->post('con_address')[$key]
+				];
+				array_push( $contact_persons, $ar);
+			}
+		}
+
+
 		$lead = $this->general_model->_get_lead($this->input->post('lead'));
 		$source = $this->general_model->_get_source($lead['source']);
 
 		$data = [
-			'lead'		=> $this->input->post('lead'),
-			'company'		=> $source['company'],
-			'branch'		=> $this->input->post('branch'),
+			'client_type'	=> $this->input->post('client_type'),
 			'fname'		=> strtoupper($this->input->post('fname')),
 			'mname'		=> strtoupper($this->input->post('mname')),
 			'lname'		=> strtoupper($this->input->post('lname')),
@@ -72,12 +84,13 @@ class Client extends CI_Controller
 			'mobile'	=> rtrim($mobiles,','),
 			'email'		=> rtrim($emails,','),
 			'pan'		=> strtoupper($this->input->post('pan')),
-			'dob'		=> dd($this->input->post('pan')),
+			'dob'		=> dd($this->input->post('dob')),
 			'gender'	=> $this->input->post('gender'),
 			'add1'		=> strtoupper($this->input->post('add1')),
 			'add2'		=> strtoupper($this->input->post('add2')),
 			'area'		=> $this->input->post('area'),
 			'city'		=> $this->input->post('city'),
+			'district'	=> strtoupper($this->input->post('district')),
 			'state'		=> $this->input->post('state'),
 			'pin'		=> $this->input->post('pin'),
 			'occupation'		=> $this->input->post('occupation'),
@@ -95,15 +108,13 @@ class Client extends CI_Controller
 			'profile_intro'		=> strtoupper($this->input->post('profile_intro')),
 			'turnover_notes'	=> strtoupper($this->input->post('turnover_notes')),
 			'turnover_notes'	=> strtoupper($this->input->post('turnover_notes')),
-			'created_by'		=> get_user()['id'],
-			'created_at'		=> date('Y-m-d H:i:s'),
-			'owner'				=> $this->input->post('owner')
+			'turnover_notes'	=> strtoupper($this->input->post('goal')),
+			'quotation'			=> strtoupper($this->input->post('quotation')),
+			'contact_persons'	=> json_encode($contact_persons),
+			'status'			=> 0
 		];
 
-		$this->db->insert('client',$data);
-		$customer_id = $this->db->insert_id();
-
-		$this->db->where('id',$customer_id)->update('client',['c_id' => "CLIENT_".$customer_id,'group' => 'GROUP_'.$customer_id]);
+		$this->db->where('id',$this->input->post('client_id'))->update('client',$data);
 
 
 		foreach ($this->input->post('services') as $key => $value) {
@@ -126,7 +137,7 @@ class Client extends CI_Controller
 					'service'		=> $service,
 					'price'			=> $price,
 					'qty'			=> $qty,
-					'client'		=> $customer_id,
+					'client'		=> $this->input->post('client_id'),
 					'status'		=> 0,
 					'owner'			=> $user['id'],
 					'importance'	=> 'Medium',
@@ -143,7 +154,7 @@ class Client extends CI_Controller
 
 		$this->db->where('id',$this->input->post('lead'))->update('leads',['status' => 2]);		
 
-		$this->session->set_flashdata('msg', 'Client Created');
+		$this->session->set_flashdata('msg', 'Client Saved');
 	    redirect(base_url('client/new_clients'));
 	}
 
@@ -233,5 +244,59 @@ class Client extends CI_Controller
 		$main = $this->general_model->_get_client($this->input->post('main'));
 		$child = $this->general_model->_get_client($this->input->post('child'));
 		echo json_encode(['group' => $main['group'],'name' => $child['fname'].' '.$child['mname'].' '.$child['lname'],'relation' => strtoupper($this->input->post('relation')),'remarks' => nl2br($this->input->post('remarks')),'client' => $child['c_id']]);
+	}
+
+	public function uploadDoc($id)
+	{
+
+		$config['upload_path'] = './uploads/doc/';
+	    $config['allowed_types']	= '*';
+	    $config['max_size']      = '0';
+	    $config['overwrite']     = FALSE;
+	    $this->load->library('upload', $config);
+		
+		foreach ($_FILES['file']['name'] as $key => $value) {
+	    	if($_FILES['file']['name'] != ""){
+		    	$fname = microtime(true).".".pathinfo($_FILES['file']['name'][$key], PATHINFO_EXTENSION);
+		    	$_FILES['doc']['name'] 		= $fname;
+		    	$_FILES['doc']['type'] 		= $_FILES['file']['type'][$key];
+		    	$_FILES['doc']['tmp_name'] 	= $_FILES['file']['tmp_name'][$key];
+		    	$_FILES['doc']['error'] 	= $_FILES['file']['error'][$key];
+		    	$_FILES['doc']['size'] 		= $_FILES['file']['size'][$key];
+
+		    	$config['file_name'] = $fname;
+		    	$this->upload->initialize($config);
+		    	if($this->upload->do_upload('doc')){
+		    		$data = [
+		    			'folder'		=> $this->input->post('folder')[$key],
+		    			'name'		=> $this->input->post('fileName')[$key],
+			        	'file'		=> $fname,
+			        	'type' 		=> pathinfo($_FILES['file']['name'][$key], PATHINFO_EXTENSION),
+			        	'client' 	=> $id
+			        ];
+
+			        $this->db->insert('documents',$data);
+		    	}
+		    }
+	    }
+
+	    $this->session->set_flashdata('msg', 'Document Uploaded');
+	    redirect(base_url('client/view/').$id);
+	}
+
+	public function add_family_person()
+	{
+		$data = [
+			'name'		=> strtoupper($this->input->post('name')),
+			'relation'	=> strtoupper($this->input->post('relation')),
+			'mobile'	=> strtoupper($this->input->post('mobile')),
+			'email'		=> strtoupper($this->input->post('email')),
+			'itr'		=> strtoupper($this->input->post('itr')),
+			'client'	=> strtoupper($this->input->post('client'))
+		];
+		$this->db->insert('family',$data);
+
+		$this->session->set_flashdata('msg', 'Family Member Added');
+	    redirect(base_url('client/view/').$this->input->post('client'));	
 	}
 }
