@@ -16,12 +16,12 @@
 <div class="page-body">
     <div class="row">
 
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="card">
                 <form method="post" action="<?= base_url('reports/ledger_result') ?>">
                     <div class="card-block">
 
-                        <div class="col-md-12">
+                        <div class="col-md-8">
                             <div class="form-group">
                                 <label>Client <span class="-req">*</span></label>
                                 <select class="form-control form-control-sm select2" name="client" required>
@@ -34,11 +34,12 @@
                             </div>
                         </div>   
 
-                    </div>
-                    <div class="card-footer text-right">
-                        <button class="btn btn-success">
-                            <i class="fa fa-eye"></i> Show
-                        </button>
+                        <div class="col-md-4">
+                            <button class="btn btn-success">
+                                <i class="fa fa-eye"></i> Show
+                            </button>    
+                        </div>
+
                     </div>
                 </form>
             </div>
