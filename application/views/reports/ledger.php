@@ -37,7 +37,7 @@
                     </div>
                     <div class="card-footer text-right">
                         <button class="btn btn-success">
-                            <i class="fa fa-plus"></i> Add
+                            <i class="fa fa-eye"></i> Show
                         </button>
                     </div>
                 </form>
@@ -45,7 +45,7 @@
         </div>
 
         <?php if($client != ""){ ?>
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <div class="card">
                     <div class="card-block">
                         <table class="table table-bordered table-striped table-sm" id="sales">
