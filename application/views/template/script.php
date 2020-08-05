@@ -729,9 +729,8 @@
             success: function(out)
             {
             	$.each(out[0], function(key,value) {
-				   //notifyMe(value['title'],value['desc'],value['url']);
+				   notifyMe(value['title'],value['desc'],value['url']);
 				});
-            	console.log(out);
 				if(out[2] != 0){
 					$('#todoList li:eq(0)').after(out[1]);
 					counter = parseFloat($('#todoCounter').html());

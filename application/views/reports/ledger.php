@@ -35,7 +35,7 @@
                             </div>   
 
                             <div class="col-md-4">
-                                <button class="btn btn-success">
+                                <button class="btn btn-success" style="margin: 12px;">
                                     <i class="fa fa-eye"></i> Show
                                 </button>    
                             </div>
@@ -55,7 +55,7 @@
                                 <tr>
                                     <th class="text-center">Date</th>
                                     <th>Particulars</th>
-                                    <th class="text-center">Inv No.</th>
+                                    <th class="text-center">Inv No./Receipt No.</th>
                                     <th class="text-right">Debit</th>
                                     <th class="text-right">Credit</th>
                                 </tr>

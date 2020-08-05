@@ -216,7 +216,7 @@
                                     <select class="form-control form-control-sm" name="source" required>
                                         <option value="">-- Select Source --</option>
                                         <?php foreach ($this->general_model->get_sources() as $sekey => $sevalue) { ?> 
-                                            <option value="<?= $sevalue['id'] ?>"><?= $sevalue['name'] ?></option>
+                                            <option value="<?= $sevalue['id'] ?>" <?= get_user()['user_type'] == '3' ? $sevalue['id'] == '10' ?'selected':'':''  ?>><?= $sevalue['name'] ?></option>
                                         <?php } ?>
                                     </select>   
                                 </div>
