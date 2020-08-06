@@ -70,6 +70,7 @@
                                                     <th>Name</th>
                                                     <th>Mobile</th>
                                                     <th>Address</th>
+                                                    <th>Birth Date</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -78,6 +79,7 @@
                                                         <td><?= $value->name ?></td>
                                                         <td><?= $value->mobile ?></td>
                                                         <td><?= $value->name ?></td>
+                                                        <td><?= $value->bdate ?></td>
                                                     </tr>
                                                 <?php } ?>
                                             </tbody>
@@ -126,7 +128,7 @@
                                                 </tr>
                                                 <tr>
                                                     <th scope="row">District</th>
-                                                    <td><?= $client['district'] ?></td>
+                                                    <td><?= $this->general_model->_get_district($client['district'])['name'] ?></td>
                                                 </tr>
                                                 <tr>
                                                     <th scope="row">State</th>
@@ -284,6 +286,9 @@
 							                                <a href="<?= base_url('pdf/invoice/').$value['id'] ?>" target="_blank" class="btn btn-primary btn-mini" title="PDF">
 							                                    <i class="fa fa-file-pdf-o"></i>
 							                                </a>
+                                                            <a href="<?= base_url('pdf/invoiceD/').$value['id'] ?>" target="_blank" class="btn btn-secondary btn-mini" title="Download PDF">
+                                                                <i class="fa fa-download"></i>
+                                                            </a>
 							                            </td>
 							                        </tr>
 							                    <?php } ?>
@@ -337,6 +342,9 @@
 							                                <a href="<?= base_url('pdf/receipt/').$value['id'] ?>" target="_blank" class="btn btn-primary btn-mini" title="PDF">
 							                                    <i class="fa fa-file-pdf-o"></i>
 							                                </a>
+                                                            <a href="<?= base_url('pdf/receiptD/').$value['id'] ?>" target="_blank" class="btn btn-secondary btn-mini" title="Download PDF">
+                                                                <i class="fa fa-download"></i>
+                                                            </a>
 							                            </td>
 							                        </tr>
 							                    <?php } ?>
@@ -361,6 +369,7 @@
 							                        <th>Client</th>
 							                        <th class="text-center">Status</th>
 							                        <th class="text-center">Importance</th>
+                                                    <th class="text-center">Next Followup Date</th>
 							                        <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){ ?>
 							                            <th>Owner</th>
 							                        <?php } ?>
@@ -378,6 +387,7 @@
 							                            <td><?= $nclient['fname'] ?> <?= $nclient['mname'] ?> <?= $nclient['lname'] ?></td>
 							                            <td class="text-center" id="status-<?= $value['id'] ?>"><?= getjobStatus($value['status']) ?></td>
 							                            <td class="text-center" id="jobImportance<?= $value['id'] ?>"><?= $value['importance'] ?></td>
+                                                        <td class="text-center" id="jobFolllowupDate<?= $value['id'] ?>"><?= $value['f_date'] != null?vd($value['f_date']):'-'; ?></td>
 							                            <td><?= $this->general_model->_get_user($value['owner'])['name'] ?></td>
 							                            <td class="text-center">
 							                                <button class="btn btn-primary btn-mini edit-job" title="Edit" data-importance="<?= $value['importance'] ?>" data-job="<?= $value['id'] ?>" data-service="<?= $value['service'] ?>" data-price="<?= $value['price'] ?>" data-job_id="<?= $value['job_id'] ?>" data-client="<?= $nclient['fname'] ?> <?= $nclient['mname'] ?> <?= $nclient['lname'] ?>">
@@ -453,82 +463,99 @@
                                             <?php $lead = $this->general_model->_get_lead($client['lead']);
                                             $docs = $this->db->get_where('files',['for' => 'Lead' , 'for_id' => $lead['id']])->result_array() ?>
                                             <?php if($docs){ ?>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <h5>Lead</h5>
-                                                    <div class="row col-md-12">
-                                                        <?php foreach ($docs as $key => $value) { ?>
-                                                            <div class="col-md-2 remove-file" style="padding: 20px;">
+                                            <table class="table table-bordered">
+                                                <tr>
+                                                    <th colspan="2">Lead</th>
+                                                </tr>
+                                                <?php foreach ($docs as $key => $value) { ?>
+                                                    <tr class="remove-file">
+                                                        <td width="5%"></td>
+                                                        <td>
+                                                            <div class="row col-md-12">
                                                                 <?php if($value['type'] == 'png' || $value['type'] == 'jpg' || $value['type'] == 'jpeg'){ ?>
-                                                                    <img src="<?= base_url('uploads/doc/').$value['filename'] ?>" class="grid-images" style="width: 100%;"> 
+                                                                    <img src="<?= base_url('uploads/doc/').$value['filename'] ?>" class="list-images" style="width: 20px;"> 
                                                                 <?php } ?>
                                                                 <?php if($value['type'] == 'docx'){ ?>
-                                                                    <img src="<?= base_url('asset/images/word.jpg') ?>" class="grid-images" style="width: 100%;"> 
+                                                                    <img src="<?= base_url('asset/images/word.jpg') ?>" class="list-images" style="width: 20px;"> 
                                                                 <?php } ?>
                                                                 <?php if($value['type'] == 'csv' || $value['type'] == 'xlsx'){ ?>
-                                                                    <img src="<?= base_url('asset/images/excel.jpg') ?>" class="grid-images" style="width: 100%;"> 
+                                                                    <img src="<?= base_url('asset/images/excel.jpg') ?>" class="list-images" style="width: 20px;"> 
                                                                 <?php } ?>
                                                                 <?php if($value['type'] == 'pdf'){ ?>
-                                                                    <img src="<?= base_url('asset/images/pdf.jpg') ?>" class="grid-images" style="width: 100%;"> 
+                                                                    <img src="<?= base_url('asset/images/pdf.jpg') ?>" class="list-images" style="width: 20px;"> 
                                                                 <?php } ?>
-                                                                <div class="row">
-                                                                    <marquee scrollamount="2" style="text-align: center;"><?=  $value['name'] ?></marquee>
-                                                                </div>
-                                                                <div class="row" style="background: #ccc; text-align: center;">
-                                                                    <p style="text-align: center; width: 100%; margin: 0; font-size: 16px;">
-                                                                        <a href="<?= base_url('uploads/doc/').$value['filename'] ?>" target="_blank" title="Download" download><i class="fa fa-download"></i></a> &nbsp;&nbsp;
-                                                                        <a href="javascript:;" type="button" class="remove-file-lead" data-id="<?= $value['id'] ?>" title="Delete"><i class="fa fa-trash"></i></a>
-                                                                    </p>
-                                                                </div>
+                                                                <span class="list-image-span"><?=  $value['name'] ?></span>
+                                                                <a href="<?= base_url('uploads/doc/').$value['filename'] ?>" target="_blank" title="Download" download><i class="fa fa-download"></i></a> &nbsp;&nbsp;
+                                                                <a href="javascript:;" type="button" class="remove-file-lead" data-id="<?= $value['id'] ?>" title="Delete"><i class="fa fa-trash"></i></a>
                                                             </div>
-                                                        <?php } ?>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                <?php } ?>
+                                            </table>
                                         <?php } } ?>
 
 
+
                                         <?php  
+                                        $this->db->order_by('date','desc');
                                         $this->db->distinct();
                                         $this->db->select('folder');
                                         $this->db->where('client', $client['id']); 
                                         $docs = $this->db->get('documents')->result_array();
+                                        if($docs){
                                         ?>
-
-                                        <?php foreach ($docs as $dkey => $dvalue) { ?>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <h5><?= $this->general_model->_get_doc_folder($dvalue['folder'])['name']; ?></h5>
-                                                    <div class="row col-md-12">
-                                                        <?php $documents = $this->general_model->_get_documents_by_folder($dvalue['folder'],$client['id']) ?>
+                                            <table class="table table-bordered">
+                                                <?php foreach ($docs as $dkey => $dvalue) { ?>
+                                                    <?php 
+                                                    $this->db->distinct();
+                                                    $this->db->select('sub_folder');
+                                                    $this->db->where('client', $client['id']); 
+                                                    $this->db->where('folder', $dvalue['folder']); 
+                                                    $subdocs = $this->db->get('documents')->result_array();
+                                                    if($subdocs){
+                                                    ?>
+                                                    <tr>
+                                                        <th colspan="3"><?= $this->general_model->_get_doc_folder($dvalue['folder'])['name']; ?></th>
+                                                    </tr>
+                                                    <?php foreach ($subdocs as $sdkey => $sdvalue) { ?>
+                                                        <tr>
+                                                            <td width="5%"></td>
+                                                            <th colspan="2"><?= $this->general_model->_get_doc_subfolder($sdvalue['sub_folder'])['name']; ?></th>
+                                                        </tr>
+                                                        <?php $documents = $this->general_model->_get_documents_by_subfolder($sdvalue['sub_folder'],$client['id']) ?>
                                                         <?php foreach ($documents as $dokey => $dovalue) { ?>
-                                                            <div class="col-md-2 remove-file" style="padding: 20px;">
-                                                                <?php if($dovalue['type'] == 'png' || $dovalue['type'] == 'jpg' || $dovalue['type'] == 'jpeg'){ ?>
-                                                                    <img src="<?= base_url('uploads/doc/').$dovalue['file'] ?>" class="grid-images" style="width: 100%;"> 
-                                                                <?php } ?>
-                                                                <?php if($dovalue['type'] == 'docx'){ ?>
-                                                                    <img src="<?= base_url('asset/images/word.jpg') ?>" class="grid-images" style="width: 100%;"> 
-                                                                <?php } ?>
-                                                                <?php if($dovalue['type'] == 'csv' || $dovalue['type'] == 'xlsx'){ ?>
-                                                                    <img src="<?= base_url('asset/images/excel.jpg') ?>" class="grid-images" style="width: 100%;"> 
-                                                                <?php } ?>
-                                                                <?php if($dovalue['type'] == 'pdf'){ ?>
-                                                                    <img src="<?= base_url('asset/images/pdf.jpg') ?>" class="grid-images" style="width: 100%;"> 
-                                                                <?php } ?>
-                                                                <div class="row">
-                                                                    <marquee scrollamount="2" style="text-align: center;"><?=  $dovalue['name'] ?></marquee>
-                                                                </div>
-                                                                <div class="row" style="background: #ccc; text-align: center;">
-                                                                    <p style="text-align: center; width: 100%; margin: 0; font-size: 16px;">
-                                                                        <a href="<?= base_url('uploads/doc/').$dovalue['file'] ?>" target="_blank" title="Download" download><i class="fa fa-download"></i></a> &nbsp;&nbsp;
-                                                                        <a href="javascript:;" type="button" class="remove-file-lead" data-id="<?= $dovalue['id'] ?>" title="Delete"><i class="fa fa-trash"></i></a>
-                                                                    </p>
-                                                                </div>
-                                                            </div>
+                                                            <tr class="remove-doc-tr">
+                                                                <td width="5%"></td>
+                                                                <td width="5%"></td>
+                                                                <td>
+                                                                    <div class="row col-md-12">
+                                                                        <?php if($dovalue['type'] == 'png' || $dovalue['type'] == 'jpg' || $dovalue['type'] == 'jpeg'){ ?>
+                                                                            <img src="<?= base_url('uploads/doc/').$dovalue['file'] ?>" class="list-images" style="width: 20px;"> 
+                                                                        <?php } ?>
+                                                                        <?php if($dovalue['type'] == 'docx'){ ?>
+                                                                            <img src="<?= base_url('asset/images/word.jpg') ?>" class="list-images" style="width: 20px;"> 
+                                                                        <?php } ?>
+                                                                        <?php if($dovalue['type'] == 'csv' || $dovalue['type'] == 'xlsx'){ ?>
+                                                                            <img src="<?= base_url('asset/images/excel.jpg') ?>" class="list-images" style="width: 20px;"> 
+                                                                        <?php } ?>
+                                                                        <?php if($dovalue['type'] == 'pdf'){ ?>
+                                                                            <img src="<?= base_url('asset/images/pdf.jpg') ?>" class="list-images" style="width: 20px;"> 
+                                                                        <?php } ?>
+                                                                        <span class="list-image-span"><?=  $dovalue['name'] ?></span>
+                                                                        <a href="<?= base_url('uploads/doc/').$dovalue['file'] ?>" target="_blank" title="Download" download="CLIENT-<?= $client['c_id'] ?>-<?=  $dovalue['name'] ?>.<?=  $dovalue['type'] ?>">
+                                                                            <i class="fa fa-download"></i>
+                                                                        </a>
+                                                                        &nbsp;&nbsp;
+                                                                        <a href="javascript:;" type="button" class="remove-file-client" data-id="<?= $dovalue['id'] ?>" title="Delete">
+                                                                            <i class="fa fa-trash"></i>
+                                                                        </a>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
                                                         <?php } ?>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                    <?php } } ?>
+                                                <?php } ?>
+                                            </table>
                                         <?php } ?>
 
 
@@ -537,19 +564,25 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Folder Name</th>
+                                                        <th>Sub Folder Name</th>
                                                         <th>File Name</th>
                                                         <th>File</th>
                                                         <th class="text-center">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="body-attchment-client">
-                                                    <tr>
+                                                    <tr id="docTr0">
                                                         <td>
-                                                            <select class="form-control form-control-sm select2" name="folder[]" required>
+                                                            <select class="form-control form-control-sm select2 docMainFolder" id="docFolder0" name="folder[]" required>
                                                                 <option value="">-- Select Folder Name --</option>
                                                                 <?php foreach ($this->general_model->get_folder_name() as $key => $value) { ?>
-                                                                    <option value="<?= $value['id'] ?>"><?= $value['name'] ?></option>
+                                                                    <option value="<?= $value['id'] ?>" data-sub="<?= $this->general_model->getSubFolders($value['id']) ?>"><?= $value['name'] ?></option>
                                                                 <?php } ?>
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <select class="form-control form-control-sm select2 docSubFolder" id="docSubFolder0" name="sub_folder[]" required>
+                                                                <option value="">-- Select Sub-Folder Name --</option>
                                                             </select>
                                                         </td>
                                                         <td>
@@ -565,12 +598,12 @@
                                                 </tbody>
                                                 <tfoot>
                                                     <tr>
-                                                        <td colspan="4" class="text-right">
+                                                        <td colspan="5" class="text-right">
                                                             <button type="button" class="btn btn-info btn-mini add-attechment-row-client"><i class="fa fa-plus"></i> Add Row</button>
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td colspan="4" class="text-right">
+                                                        <td colspan="5" class="text-right">
                                                             <button type="submit" class="btn btn-info btn-mini"><i class="fa fa-upload"></i> Upload</button>
                                                         </td>
                                                     </tr>

@@ -22,6 +22,7 @@
                 <thead>
                     <tr>
                         <th class="text-center">#</th>
+                        <th class="text-center">Branch Code</th>
                         <th>Name</th>
                         <th class="text-center">Mobile</th>
                         <th>Email</th>
@@ -33,6 +34,7 @@
                     <?php foreach ($branch as $key => $value) { ?>
                         <tr>
                             <td class="text-center"><?= $key + 1 ?></td>
+                            <td class="text-center"><?= $value['code'] ?></td>
                             <td><?= $value['name'] ?></td>
                             <td class="text-center"><?= $value['mobile'] ?></td>
                             <td><?= $value['email'] ?></td>

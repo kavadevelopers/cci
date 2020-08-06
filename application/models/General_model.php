@@ -198,6 +198,26 @@ class General_model extends CI_Model
 		return $this->db->get_where('area_city',['id'	=> $id])->row_array();
 	}
 
+	public function get_districts()
+	{
+		return $this->db->get_where('district',['df' => ''])->result_array();
+	}
+
+	public function get_district($id)
+	{
+		return $this->db->get_where('district',['id'	=> $id,'df' => ''])->row_array();
+	}
+
+	public function list_district()
+	{
+		return $this->db->order_by('id','asc')->get_where('district',['df' => ''])->result_array();
+	}
+
+	public function _get_district($id)
+	{
+		return $this->db->get_where('district',['id'	=> $id])->row_array();
+	}
+
 	public function get_area($id)
 	{
 		return $this->db->get_where('areas',['id'	=> $id,'df' => ''])->row_array();
@@ -249,9 +269,19 @@ class General_model extends CI_Model
 		return $this->db->get_where('document_folders',['id'	=> $id])->row_array();
 	}
 
+	public function _get_doc_subfolder($id)
+	{
+		return $this->db->get_where('document_sub_folders',['id'	=> $id])->row_array();
+	}
+
 	public function _get_documents_by_folder($folder,$client)
 	{
 		return $this->db->get_where('documents',['folder'	=> $folder,'client' => $client])->result_array();
+	}
+
+	public function _get_documents_by_subfolder($folder,$client)
+	{
+		return $this->db->get_where('documents',['sub_folder'	=> $folder,'client' => $client])->result_array();
 	}
 
 	public function get_clients()
@@ -436,6 +466,14 @@ class General_model extends CI_Model
 		}else{
 			return [0,0];
 		}
+	}
+
+
+	public function getSubFolders($id)
+	{
+		$this->db->select('name,id');
+		$folders = $this->db->get_where('document_sub_folders',['main' => $id])->result_array();
+		return htmlspecialchars(json_encode($folders), ENT_QUOTES, 'UTF-8');
 	}
 }
 ?>

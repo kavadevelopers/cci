@@ -101,9 +101,8 @@
                             <label>Importance <span class="-req">*</span></label>
                             <select class="form-control" id="editJobImportance" required>
                                 <option value="">-- Select --</option>
-                                <option value="High">High</option>
-                                <option value="Medium">Medium</option>
-                                <option value="Low">Low</option>
+                                <option value="REGULAR">REGULAR</option>
+                                <option value="URGENT">URGENT</option>
                             </select>
                         </div>
                     </div>
@@ -152,7 +151,7 @@
     </form>
 </div>
 
-<?php if($this->uri->segment(1) != 'job'){ ?>
+<?php if($this->uri->segment(1) == 'leads' || $this->uri->segment(2) == 'lead'){ ?>
 <div class="modal fade bd-example-modal-lg" id="followup_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <form method="post" action="" id="followupForm">
         <div class="modal-dialog modal-lg" role="document">
@@ -219,10 +218,9 @@
         </div>
     </form>
 </div>
-<?php } ?>
-<?php if($this->uri->segment(1) == 'job'){ ?>
+<?php }else{ ?>
 
-<div class="modal fade bd-example-modal-lg" id="job_followup_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg show" id="job_followup_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <form method="post" action="" id="jobfollowupForm">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -346,7 +344,7 @@
                                 <select class="form-control form-control-sm addPaymentClient" name="client" required>
                                     <option value="">-- Select --</option>
                                     <?php foreach ($this->general_model->getFilteredClients() as $bkey => $bvalue) { ?>
-                                        <option value="<?= $bvalue['id'] ?>"><?= $bvalue['fname'] ?> <?= $bvalue['mname'] ?> <?= $bvalue['lname'] ?> - <?= $bvalue['mobile'] ?></option>
+                                        <option value="<?= $bvalue['id'] ?>"><?= $bvalue['c_id'] ?> - <?= $bvalue['fname'] ?> <?= $bvalue['mname'] ?> <?= $bvalue['lname'] ?> - <?= $bvalue['mobile'] ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
@@ -410,7 +408,7 @@
                                 <select class="form-control form-control-sm editPaymentClient" name="client" required id="editPaymentClient">
                                     <option value="">-- Select --</option>
                                     <?php foreach ($this->general_model->getFilteredClients() as $bkey => $bvalue) { ?>
-                                        <option value="<?= $bvalue['id'] ?>"><?= $bvalue['fname'] ?> <?= $bvalue['mname'] ?> <?= $bvalue['lname'] ?> - <?= $bvalue['mobile'] ?></option>
+                                        <option value="<?= $bvalue['id'] ?>"><?= $bvalue['c_id'] ?> - <?= $bvalue['fname'] ?> <?= $bvalue['mname'] ?> <?= $bvalue['lname'] ?> - <?= $bvalue['mobile'] ?></option>
                                     <?php } ?>
                                 </select>
                             </div>

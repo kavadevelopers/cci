@@ -35,7 +35,7 @@
                             </div>   
 
                             <div class="col-md-4">
-                                <button class="btn btn-success" style="margin: 12px;">
+                                <button class="btn btn-success btn-mini" style="margin-top: 30px;">
                                     <i class="fa fa-eye"></i> Show
                                 </button>    
                             </div>
@@ -58,11 +58,14 @@
                                     <th class="text-center">Inv No./Receipt No.</th>
                                     <th class="text-right">Debit</th>
                                     <th class="text-right">Credit</th>
+                                    <th class="text-right">Balance</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php $credit_total = 0;$debit_total = 0; ?>
                                 <?php foreach($list as $key => $value){ ?>
+                                    <?php $debit_total += tledamtc($value['debit'],$value['credit']); ?>
+                                    <?php $credit_total += tledamtd($value['debit'],$value['credit']); ?>
                                     <tr>
                                         <td class="text-center"><?= vd($value['date']) ?></td>
                                         <th><?= typestring($value['type']) ?></th>
@@ -71,9 +74,8 @@
                                         </td>
                                         <th class="text-right"><?= ledamtc($value['debit'],$value['credit']) ?></th>
                                         <th class="text-right"><?= ledamtd($value['debit'],$value['credit']) ?></th>
+                                        <th class="text-right"><?= moneyFormatIndia($credit_total - $debit_total) ?></th>
                                     </tr>
-                                    <?php $debit_total += tledamtc($value['debit'],$value['credit']); ?>
-                                    <?php $credit_total += tledamtd($value['debit'],$value['credit']); ?>
                                 <?php } ?>
 
                                 <tr>
@@ -82,6 +84,7 @@
                                     <th class="text-right">Total:</th>
                                     <td class="text-right"><?= moneyFormatIndia($debit_total) ?></td>
                                     <td class="text-right"><?= moneyFormatIndia($credit_total) ?></td>
+                                    <th class="text-right"><?= moneyFormatIndia($credit_total - $debit_total) ?></th>
                                 </tr>
 
                                 <?php if($credit_total > $debit_total){ ?>
@@ -90,6 +93,7 @@
                                         <td class="text-right"></td>
                                         <th class="text-right">Cr Closing Balance</th>
                                         <th class="text-right"><?= moneyFormatIndia($credit_total - $debit_total) ?></th>
+                                        <td class="text-right"></td>
                                         <td class="text-right"></td>
                                     </tr>
                                 <?php } ?>
@@ -101,6 +105,7 @@
                                         <th class="text-right">Dr Closing Balance</th>
                                         <td class="text-right"></td>
                                         <th class="text-right"><?= moneyFormatIndia($debit_total - $credit_total) ?></th>
+                                        <td class="text-right"></td>
                                     </tr>
                                 <?php } ?>
 
@@ -109,11 +114,12 @@
                                     <td class="text-right"></td>
                                     <th class="text-right">Total</td>
                                     <th class="text-right">
-                                        <?= max(moneyFormatIndia($debit_total),moneyFormatIndia($credit_total)) ?>
+                                        <?= moneyFormatIndia(max($debit_total,$credit_total)) ?>
                                     </th>
                                     <th class="text-right">
-                                        <?= max(moneyFormatIndia($debit_total),moneyFormatIndia($credit_total)) ?>
+                                        <?= moneyFormatIndia(max($debit_total,$credit_total)) ?>
                                     </th>
+                                    <th></th>
                                 </tr>
                             </tbody>
                         </table>

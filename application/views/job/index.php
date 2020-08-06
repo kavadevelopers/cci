@@ -36,6 +36,7 @@
                         <th>Client</th>
                         <th class="text-center">Status</th>
                         <th class="text-center">Importance</th>
+                        <th class="text-center">Next Followup Date</th>
                         <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){ ?>
                             <th>Owner</th>
                         <?php } ?>
@@ -60,6 +61,7 @@
                             <td><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?></td>
                             <td class="text-center" id="status-<?= $value['id'] ?>"><?= getjobStatus($value['status']) ?></td>
                             <td class="text-center" id="jobImportance<?= $value['id'] ?>"><?= $value['importance'] ?></td>
+                            <td class="text-center" id="jobFolllowupDate<?= $value['id'] ?>"><?= $value['f_date'] != null?vd($value['f_date']):'-'; ?></td>
                             <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){ ?>
                                 <td><?= $this->general_model->_get_user($value['owner'])['name'] ?></td>
                             <?php } ?>

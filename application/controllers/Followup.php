@@ -116,11 +116,11 @@ class Followup extends CI_Controller
 			$source = $this->general_model->_get_source($lead['source']);
 
 			$client_count = $this->db->get_where('client',['branch' => $lead['branch']])->num_rows();
-
+			$branch = $this->general_model->_get_branch($lead['branch']);
 			$data = [
-				'c_id'				=> "0".$lead['branch'].getClientId($client_count + 1),
+				'c_id'				=> $branch['code'].getClientId($client_count + 1),
 				'lead'				=> $this->input->post('id'),
-				'group'				=> "GROUP_0".$lead['branch'].getClientId($client_count + 1),
+				'group'				=> "GROUP_".$branch['code'].getClientId($client_count + 1),
 				'company'			=> $source['company'],
 				'branch'			=> $lead['branch'],
 				'fname'				=> strtoupper($lead['customer']),
@@ -151,10 +151,14 @@ class Followup extends CI_Controller
 		}else{
 			$ttime = null;
 		}
-
+		if($this->input->post('needed') == 1){
+			$ndate = dd($this->input->post('date'));
+		}else{
+			$ndate = null;
+		}
 		$data = [
 			'remarks'		=> $this->input->post('remarks'),
-			'next_f'		=> dd($this->input->post('date')),
+			'next_f'		=> $ndate,
 			'customer'		=> 0,
 			'date'			=> date('Y-m-d H:i:s'),
 			'ftime'			=> $ftime,
@@ -168,7 +172,7 @@ class Followup extends CI_Controller
 		$fId = $this->db->insert_id();
 
 		$status = $this->input->post('status');
-		$this->db->where('id',$this->input->post('id'))->update('job',['f_date' => dd($this->input->post('date')),'f_time'	=> $ftime,'t_time' => $ttime,'status'	=> $status]);
+		$this->db->where('id',$this->input->post('id'))->update('job',['f_date' => $ndate,'f_time'	=> $ftime,'t_time' => $ttime,'status'	=> $status]);
 
 
 		$followup = $this->db->get_where('followup',['id' => $fId])->row_array();

@@ -75,7 +75,54 @@
                         </div>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>Area/Village</label> 
+                            <select class="form-control form-control-sm select2" name="area" onchange="otherArea(this.value);">
+                                <option value="">-- Select Area/Village --</option>
+                                <?php foreach ($this->general_model->get_areas() as $akey => $avalue) { ?>
+                                    <option value="<?= $avalue['id'] ?>" <?= selected($lead['area'],$avalue['id']) ?>><?= $avalue['name'] ?></option>
+                                <?php } ?>
+                            </select>
+                            <?= form_error('area') ?>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3" style="<?= $lead['area'] == '3244'?'':'display: none;'; ?>" id="otherArea">
+                        <div class="form-group">
+                            <label>Other Area/Village Name <span class="-req">*</span></label> 
+                            <input type="text" name="other_area_name" class="form-control form-control-sm other-area" autocomplete="off" value="<?= $lead['other_area'] ?>" placeholder="Other Area/Village Name">   
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>City/Taluka</label> 
+                            <select class="form-control form-control-sm select2" name="city" >
+                                <option value="">-- Select City/Taluka --</option>
+                                <?php foreach ($this->general_model->get_cities() as $ckey => $cvalue) { ?>
+                                    <option value="<?= $cvalue['id'] ?>" <?= selected($lead['city'],$cvalue['id']) ?>><?= $cvalue['name'] ?></option>
+                                <?php } ?>
+                            </select>
+                            <?= form_error('city') ?>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>District</label> 
+                            <select class="form-control form-control-sm select2" name="district">
+                                <option value="">-- Select District --</option>
+                                <?php foreach ($this->general_model->get_districts() as $ckey => $cvalue) { ?>
+                                    <option value="<?= $cvalue['id'] ?>" <?= selected($cvalue['id'],$lead['district']) ?>><?= $cvalue['name'] ?></option>
+                                <?php } ?>
+                            </select>
+                            <?= form_error('district') ?>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
                         <div class="form-group">
                             <label>State</label> 
                             <select class="form-control form-control-sm select2" name="state" >
@@ -88,38 +135,9 @@
                         </div>
                     </div>
 
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>City</label> 
-                            <select class="form-control form-control-sm select2" name="city" >
-                                <option value="">-- Select City --</option>
-                                <?php foreach ($this->general_model->get_cities() as $ckey => $cvalue) { ?>
-                                    <option value="<?= $cvalue['id'] ?>" <?= selected($lead['city'],$cvalue['id']) ?>><?= $cvalue['name'] ?></option>
-                                <?php } ?>
-                            </select>
-                            <?= form_error('city') ?>
-                        </div>
-                    </div>
+                    
 
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Area</label> 
-                            <select class="form-control form-control-sm select2" name="area" onchange="otherArea(this.value);">
-                                <option value="">-- Select Area --</option>
-                                <?php foreach ($this->general_model->get_areas() as $akey => $avalue) { ?>
-                                    <option value="<?= $avalue['id'] ?>" <?= selected($lead['area'],$avalue['id']) ?>><?= $avalue['name'] ?></option>
-                                <?php } ?>
-                            </select>
-                            <?= form_error('area') ?>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3" style="<?= $lead['area'] == '3244'?'':'display: none;'; ?>" id="otherArea">
-                        <div class="form-group">
-                            <label>Other Area Name <span class="-req">*</span></label> 
-                            <input type="text" name="other_area_name" class="form-control form-control-sm other-area" autocomplete="off" value="<?= $lead['other_area'] ?>" placeholder="Other Area Name">   
-                        </div>
-                    </div>
+                    
 
                     <div class="col-md-12">
                         <div class="row">

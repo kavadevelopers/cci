@@ -86,7 +86,7 @@
 		                    <div class="col-md-3">
 		                        <div class="form-group">
 		                            <label>Date Of Birth <span class="-req">*</span></label> 
-		                            <input name="dob" type="text" placeholder="Date Of Birth" class="form-control form-control-sm datepicker" value="<?= set_value('dob',date('d-m-Y')); ?>" readonly>
+		                            <input name="dob" type="text" placeholder="Date Of Birth" class="form-control form-control-sm birth-date" value="<?= set_value('dob',date('d-m-Y',strtotime("-15 years"))); ?>" readonly>
 		                            <?= form_error('dob') ?>
 		                        </div>
 		                    </div>
@@ -150,8 +150,13 @@
 
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>District</label> 
-                            <input name="district" type="text" placeholder="District" class="form-control form-control-sm" value="<?= set_value('district'); ?>" >
+                            <label>District<span class="-req">*</span></label> 
+                            <select class="form-control form-control-sm select2" name="district" required>
+                                <option value="">-- Select District --</option>
+                                <?php foreach ($this->general_model->get_districts() as $ckey => $cvalue) { ?>
+                                    <option value="<?= $cvalue['id'] ?>" <?= selected($cvalue['id'],$lead['district'],1) ?>><?= $cvalue['name'] ?></option>
+                                <?php } ?>
+                            </select>
                             <?= form_error('district') ?>
                         </div>
                     </div>
@@ -432,6 +437,7 @@
                                             <th>Name</th>
                                             <th>Mobile</th>
                                             <th>Address</th>
+                                            <th>Birth Date</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -447,13 +453,16 @@
                                                 <textarea class="form-control" placeholder="Address" name="con_address[]"></textarea>
                                             </td>
                                             <td>
+                                                <input type="text" name="con_birth[]" class="form-control form-control-sm birth-date" value="<?= date('d-m-Y',strtotime('-15 years')); ?>" placeholder="Birth Date" readonly>
+                                            </td>
+                                            <td>
                                                 
                                             </td>
                                         </tr>
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="4" class="text-right">
+                                            <td colspan="5" class="text-right">
                                                 <button class="btn btn-info btn-mini add_contact_personRow" type="button"><i class="fa fa-plus"></i> Add Row</button>
                                             </td>
                                         </tr>

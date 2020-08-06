@@ -98,6 +98,97 @@ class Area extends CI_Controller
 		}
 	}
 
+	public function district()
+	{
+		$data['_title']		= "District";
+		$data['_e']         = 0;
+		$data['list']		= $this->db->order_by('id','desc')->get_where('district',['df' => ''])->result_array();
+		$this->load->theme('master/area/district_index',$data);		
+	}
+
+	public function save_district()
+	{
+		$this->form_validation->set_error_delimiters('<div class="val-error">', '</div>');
+		$this->form_validation->set_rules('name', 'Name','trim|required|callback_unique_district');
+
+		if ($this->form_validation->run() == FALSE)
+		{
+			$data['_title']		= "State";
+			$data['_e']         = 0;
+			$data['list']		= $this->db->order_by('id','desc')->get_where('district',['df' => ''])->result_array();
+			$this->load->theme('master/area/district_index',$data);	
+		}
+		else
+		{ 
+			$data = [
+				'name'		=> $this->input->post('name')
+			];
+			$this->db->insert('district',$data);
+			$this->session->set_flashdata('msg', 'District Added');
+	        redirect(base_url('area/district'));
+		}
+	}
+
+	public function edit_district($id = false)
+	{
+		if($id){
+			if($this->general_model->get_district($id)){
+				$data['_title']		= "Edit District";
+				$data['_e']         = 1;
+				$data['ind']		= $this->general_model->get_district($id);
+				$data['list']		= $this->db->order_by('id','desc')->get_where('district',['df' => ''])->result_array();
+				$this->load->theme('master/area/district_index',$data);	
+			}else{
+				redirect(base_url('area/district'));
+			}
+		}else{
+			redirect(base_url('area/district'));
+		}
+	}
+
+	public function update_district()
+	{
+		$this->form_validation->set_error_delimiters('<div class="val-error">', '</div>');
+		$this->form_validation->set_rules('name', 'Name','trim|required|callback_e_unique_district');
+
+		if ($this->form_validation->run() == FALSE)
+		{
+			$data['_title']		= "Edit District";
+			$data['_e']         = 1;
+			$data['ind']		= $this->general_model->get_district($this->input->post('id'));
+			$data['list']		= $this->db->order_by('id','desc')->get_where('district',['df' => ''])->result_array();
+			$this->load->theme('master/area/district_index',$data);	
+		}
+		else
+		{ 
+			$data = [
+				'name'		=> $this->input->post('name')
+			];
+			$this->db->where('id',$this->input->post('id'))->update('district',$data);
+
+			$this->session->set_flashdata('msg', 'District Updated');
+	        redirect(base_url('area/district'));
+		}
+	}
+
+	public function delete_district($id = false)
+	{
+		if($id){
+			if($this->general_model->get_district($id)){
+				$data = [
+					'df'		=> 'deleted'
+				];
+				$this->db->where('id',$id)->update('district',$data);
+				$this->session->set_flashdata('msg', 'District Deleted');
+	        	redirect(base_url('area/district'));
+			}else{
+				redirect(base_url('area/district'));
+			}
+		}else{
+			redirect(base_url('area/district'));
+		}
+	}
+
 	public function city()
 	{
 		$data['_title']		= "City";
@@ -310,6 +401,26 @@ class Area extends CI_Controller
 	{
 		if($this->db->get_where('area_state',['name' => $this->input->post('name'),'df' => ''])->result_array()){
 			$this->form_validation->set_message('unique_name', 'Name Already Exists');
+        	return false;
+		}else{
+			return true;
+		}
+	}
+
+	public function unique_district()
+	{
+		if($this->db->get_where('district',['name' => $this->input->post('name'),'df' => ''])->result_array()){
+			$this->form_validation->set_message('unique_district', 'Name Already Exists');
+        	return false;
+		}else{
+			return true;
+		}
+	}
+
+	public function e_unique_district()
+	{
+		if($this->db->get_where('district',['id !=' => $this->input->post('id'),'name' => $this->input->post('name'),'df' => ''])->result_array()){
+			$this->form_validation->set_message('e_unique_district', 'Name Already Exists');
         	return false;
 		}else{
 			return true;

@@ -62,10 +62,16 @@ class Client extends CI_Controller
 		$contact_persons = [];
 		foreach ($this->input->post('con_name') as $key => $value) {
 			if($this->input->post('con_name')[$key] != "" && $this->input->post('con_mobile')[$key] != "" && $this->input->post('con_address')[$key] != ""){
+				if($this->input->post('con_birth')[$key] != ""){
+					$cpbdate = $this->input->post('con_birth')[$key];
+				}else{
+					$cpbdate = "";
+				}
 				$ar = [
 					'name' => $this->input->post('con_name')[$key],
 					'mobile' => $this->input->post('con_mobile')[$key],
-					'address' => $this->input->post('con_address')[$key]
+					'address' => $this->input->post('con_address')[$key],
+					'bdate'	=> $cpbdate
 				];
 				array_push( $contact_persons, $ar);
 			}
@@ -140,7 +146,7 @@ class Client extends CI_Controller
 					'client'		=> $this->input->post('client_id'),
 					'status'		=> 0,
 					'owner'			=> $user['id'],
-					'importance'	=> 'Medium',
+					'importance'	=> 'REGULAR',
 					'f_date'		=> null,
 					'f_time'		=> null,
 					'created_by'	=> get_user()['id'],
@@ -269,6 +275,7 @@ class Client extends CI_Controller
 		    	if($this->upload->do_upload('doc')){
 		    		$data = [
 		    			'folder'		=> $this->input->post('folder')[$key],
+		    			'sub_folder'		=> $this->input->post('sub_folder')[$key],
 		    			'name'		=> $this->input->post('fileName')[$key],
 			        	'file'		=> $fname,
 			        	'type' 		=> pathinfo($_FILES['file']['name'][$key], PATHINFO_EXTENSION),
@@ -298,5 +305,15 @@ class Client extends CI_Controller
 
 		$this->session->set_flashdata('msg', 'Family Member Added');
 	    redirect(base_url('client/view/').$this->input->post('client'));	
+	}
+
+	public function file_delete()
+	{
+		$data = $this->db->get_where('documents',['id' => $this->input->post('id')])->row_array();
+		if(file_exists(FCPATH.'uploads/doc/'.$data['file'])){
+            unlink(FCPATH.'uploads/doc/'.$data['file']);   
+        }
+
+        $this->db->where('id',$data['id'])->delete('documents');
 	}
 }

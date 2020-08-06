@@ -322,17 +322,24 @@
                                     </a>
                                 </li>
 
+                                <li class="<?= menu(2,["district","save_district","edit_district","update_district"])[0]; ?>">
+                                    <a href="<?= base_url('area/district') ?>">
+                                        <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                        <span class="pcoded-mtext">District</span>
+                                    </a>
+                                </li>
+
                                 <li class="<?= menu(2,["city","save_city","edit_city","update_state"])[0]; ?>">
                                     <a href="<?= base_url('area/city') ?>">
                                         <span class="pcoded-micon"><i class="fa fa-list"></i></span>
-                                        <span class="pcoded-mtext">City</span>
+                                        <span class="pcoded-mtext">City/Taluka</span>
                                     </a>
                                 </li>
 
                                 <li class="<?= menu(2,["areas","save_area","edit_area","update_area"])[0]; ?>">
                                     <a href="<?= base_url('area/areas') ?>">
                                         <span class="pcoded-micon"><i class="fa fa-list"></i></span>
-                                        <span class="pcoded-mtext">Area</span>
+                                        <span class="pcoded-mtext">Area/Village</span>
                                     </a>
                                 </li>
                             </ul>
@@ -351,11 +358,28 @@
                             </a>
                         </li>
 
-                        <li class="<?= menu(1,["document"])[0]; ?>">
-                            <a href="<?= base_url('document/folder') ?>">
+                        <li class="pcoded-hasmenu <?= menu(1,["document"])[2]; ?>">
+                            <a href="javascript:void(0)">
                                 <span class="pcoded-micon"><i class="fa fa-folder-open-o"></i></span>
                                 <span class="pcoded-mtext">Document Folder</span>
-                            </a>
+                             </a>   
+                            <ul class="pcoded-submenu">
+
+                                <li class="<?= menu(2,["folder"])[0]; ?>">
+                                    <a href="<?= base_url('document/folder') ?>">
+                                        <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                        <span class="pcoded-mtext">Main</span>
+                                    </a>
+                                </li>
+
+                                <li class="<?= menu(2,["sub_folder"])[0]; ?>">
+                                    <a href="<?= base_url('document/sub_folder') ?>">
+                                        <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                        <span class="pcoded-mtext">Sub</span>
+                                    </a>
+                                </li>
+
+                            </ul>
                         </li>
                     <?php } ?>
 

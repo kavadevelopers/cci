@@ -302,18 +302,14 @@ function selected($val,$val2,$val3 = false){
 function getClientId($num){
     if(strlen($num) == 1)
     {
-        return "00000".$num;
+        return "0000".$num;
     }else if(strlen($num) == 2)
     {
-        return "0000".$num;
+        return "000".$num;
     }else if(strlen($num) == 3)
     {
-        return "000".$num;
-    }else if(strlen($num) == 4)
-    {
         return "00".$num;
-    }
-    else if(strlen($num) == 5)
+    }else if(strlen($num) == 4)
     {
         return "0".$num;
     }else {

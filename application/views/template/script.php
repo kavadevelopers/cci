@@ -182,13 +182,20 @@
 		});
 
 		$(document).on('click','.add-attechment-row-client',function(){
-			textbox = '<tr>';
+			var last_id = parseFloat(($('.body-attchment-client tr:last').attr('id')).replace('docTr',''));
+			last_id++;
+			textbox = '<tr id="docTr'+last_id+'">';
 				textbox += '<td>';
-                    textbox += '<select class="form-control form-control-sm select2" name="folder[]" required>';
+                    textbox += '<select class="form-control form-control-sm select2 docMainFolder" id="docFolder'+last_id+'" name="folder[]" required>';
                         textbox += '<option value="">-- Select Folder Name --</option>';
                         textbox += '<?php foreach ($this->general_model->get_folder_name() as $key => $value) { ?>';
-                            textbox += '<option value="<?= $value['id'] ?>"><?= $value['name'] ?></option>';
+                            textbox += '<option value="<?= $value['id'] ?>" data-sub="<?= $this->general_model->getSubFolders($value['id']) ?>"><?= $value['name'] ?></option>';
                         textbox += '<?php } ?>';
+                    textbox += '</select>';
+                textbox += '</td>';
+                textbox += '<td>';
+                	textbox += '<select class="form-control form-control-sm select2 docSubFolder" id="docSubFolder'+last_id+'" name="sub_folder[]" required>';
+                        textbox += '<option value="">-- Select Sub-Folder Name --</option>';
                     textbox += '</select>';
                 textbox += '</td>';
 				textbox += '<td><input type="text" name="fileName[]" class="form-control" placeholder="File Name"></td>';
@@ -200,6 +207,24 @@
 			$('.select2').select2();
 		});
 
+		$(document).on('change','.docMainFolder',function(){
+			main_id = ($(this).attr('id')).replace('docFolder','');
+			if($(this).val() != ""){
+				json = $('#docFolder'+main_id+' option:selected').data('sub');
+				var str = '<option value="">-- Select Sub-Folder Name --</option>';
+                $.each(json, function(index) {
+                    str += '<option value="'+json[index].id+'">'+json[index].name+'</option>';
+                });
+                $('#docSubFolder'+main_id).select2('destroy');
+                $('#docSubFolder'+main_id).html(str);
+                $('#docSubFolder'+main_id).select2();
+			}else{
+				var str = '<option value="">-- Select Sub-Folder Name --</option>';
+				$('#docSubFolder'+main_id).select2('destroy');
+                $('#docSubFolder'+main_id).html(str);
+                $('#docSubFolder'+main_id).select2();
+			}
+		});
 
 		$(document).on('change','.gst_client',function(){
 			_this = $(this);
@@ -245,6 +270,30 @@
 	                success: function(out)
 	                {
 	                	athis.closest(".remove-file").remove();
+	                	PNOTY("File Deleted",'success');     	
+	                }
+                });
+			}
+		});
+
+		$(document).on('click', '.remove-file-client', function(event) {
+			if(confirm('Are you sure want to delete this?')){
+				id = $(this).data('id');
+				athis = $(this); 
+				
+				$.ajax({
+	                type: "POST",
+	                url : "<?= base_url('client/file_delete'); ?>",
+	                data : "id="+id,
+	                cache : false,
+	                beforeSend: function() {
+	                    PNOTY('Please Wait','info');  
+	                    athis.html('<i class="fa fa-circle-o-notch fa-spin"></i>');   
+	                },
+	                success: function(out)
+	                {
+	                	athis.html('<i class="fa fa-trash"></i>');
+	                	athis.closest(".remove-doc-tr").remove();
 	                	PNOTY("File Deleted",'success');     	
 	                }
                 });
@@ -354,6 +403,8 @@
 						if(cus == 1){
 							$('#tr-lead-'+$('#id_followup_lead').val()).remove();
 						}
+						$('#followup_timef').val('');
+						$('#followup_timet').val('');
 	                }
 	            });
 			}else{
@@ -390,6 +441,13 @@
 						$('#jobfollowup_body').prepend(out[0]);
 						$('#jobfollowup_table').show();
 						$('#status-'+$('#id_jobModel').val()).html(out[1]);
+						if(needed == 1){
+							$('#jobFolllowupDate'+$('#id_jobModel').val()).html($('#followup_date').val());
+						}else{
+							$('#jobFolllowupDate'+$('#id_jobModel').val()).html('-');
+						}
+						$('#followup_timef').val('');
+						$('#followup_timet').val('');
 	                }
 	            });
 			}else{
@@ -589,8 +647,10 @@
 				str += '<input type="text" name="con_mobile[]" class="form-control form-control-sm numbers" placeholder="Mobile" minlength="10" maxlength="10" >';
 			str += '</td><td>';
 				str += '<textarea class="form-control" placeholder="Address" name="con_address[]"></textarea>';
+			str += '</td><td><input type="text" name="con_birth[]" class="form-control form-control-sm birth-date" value="<?= date('d-m-Y',strtotime('-15 years')); ?>" placeholder="Birth Date" readonly>';
 			str += '</td><td class="text-center">';
 				str += '<button class="btn btn-danger btn-mini remove_contact_personRow" type="button"><i class="fa fa-minus"></i></button>';
+
 			str += '</td></tr>';
 			$('#contact_person_row').append(str);
 		});

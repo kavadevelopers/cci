@@ -75,6 +75,14 @@ $(function(){
         autoclose: true
     });
 
+    $('.birth-date').datepicker({
+        format: 'dd-mm-yyyy',
+        todayHighlight:'TRUE',
+        autoclose: true,
+        endDate: '-15y',
+        startDate: '-100y'
+    });
+
 	var date = new Date();
    var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
     $('.datepicker-new').datepicker({

@@ -47,8 +47,8 @@
                             <td class="text-center"><?= $value['pan'] ?></td> 
                             <td>
                                 <?= $value['add1'] ?>,<br>
-                                <?= $value['add2'] ?>,<br>
-                                <?=  $this->general_model->_get_area($value['area'])['name'] ?>, <?= $this->general_model->_get_city($value['city'])['name'] ?>, <?= $this->general_model->_get_state($value['state'])['name'] ?>, <?= $value['pin'] ?>
+                                <?php if(!empty($value['add2'])){ ?><?= $value['add2'] ?>,<br> <?php } ?>
+                                <?=  $this->general_model->_get_area($value['area'])['name'] ?>, <?= $this->general_model->_get_city($value['city'])['name'] ?>, <?= $this->general_model->_get_district($value['district'])['name'] ?>, <?= $this->general_model->_get_state($value['state'])['name'] ?> <?= $value['pin'] != ''?",".$value['pin']:''; ?>
                             </td>
                             <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){ ?>
                                 <td class="text-center">

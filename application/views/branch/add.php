@@ -18,6 +18,14 @@
 
                     <div class="col-md-3">
                         <div class="form-group">
+                            <label>Branch Code <span class="-req">*</span></label>
+                            <input name="code" type="text" placeholder="Branch Code" class="form-control" value="<?= set_value('code'); ?>">
+                            <?= form_error('code') ?>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
                             <label>Name <span class="-req">*</span></label>
                             <input name="name" type="text" placeholder="Name" class="form-control" value="<?= set_value('name'); ?>">
                             <?= form_error('name') ?>

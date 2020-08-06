@@ -65,6 +65,19 @@
 	    max-width: 100%;
 	}
 
+	.list-images{
+		height: auto;
+		max-height: 15px;
+	}
+
+	.list-image-span{
+		margin: 0;
+	    padding: 0;
+	    margin-left: 5px;
+	    margin-top: -4px;
+	    width: 350px;
+	}
+
 	.table-no-padding td,.table-no-padding tH{
 		padding: 5px;
 	}
