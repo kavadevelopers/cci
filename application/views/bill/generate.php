@@ -28,9 +28,7 @@
 	                        <th class="text-center">Status</th>
 	                        <th class="text-center">Importance</th>
 	                        <th class="text-center">
-	                        	<?php if($customer == $customer_done){ ?>
-	                        		<button class="btn btn-info btn-mini generateFullBill" data-client="<?= $value['client'] ?>">Generate Full Bill</button>
-	                        	<?php } ?>
+	                        	<button class="btn btn-info btn-mini generateFullBill" data-client="<?= $value['client'] ?>">Generate Full Bill</button>
 	                        </th>
 	                    </tr>
 	                </thead>
