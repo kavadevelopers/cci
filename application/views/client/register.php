@@ -453,7 +453,7 @@
                                                 <textarea class="form-control" placeholder="Address" name="con_address[]"></textarea>
                                             </td>
                                             <td>
-                                                <input type="text" name="con_birth[]" class="form-control form-control-sm birth-date" value="<?= date('d-m-Y',strtotime('-15 years')); ?>" placeholder="Birth Date" readonly>
+                                                <input type="text" name="con_birth[]" class="form-control form-control-sm birth-date" value="" placeholder="Birth Date" readonly>
                                             </td>
                                             <td>
                                                 

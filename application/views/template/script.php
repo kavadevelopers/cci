@@ -647,7 +647,7 @@
 				str += '<input type="text" name="con_mobile[]" class="form-control form-control-sm numbers" placeholder="Mobile" minlength="10" maxlength="10" >';
 			str += '</td><td>';
 				str += '<textarea class="form-control" placeholder="Address" name="con_address[]"></textarea>';
-			str += '</td><td><input type="text" name="con_birth[]" class="form-control form-control-sm birth-date" value="<?= date('d-m-Y',strtotime('-15 years')); ?>" placeholder="Birth Date" readonly>';
+			str += '</td><td><input type="text" name="con_birth[]" class="form-control form-control-sm birth-date" value="" placeholder="Birth Date" readonly>';
 			str += '</td><td class="text-center">';
 				str += '<button class="btn btn-danger btn-mini remove_contact_personRow" type="button"><i class="fa fa-minus"></i></button>';
 
