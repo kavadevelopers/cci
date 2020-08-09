@@ -193,12 +193,14 @@
                             <span class="pcoded-mtext">Follow Up</span>
                          </a>   
                         <ul class="pcoded-submenu">
-                            <li class="<?= menu(2,["lead"])[0]; ?>">
-                                <a href="<?= base_url('followup/lead') ?>">
-                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
-                                    <span class="pcoded-mtext">Lead</span>
-                                </a>
-                            </li>
+                            <?php if($this->session->userdata('user_type') == "0" || $this->session->userdata('user_type') == "3" || $this->session->userdata('user_type') == "1"){ ?>
+                                <li class="<?= menu(2,["lead"])[0]; ?>">
+                                    <a href="<?= base_url('followup/lead') ?>">
+                                        <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                        <span class="pcoded-mtext">Lead</span>
+                                    </a>
+                                </li>
+                            <?php } ?>
                             <?php if($this->session->userdata('user_type') == "0" || $this->session->userdata('user_type') == "2"){ ?>
                                 <li class="<?= menu(2,["job"])[0]; ?>">
                                     <a href="<?= base_url('followup/job') ?>">
