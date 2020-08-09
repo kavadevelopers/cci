@@ -86,7 +86,7 @@
 		                    <div class="col-md-3">
 		                        <div class="form-group">
 		                            <label>Date Of Birth <span class="-req">*</span></label> 
-		                            <input name="dob" type="text" placeholder="Date Of Birth" class="form-control form-control-sm birth-date" value="<?= set_value('dob',date('d-m-Y',strtotime("-15 years"))); ?>" readonly>
+		                            <input name="dob" type="text" placeholder="Date Of Birth" class="form-control form-control-sm birth-date" value="" >
 		                            <?= form_error('dob') ?>
 		                        </div>
 		                    </div>
