@@ -24,8 +24,8 @@ class Client extends CI_Controller
 	public function new_client_register($id)
 	{
 		$data['_title']		= "Register Client";
-		$data['lead']		= $this->general_model->_get_lead($id);
 		$data['client']		= $this->general_model->_get_client($id);
+		$data['lead']		= $this->general_model->_get_lead($data['client']['lead']);
 		$this->load->theme('client/register',$data);		
 	}
 
