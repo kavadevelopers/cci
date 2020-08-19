@@ -85,13 +85,12 @@
     </script>
 
 
-    <?php if(get_user()['sidebar_isopen'] == 0){ ?>
-        <script type="text/javascript">
-            $(document).ready(function($) {
-                $('#mobile-collapse').click(); 
-            });
-        </script>
-    <?php } ?>
+    
+    <script type="text/javascript">
+        $(document).ready(function($) {
+            $('#mobile-collapse').click(); 
+        });
+    </script>
 
 	</body>
 </html>

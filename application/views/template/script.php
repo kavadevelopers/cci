@@ -965,26 +965,26 @@
         });
 	}
 
-	$(function(){
-		$('#mobile-collapse').click(function(event) {
-			if($('#mobile-collapse i').hasClass('icon-toggle-right')){
-				type = 0;
-			}else{
-				type = 1;
-			}
+	// $(function(){
+	// 	$('#mobile-collapse').click(function(event) {
+	// 		if($('#mobile-collapse i').hasClass('icon-toggle-right')){
+	// 			type = 0;
+	// 		}else{
+	// 			type = 1;
+	// 		}
 
-			$.ajax({
-	            type: "POST",
-	            url : "<?= base_url('setting/save_sidebar_toggle'); ?>",
-	            cache : false,
-	            data: {type:type},
-	            success: function(out)
-	            {
+	// 		$.ajax({
+	//             type: "POST",
+	//             url : "<?= base_url('setting/save_sidebar_toggle'); ?>",
+	//             cache : false,
+	//             data: {type:type},
+	//             success: function(out)
+	//             {
 	            	
-	            }
-	        });
-		});
-	});
+	//             }
+	//         });
+	// 	});
+	// });
 </script>
 
 
