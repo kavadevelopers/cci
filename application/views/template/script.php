@@ -412,6 +412,81 @@
 			}
 		});
 
+		$(document).on('click', '.add-payment-followup', function(event) {
+			_this = $(this);
+			_this.html('<i class="fa fa-circle-o-notch fa-spin"></i> Please Wait');
+			$("#id_paymentModel").val(_this.data('id'));
+			$.ajax({
+                type: "POST",
+                url : "<?= base_url('followup/payment_get'); ?>",
+                data : "id="+_this.data('id')+"&type=payment",
+                dataType: "JSON",
+                cache : false,
+                beforeSend: function() {
+                    
+                },
+                success: function(out)
+                {
+                	_this.html('<i class="fa fa-question"></i>');
+                	$('#payment_followup_modal').modal('show');
+                	$('#paymentfollowup_body').empty();
+                	$('#paymentfollowup_body').append(out[0]);
+                	if(out[0] != ""){
+						$('#paymentfollowup_table').show();
+					}else{
+						$('#paymentfollowup_table').hide();
+					}
+                }
+            });
+		});		
+		
+		$('#paymentfollowupForm').submit(function(event) {
+			event.preventDefault();
+			if($("#payment_done").prop('checked') == true){
+			    cus = 1;
+			}else{
+				cus = '';
+			}
+			$.ajax({
+                type: "POST",
+                url : "<?= base_url('followup/payment_save'); ?>",
+                data : "cus="+cus+"&remarks="+$('#payment_followup_remarks').val()+"&date="+$('#payment_followup_date').val()+"&id="+$('#id_paymentModel').val()+"&type=payment",
+                cache : false,
+                dataType: "JSON",
+                beforeSend: function() {
+                    $('#payment_followup_save').attr('disabled','true');
+                    $('#payment_followup_save').html('<i class="fa fa-circle-o-notch fa-spin"></i> Please Wait');
+                },
+                success: function(out)
+                {
+                	PNOTY("Followup Saved",'success');  
+                	$('#payment_followup_save').removeAttr('disabled');
+                    $('#payment_followup_save').html('Save');
+                    $('#payment_followup_remarks').val("");
+                    if($("#payment_done").prop('checked') == true){
+					    $('#payment_done').prop('checked', false);
+					}
+					$('#paymentfollowup_body').prepend(out[0]);
+					$('#paymentfollowup_table').show();
+					$('#payment_followup_date').val('');
+					$('#tr_payment-date'+$('#id_paymentModel').val()).html(out[1]);
+					if(cus == 1){
+						$('#tr_payment-'+$('#id_paymentModel').val()).remove();
+					}
+                }
+            });
+		});
+
+		$(document).on('change', '#followup_needed', function(event) {
+			if($("#followup_needed").prop('checked') == true){
+			    $('#followUpNeededJob').show();
+			    $('#followup_date').attr('required',true);
+			}else{
+				$('#followUpNeededJob').hide();
+				$('#followup_date').removeAttr('required');
+			}
+		});
+
 		$('#jobfollowupForm').submit(function(event) {
 			event.preventDefault();
 			if($("#followup_needed").prop('checked') == true){
@@ -438,16 +513,18 @@
 	                    $('#followup_remarks').val("");
 	                    $('#followup_timef').val("");
 	                    $('#followup_timet').val("");
+	                    $('#followup_date').val("");
 						$('#jobfollowup_body').prepend(out[0]);
 						$('#jobfollowup_table').show();
 						$('#status-'+$('#id_jobModel').val()).html(out[1]);
 						if(needed == 1){
 							$('#jobFolllowupDate'+$('#id_jobModel').val()).html($('#followup_date').val());
 						}else{
-							$('#jobFolllowupDate'+$('#id_jobModel').val()).html('-');
+							$('#jobFolllowupDate'+$('#id_jobModel').val()).html('NA');
 						}
 						$('#followup_timef').val('');
 						$('#followup_timet').val('');
+						$('#jobFollowupBtn_'+$('#id_jobModel').val()).data('status',$('#jobStatus').val());
 	                }
 	            });
 			}else{
@@ -522,6 +599,20 @@
 			});
 		});
 
+		$('#addNewJob').click(function(event) {
+			$('#add_job_model').modal('show');
+			$('.select2n').select2({
+			    dropdownParent: $('#add_job_model .modal-content')
+			});
+		});
+
+		$('#addTask').click(function(event) {
+			$('#addTaskModal').modal('show');
+			$('.select2n').select2({
+			    dropdownParent: $('#addTaskModal .modal-content')
+			});
+		});
+
 		$('#jobEditForm').submit(function(e) {
 			e.preventDefault();
 			$.ajax({
@@ -543,6 +634,10 @@
                     $('#jobService'+$('#jobId').val()).html(out['service']);
                     $('#jobImportance'+$('#jobId').val()).html(out['importance']);
                     $('#jobEditModal').modal('hide');
+
+                    $('#jobEditBtn_'+$('#jobId').val()).data('importance',out['importance']);
+                    $('#jobEditBtn_'+$('#jobId').val()).data('price',out['price']);
+                    $('#jobEditBtn_'+$('#jobId').val()).data('service',$('#jobEditService').val());
                 }
             });
 		});
@@ -567,6 +662,7 @@
                 	$('#generateAllBillModal').modal('show');
                 	_this.removeAttr('disabled');
                     _this.html('Generate Full Bill');
+                    invoiceTotal();
                 }
             });
 		});
@@ -589,6 +685,7 @@
                 	$('#generateBillService').attr("title",out['service']);
                 	$('#generateBillPrice').val(out['price']);
                 	$('#generateBillQty').val(out['qty']);
+                	$('#generateBillTotal').val(out['qty'] * out['price']);
                 	$('#generateBillJob').val(out['job']);
                 	$('#generateBillModal').modal('show');
                 	_this.removeAttr('disabled');
@@ -602,6 +699,24 @@
 			$('.addPaymentClient').select2({
 			    dropdownParent: $('#add_payment_model .modal-content')
 			});
+		});
+
+		$(document).on('keyup','#generateBillQty',function(){
+			if($('#generateBillQty').val() != "" && $('#generateBillPrice').val() != ""){
+				total = parseFloat($('#generateBillQty').val())  * parseFloat($('#generateBillPrice').val());
+				$('#generateBillTotal').val(total.toFixed(2));
+			}else{
+				$('#generateBillTotal').val(0);
+			}
+		});
+
+		$(document).on('keyup','#generateBillPrice',function(){
+			if($('#generateBillQty').val() != "" && $('#generateBillPrice').val() != ""){
+				total = parseFloat($('#generateBillQty').val())  * parseFloat($('#generateBillPrice').val());
+				$('#generateBillTotal').val(total.toFixed(2));
+			}else{
+				$('#generateBillTotal').val(0);
+			}
 		});
 
 		$(document).on('click','.edit-payment',function(){
@@ -730,6 +845,54 @@
 			$('.other-area').removeAttr('required');
 		}
 	}
+
+	function invoiceTotal () {
+		maintotal = 0;
+		$(".generateFullBillJobList").each(function() {
+			_this = $(this).val();
+		    if($('#generateBillQty'+_this).val() != "" && $('#generateBillPrice'+_this).val() != ""){
+				total = parseFloat($('#generateBillQty'+_this).val())  * parseFloat($('#generateBillPrice'+_this).val());
+				maintotal += total;
+				$('#generateBillTotal'+_this).val(total.toFixed(2));
+			}else{
+				$('#generateBillTotal'+_this).val(0);
+			}
+		});
+
+		$('#generateBillsTotal').val(maintotal.toFixed(2));
+	}
+
+	function generateMultipleBill (client) {
+		_this = $('.generateFullBill'+client);
+		if($('.generateBill'+client+':checked').length > 0){
+			str = "";
+			$('.generateBill'+client+':checked').each(function () {
+		       	str += $(this).val()+",";
+		  	});
+			$.ajax({
+                type: "POST",
+                url : "<?= base_url('generate_bill/getJobs'); ?>",
+                data : {job : str,client : client},
+                cache : false,
+                dataType : "json",
+                beforeSend: function() {
+                    _this.attr('disabled','true');
+                    _this.html('<i class="fa fa-circle-o-notch fa-spin"></i> Please Wait');
+                },
+                success: function(out)
+                {
+                	$('#generateAllBillAppend').html(out['list']);
+                	$('#generateAllBillClient').val(out['client']);
+                	$('#generateAllBillModal').modal('show');
+                	_this.removeAttr('disabled');
+                    _this.html('Generate Full Bill');
+                    invoiceTotal();
+                }
+            });
+		}else{
+			alert('Please Select Bill');
+		}
+	}
 </script>
 
 
@@ -801,4 +964,27 @@
             }
         });
 	}
+
+	$(function(){
+		$('#mobile-collapse').click(function(event) {
+			if($('#mobile-collapse i').hasClass('icon-toggle-right')){
+				type = 0;
+			}else{
+				type = 1;
+			}
+
+			$.ajax({
+	            type: "POST",
+	            url : "<?= base_url('setting/save_sidebar_toggle'); ?>",
+	            cache : false,
+	            data: {type:type},
+	            success: function(out)
+	            {
+	            	
+	            }
+	        });
+		});
+	});
 </script>
+
+

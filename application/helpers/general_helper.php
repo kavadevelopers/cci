@@ -20,6 +20,15 @@ function vd($date)
     return date('d-m-Y',strtotime($date));
 }
 
+function followupVD($date)
+{
+    if($date != null){
+        return vd($date);
+    }else{
+        return "NA";
+    }
+}
+
 function dd($date)
 {
     return date('Y-m-d',strtotime($date));
@@ -214,11 +223,18 @@ function payment()
     return "2";
 }
 
+function referal()
+{
+    return "3";
+}
+
 function typestring($str){
     if($str == 1){
         return "Invoice";
     }else if($str == 2){
         return "Payment";
+    }else if($str == 3){
+        return "Referal Amount";
     }
 }
 

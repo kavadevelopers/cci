@@ -73,6 +73,8 @@ $(function(){
         format: 'dd-mm-yyyy',
         todayHighlight:'TRUE',
         autoclose: true
+    }).keydown(function(e) {
+        return false;
     });
 
     $('.birth-date').datepicker({
@@ -81,6 +83,8 @@ $(function(){
         autoclose: true,
         endDate: '-15y',
         startDate: '-100y'
+    }).keydown(function(e) {
+        return false;
     });
 
 	var date = new Date();
@@ -90,6 +94,8 @@ $(function(){
         todayHighlight:'TRUE',
         autoclose: true,
         startDate: new Date()
+    }).keydown(function(e) {
+        return false;
     });
 
     $('.checkAll').click(function(){

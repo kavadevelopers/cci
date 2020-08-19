@@ -6,9 +6,6 @@ class Setting extends CI_Controller
 	{
 		parent::__construct();
 		$this->auth->check_session();
-		if(get_user()['user_type'] != '0'){
-			redirect(base_url());
-		}
 	}
 
 	public function index()
@@ -21,6 +18,7 @@ class Setting extends CI_Controller
 	{
 		$this->form_validation->set_error_delimiters('<div class="val-error">', '</div>');
 		$this->form_validation->set_rules('company', 'Company Name','trim|required');
+		$this->form_validation->set_rules('ref_amount', 'Referal Amount x n','trim|required');
 
 		if ($this->form_validation->run() == FALSE)
 		{
@@ -30,7 +28,8 @@ class Setting extends CI_Controller
 		else
 		{ 
 			$data = [
-				'name'	=> $this->input->post('company')
+				'name'	=> $this->input->post('company'),
+				'ref_amount'	=> $this->input->post('ref_amount')
 			];
 
 			$this->db->where('id','1');
@@ -39,6 +38,11 @@ class Setting extends CI_Controller
 			$this->session->set_flashdata('msg', 'Settings Saved');
 	        redirect(base_url('setting'));
 		}
+	}
+
+	public function save_sidebar_toggle()
+	{
+		$this->db->where('id',get_user()['id'])->update('user',['sidebar_isopen' => $this->input->post('type')]);
 	}
 
 }

@@ -20,16 +20,21 @@ class Generate_bill extends CI_Controller
 
 	public function all()
 	{
+
 		$date = date('Y-m-d');
 
 		foreach ($this->input->post('jobId') as $key => $value) {
 			$this->db->where('id',$this->input->post('jobId')[$key]);
 			$this->db->update('job',['price' => $this->input->post('price')[$key],'qty' => $this->input->post('qty')[$key]]);
 		}
+		$jobIds = "";
+		foreach ($this->input->post('jobId') as $key => $value) {
+			$jobIds .= $value.',';
+		}
 
+		$jobIds = explode(',',rtrim($jobIds,','));
 
-		$this->db->where('status','3');
-		$this->db->where('client',$this->input->post('client'));
+		$this->db->where_in('id',$jobIds);
 		$jobs = $this->db->get('job')->result_array();
 
 		$client = $this->general_model->_get_client($this->input->post('client'));
@@ -61,6 +66,10 @@ class Generate_bill extends CI_Controller
 				'invoice'			=> $inv_id
 			];
 			$this->db->insert('invoice_details',$data);
+
+			if($value['service'] == 1 || $value['service'] == 2 || $value['service'] == 3){
+				$this->db->where('id',$this->input->post('client'))->update('client',['itr_amount' => $value['price']]);
+			}
 
 			$data = [
 				'remarks'		=> "Bill Generated",
@@ -179,35 +188,35 @@ class Generate_bill extends CI_Controller
 
 	public function getJobs()
 	{
-		$this->db->where('status','3');
-		$this->db->where('client',$this->input->post('client'));
+		$job = explode(',', rtrim($this->input->post('job'),','));
+		
+		$this->db->where_in('id',$job);
 		$jobs = $this->db->get('job')->result_array();
 
 
 		$str = "";
 		foreach ($jobs as $key => $job) {
 			$service = $this->general_model->_get_service($job['service']);
-			$ar = 	[
-						'job' => $this->input->post('job'),
-						'qty' => $job['qty'],
-						'price' => $job['price'],
-						'service' => $service['name']
-				];	
 			
-			$str .= '<div class="col-md-4"><input type="hidden" value="'.$job['id'].'" name="jobId[]">';
+			$str .= '<div class="col-md-3"><input type="hidden" class="generateFullBillJobList" value="'.$job['id'].'" name="jobId[]">';
 				$str .= '<div class="form-group">';
 					$str .= '<label>Service <span class="-req">*</span></label> ';
 					$str .= '<input name="" type="text" placeholder="Service" class="form-control form-control-sm" id="" value="'.$service["name"].'" title="'.$service["name"].'" readonly>';
 					$str .= '</div></div>';
-			$str .= '<div class="col-md-4">';
+			$str .= '<div class="col-md-3">';
                 $str .= '<div class="form-group">';
                     $str .= '<label>Qty <span class="-req">*</span></label>';
-                    $str .= '<input name="qty[]" type="text" placeholder="Qty" class="form-control form-control-sm numbers" id="" value="'.$job['qty'].'" required>';
+                    $str .= '<input name="qty[]" type="text" placeholder="Qty" class="form-control form-control-sm numbers" onkeyup="invoiceTotal ();" id="generateBillQty'.$job['id'].'" value="'.$job['qty'].'" required>';
 					$str .= '</div></div> ';
-			$str .= '<div class="col-md-4">';
+			$str .= '<div class="col-md-3">';
                 $str .= '<div class="form-group">';
                     $str .= '<label>Price <span class="-req">*</span></label>';
-                    $str .= '<input name="price[]" type="text" placeholder="Price" class="form-control form-control-sm decimal-num" id="" value="'.$job['price'].'" required>';
+                    $str .= '<input name="price[]" type="text" placeholder="Price" class="form-control form-control-sm decimal-num" onkeyup="invoiceTotal ();" id="generateBillPrice'.$job['id'].'" value="'.$job['price'].'" required></div></div>';
+                    $str .= '<div class="col-md-3">
+                              <div class="form-group">
+                                <label>Total</label>
+                                <input name="" type="text" placeholder="Total" class="form-control form-control-sm" id="generateBillTotal'.$job['id'].'" value="" readonly>
+                            </div>';
                 	$str .= '</div></div>';
 		}
 

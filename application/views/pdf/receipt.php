@@ -38,36 +38,25 @@
         <table style="width:100%">
             <tr>
                 <th>
-                   <b>From :  </b>
+                   <b>To :  </b>
                 </th>
-                <td align="right">
-                    <b>To :  </b>
-                </td>
             </tr>
             <tr>
-                <td>
-                    <table style="width: 100%">
+                <td align="left">
+                    <table style="width: 50%">
                         <tr>
-                            <td><?= $this->general_model->_get_company($invoice['company'])['name'] ?></td>
+                            <td align="left"><?= $client['fname'].' '.$client['mname'].' '.$client['lname'] ?> <?= $client['firm'] != ""?' ('.$client['firm'].')':'' ?></td>
                         </tr>
                         <tr>
-                            <td style="font-size: 10px;"><?= $this->general_model->_get_company($invoice['company'])['add1'] ?></td>
+                            <td align="left" style="font-size: 10px;"><?= $client['add1'] ?></td>
                         </tr>
+                        <?php if($client['add2'] != ""){ ?>
+                            <tr>
+                                <td align="left" style="font-size: 10px;"><?= $client['add2'] ?></td>
+                            </tr>
+                        <?php } ?>
                         <tr>
-                            <td style="font-size: 10px;"><?= $this->general_model->_get_company($invoice['company'])['add2'] ?></td>
-                        </tr>
-                    </table>
-                </td>
-                <td align="right">
-                    <table style="width: 100%">
-                        <tr>
-                            <td align="right"><?= $client['fname'].' '.$client['mname'].' '.$client['lname'] ?></td>
-                        </tr>
-                        <tr>
-                            <td align="right" style="font-size: 10px;"><?= $client['add1'] ?></td>
-                        </tr>
-                        <tr>
-                            <td align="right" style="font-size: 10px;"><?= $client['add2'] ?></td>
+                            <td align="left" style="font-size: 10px;"><?=  $this->general_model->_get_area($client['area'])['name'] ?>, <?= $this->general_model->_get_city($client['city'])['name'] ?>, <?= $this->general_model->_get_district($client['district'])['name'] ?>, <?= $this->general_model->_get_state($client['state'])['name'] ?> <?= $client['pin'] != ''?",".$client['pin']:''; ?></td>
                         </tr>
                     </table>
                 </td>

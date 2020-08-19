@@ -9,7 +9,7 @@ class Payment extends CI_Controller
 
 	public function index()
 	{
-		$data['_title']		= "Payments";
+		$data['_title']		= "Receipt";
 		$data['invoices']	= $this->general_model->getPayments();
 		$this->load->theme('payment/index',$data);		
 	}

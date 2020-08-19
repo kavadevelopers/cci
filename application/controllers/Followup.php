@@ -28,9 +28,31 @@ class Followup extends CI_Controller
 			$this->db->where('owner',$this->session->userdata('id'));
 		}
 		$this->db->where('fstatus',0);
+		$this->db->where('status <','4');
 		$this->db->where('f_date <=', date('Y-m-d'));
 		$data['jobs']		= $this->db->get('job')->result_array();
 		$this->load->theme('followup/job',$data);	
+	}
+
+	public function payment()
+	{
+		$from = "";$to = "";
+		if($this->input->post('from') && $this->input->post('from') != ""){
+			$this->db->where('date >=',dd($this->input->post('from')));
+			$from = $this->input->post('from');
+		}
+
+		if($this->input->post('to') && $this->input->post('to') != ""){
+			$this->db->where('date <=',dd($this->input->post('to')));	
+			$to = $this->input->post('to');
+		}
+		$this->db->where('done','0');
+		$data['_title']			= "Payment Followup";
+		$data['invoices'] = $this->db->get('invoice')->result_array();
+		$data['from']		= $from;
+		$data['to']			= $to;
+		$this->load->theme('followup/payment',$data);
+
 	}
 
 	public function get()
@@ -130,6 +152,41 @@ class Followup extends CI_Controller
 				'status'			=> 1
 			];
 			$this->db->insert('client',$data);
+			$clientId = $this->db->insert_id();
+
+			$lead = $this->general_model->_get_lead($this->input->post('id'));
+
+
+			foreach (json_decode($lead['services']) as $key => $value) {
+				$qty = 1;
+				$amount = $value[1];
+				$service = $value[0];
+
+				$this->db->order_by('rand()');
+			    $this->db->limit(1);
+			    $this->db->where('user_type','2');
+			    $this->db->where('type !=','3');
+			    $this->db->where('df','');
+			    $user = $this->db->get('user')->row_array();
+
+			    $data = [
+					'branch'		=> $lead['branch'],
+					'service'		=> $service,
+					'price'			=> $amount,
+					'qty'			=> $qty,
+					'client'		=> $clientId,
+					'status'		=> 0,
+					'owner'			=> $user['id'],
+					'importance'	=> 'NORMAL',
+					'f_date'		=> null,
+					'f_time'		=> null,
+					'created_by'	=> get_user()['id'],
+					'created_at'		=> date('Y-m-d H:i:s')
+				];
+				$this->db->insert('job',$data);
+				$job_id = $this->db->insert_id();
+				$this->db->where('id',$job_id)->update('job',['job_id' => "JOB_".$job_id]);	
+			}
 		}
 	}
 
@@ -179,7 +236,7 @@ class Followup extends CI_Controller
 		$customer = $followup['customer'] == '1'?'Yes':'No';
 		$needed = $followup['needed'] == '1'?'Yes':'No';
 		$str = '<tr>';
-			$str .= '<td class="text-center">'.vd($followup['next_f']).get_from_to($followup['ftime'],$followup['ttime']).'</td>';
+			$str .= '<td class="text-center">'.followupVD($followup['next_f']).get_from_to($followup['ftime'],$followup['ttime']).'</td>';
 			$str .= '<td class="text-center">'._vdatetime($followup['date']).'</td>';
 			$str .= '<td>'.nl2br($followup['remarks']).'</td>';
 			$str .= '<td class="text-center">'.$customer.'</td>';
@@ -207,7 +264,7 @@ class Followup extends CI_Controller
 				$cus++;
 			}
 			$str = '<tr>';
-			$str .= '<td class="text-center">'.vd($followup['next_f']).get_from_to($followup['ftime'],$followup['ttime']).'</td>';
+			$str .= '<td class="text-center">'.followupVD($followup['next_f']).get_from_to($followup['ftime'],$followup['ttime']).'</td>';
 			$str .= '<td class="text-center">'._vdatetime($followup['date']).'</td>';
 			$str .= '<td>'.nl2br($followup['remarks']).'</td>';
 			$str .= '<td class="text-center">'.$customer.'</td>';
@@ -224,6 +281,70 @@ class Followup extends CI_Controller
 			$cus = "";
 		}
 		echo json_encode([$string,$cus]);
+	}
+
+	public function payment_get()
+	{
+		$followups = $this->db->order_by('id','desc')->get_where('followup',['main_id' => $this->input->post('id'),'type' => "payment"])->result_array();
+		$string = '';
+		foreach ($followups as $key => $followup) {
+			$str = '<tr>';
+			$str .= '<td class="text-center">'.followupVD($followup['next_f']).get_from_to($followup['ftime'],$followup['ttime']).'</td>';
+			$str .= '<td class="text-center">'._vdatetime($followup['date']).'</td>';
+			$str .= '<td>'.nl2br($followup['remarks']).'</td>';
+			$str .= '<td class="text-center">NO</td>';
+			if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){
+				$str .= '<td>'.$this->general_model->_get_user($followup['followup_by'])['name'].'</td>';
+			}
+			$str .= '</tr>';
+			$string .= $str;
+		}
+		echo json_encode([$string]);
+	}
+
+	public function payment_save()
+	{
+
+		
+		
+		$ndate = dd($this->input->post('date'));
+		
+		$data = [
+			'remarks'		=> $this->input->post('remarks'),
+			'next_f'		=> $ndate,
+			'customer'		=> 0,
+			'date'			=> date('Y-m-d H:i:s'),
+			'ftime'			=> null,
+			'ttime'			=> null,
+			'type'			=> $this->input->post('type'),
+			'main_id'		=> $this->input->post('id'),
+			'followup_by'	=> $this->session->userdata('id')
+		];
+		$this->db->insert('followup',$data);
+		$fId = $this->db->insert_id();
+
+		if($this->input->post('cus') == 1){
+			$done = 1;
+		}else{
+			$done = 0;
+		}
+		$this->db->where('id',$this->input->post('id'))->update('invoice',['fdate' => $ndate,'done'	=> $done]);
+
+
+		$followup = $this->db->get_where('followup',['id' => $fId])->row_array();
+		$str = '<tr>';
+			$str .= '<td class="text-center">'.followupVD($followup['next_f']).get_from_to($followup['ftime'],$followup['ttime']).'</td>';
+			$str .= '<td class="text-center">'._vdatetime($followup['date']).'</td>';
+			$str .= '<td>'.nl2br($followup['remarks']).'</td>';
+			$str .= '<td class="text-center">NO</td>';
+			if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){
+				$str .= '<td>'.$this->general_model->_get_user($followup['followup_by'])['name'].'</td>';
+			}
+		$str .= '</tr>';
+
+
+		
+		echo json_encode([$str]);
 	}
 
 	public function getNotifications()

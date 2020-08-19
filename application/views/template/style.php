@@ -59,6 +59,10 @@
 	.table-dt td, .table-dt th{
 		padding: 5px;
 	}
+
+	.table-ndt td, .table-ndt th{
+		padding: 5px;
+	}
 	.grid-images{
 		width: auto;
 	    height: 100px;

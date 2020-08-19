@@ -119,6 +119,11 @@ class General_model extends CI_Model
 		}
 	}
 
+	public function get_task_users()
+	{
+		return $this->db->get_where('user',['df' => '','id !=' => get_user()['id']])->result_array();
+	}
+
 	public function get_job_owners()
 	{
 		if(get_user()['user_type'] == '1'){
@@ -288,6 +293,9 @@ class General_model extends CI_Model
 	{
 		if(get_user()['user_type'] == 0){
 			return $this->db->get_where('client',['status' => '0'])->result_array();
+		}
+		else if(get_user()['user_type'] == 3){
+			return $this->db->get_where('client',['status' => '0','owner' => get_user()['id']])->result_array();
 		}else{
 			return $this->db->get_where('client',['branch' => get_user()['branch'],'status' => '0'])->result_array();
 		}
@@ -297,6 +305,8 @@ class General_model extends CI_Model
 	{
 		if(get_user()['user_type'] == 0){
 			return $this->db->get_where('client',['status' => '9'])->result_array();
+		}else if(get_user()['user_type'] == 3){
+			return $this->db->get_where('client',['status' => '9','owner' => get_user()['id']])->result_array();
 		}else{
 			return $this->db->get_where('client',['branch' => get_user()['branch'],'status' => '9'])->result_array();
 		}
@@ -306,6 +316,8 @@ class General_model extends CI_Model
 	{
 		if(get_user()['user_type'] == 0){
 			return $this->db->get_where('client',['status' => '8'])->result_array();
+		}else if(get_user()['user_type'] == 3){
+			return $this->db->get_where('client',['status' => '8','owner' => get_user()['id']])->result_array();
 		}else{
 			return $this->db->get_where('client',['branch' => get_user()['branch'],'status' => '8'])->result_array();
 		}
@@ -474,6 +486,49 @@ class General_model extends CI_Model
 		$this->db->select('name,id');
 		$folders = $this->db->get_where('document_sub_folders',['main' => $id])->result_array();
 		return htmlspecialchars(json_encode($folders), ENT_QUOTES, 'UTF-8');
+	}
+
+	public function getTotalLeadBySales($user)
+	{
+		$total = $this->db->get_where('leads',['owner' => $user])->num_rows();
+		$month = $this->db->get_where('leads',['owner' => $user,'date >=' => date('Y-m-1'),'date <=' => date('Y-m-t')])->num_rows();
+		return [$total,$month];
+	}
+
+	public function newClientsNumAmount()
+	{
+		$clients = $this->db->get_where('client',['created_at >=' => date("Y-m-1"),'created_at <=' => date("Y-m-t")]);
+		$count_client = $clients->num_rows();
+		$amount = 0;
+		foreach ($clients->result_array() as $key => $value) {
+			$jobs = $this->db->get_where('job',['client' => $value['id']])->result_array();
+			foreach ($jobs as $jkey => $jvalue) {
+				$amount += $jvalue['price'] * $jvalue['qty'];
+			}
+		}
+		return [$count_client,$amount];
+	}
+
+	public function pastThDaysPendingPayment()
+	{
+		$this->db->select_sum('total');
+    	$this->db->where('date >=' , date('Y-m-d', strtotime('-30 days')));
+    	$this->db->where('date <=' , date("Y-m-d"));
+    	return  $this->db->get('invoice')->row()->total;
+	}
+
+	public function pastDaysPendingPayment()
+	{
+		$this->db->select_sum('total');
+    	$this->db->from('invoice');
+    	return  $this->db->get()->row()->total;
+	}
+
+	public function pendingForPaymentClient()
+	{
+		$this->db->where('status','3');
+		$this->db->group_by('client');
+    	return $this->db->get('job')->num_rows();
 	}
 }
 ?>

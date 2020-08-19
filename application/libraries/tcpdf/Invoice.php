@@ -20,6 +20,6 @@ class Invoice extends TCPDF
 
     public function Header()
     {
-    	$this->Image($this->data['image'], 0, 0, 210, 40, $this->data['extention'], '', '', false, 300, '', false, false, 0);
+    	$this->Image($this->data['image'], 10, 10, 190, 35, $this->data['extention'], '', '', false, 300, '', false, false, 0);
     }
 }

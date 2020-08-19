@@ -32,6 +32,44 @@
     </form>
 </div>
 
+<div class="modal fade" id="dueDateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <form method="post" action="">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Due Dates</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered table-mini table-ndt">
+                        <tr>
+                            <th>Date</th>
+                            <th>Remarks</th>
+                        </tr>
+                        <?php $dueDates = $this->db->get_where('due_dates',['dt <=' => date('Y-m-d'),'dt >=' => date('Y-m-d')])->result_array(); ?>
+                        <?php foreach ($dueDates as $dueDateskey => $dueDatesvalue) { ?>
+                            <tr>
+                                <td><?= vd($dueDatesvalue['date']) ?></td>
+                                <td><?= $dueDatesvalue['remarks'] ?></td>
+                            </tr>
+                        <?php } ?>
+                        <?php if(count($dueDates) == 0){ ?>
+                            <tr>
+                                <td class="text-center" colspan="2">No Data Found</td>
+                            </tr>
+                        <?php } ?>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
 <div class="modal fade" id="jobTransferModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <form method="post" action="<?= base_url('job/transfer') ?>">
         <div class="modal-dialog" role="document">
@@ -101,7 +139,7 @@
                             <label>Importance <span class="-req">*</span></label>
                             <select class="form-control" id="editJobImportance" required>
                                 <option value="">-- Select --</option>
-                                <option value="REGULAR">REGULAR</option>
+                                <option value="NORMAL">NORMAL</option>
                                 <option value="URGENT">URGENT</option>
                             </select>
                         </div>
@@ -249,10 +287,10 @@
                                     <?php } ?>
                                 </select>
                             </div>
-                            <div class="row">
+                            <div class="row" style="display: none;" id="followUpNeededJob">
                                 <div class="col-md-6 form-group">
                                     <label>Next Followup Date <span class="-req">*</span></label> 
-                                    <input name="date" type="text" placeholder="Next Followup Date" class="form-control form-control-sm datepicker-new" value="<?= set_value('date',date('d-m-Y')); ?>" id="followup_date" readonly required>
+                                    <input name="date" type="text" placeholder="Next Followup Date" class="form-control form-control-sm datepicker-new" value="" id="followup_date">
                                 </div>
                                 <div class="col-md-6 form-group">
                                     <label>Next Follow up Time</label> 
@@ -301,12 +339,73 @@
 </div>
 <?php } ?>
 
+<div class="modal fade bd-example-modal-lg show" id="payment_followup_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <form method="post" action="" id="paymentfollowupForm">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Followup</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div id="hideJobFollowupForm">
+                            <div class="form-group">
+                                <label>Remarks <span class="-req">*</span></label> 
+                                <textarea class="form-control" placeholder="Remarks" name="remarks" id="payment_followup_remarks" required></textarea>
+                                <?= form_error('owner') ?>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label>Next Followup Date <span class="-req">*</span></label> 
+                                    <input name="date" type="text" placeholder="Next Followup Date" class="form-control form-control-sm datepicker-new" autocomplete="off" value="" id="payment_followup_date">
+                                </div>
+                            </div>
+                            <div class="checkbox-fade fade-in-primary d-">
+                                <label>
+                                    <input type="checkbox" value="1" name="" id="payment_done">
+                                    <span class="cr"><i class="cr-icon icofont icofont-ui-check txt-primary"></i></span>
+                                    <span class="text-inverse">Done ?</span>
+                                </label>
+                            </div>
+                            <div class="form-group text-right">
+                                <button type="submit" class="btn btn-primary" id="payment_followup_save">Save</button>
+                            </div>
+                            <input type="hidden" name="id" id="id_paymentModel">
+                            <input type="hidden" name="type" value="payment">
+                        </div>
+                        <table class="table table-bordered table-mini table-no-padding" id="paymentfollowup_table" style="max-width: 100%; display: none;">
+                            <thead>
+                                <th class="text-center">Next Followup</th>
+                                <th class="text-center">Date</th>
+                                <th>Remarks</th>
+                                <th class="text-center">Is Done ?</th>
+                                <?php if(get_user()['user_type'] == '0' || get_user()['user_type'] == '1'){ ?>
+                                    <th>Followup By</th>
+                                <?php } ?>
+                            </thead>
+                            <tbody id="paymentfollowup_body">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
 <div class="modal fade" id="add_payment_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <form method="post" action="<?= base_url('payment/save') ?>">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Payment</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add Receipt</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -481,9 +580,9 @@
     </form>
 </div>
 
-<div class="modal fade" id="generateBillModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="generateBillModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <form method="post" action="<?= base_url('generate_bill/single') ?>">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Generate Bill</h5>
@@ -493,24 +592,30 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                               <div class="form-group">
                                 <label>Service <span class="-req">*</span></label> 
                                 <input name="" type="text" placeholder="Service" class="form-control form-control-sm" id="generateBillService" value="" readonly>
                             </div>
                         </div>    
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                               <div class="form-group">
                                 <label>Qty <span class="-req">*</span></label> 
                                 <input name="qty" type="text" placeholder="Qty" class="form-control form-control-sm numbers" id="generateBillQty" value="" required>
                             </div>
                         </div>    
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                               <div class="form-group">
                                 <label>Price <span class="-req">*</span></label>
                                 <input name="price" type="text" placeholder="Price" class="form-control form-control-sm decimal-num" id="generateBillPrice" value="" required>
                             </div>
-                        </div>    
+                        </div>
+                        <div class="col-md-3">
+                              <div class="form-group">
+                                    <label>Total</label>
+                                    <input name="" type="text" placeholder="Total" class="form-control form-control-sm" id="generateBillTotal" value="" readonly>
+                                </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
@@ -533,7 +638,7 @@
 
 <div class="modal fade" id="generateAllBillModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <form method="post" action="<?= base_url('generate_bill/all') ?>">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Generate Bill</h5>
@@ -544,6 +649,15 @@
                 <div class="modal-body">
                     <div class="row" id="generateAllBillAppend">
                            
+                    </div>
+                    <div class="row">
+                        <div class="col-md-9"></div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Invoice Total</label>
+                                <input name="" type="text" placeholder="Invoice Total" class="form-control form-control-sm" id="generateBillsTotal" value="" readonly>
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
@@ -564,3 +678,121 @@
     </form>
 </div>
     
+
+<div class="modal fade" id="add_job_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <form method="post" action="<?= base_url('job/save') ?>">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Job</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Select Client <span class="-req">*</span></label> 
+                                    <select class="form-control form-control-sm select2n" name="client" required>
+                                        <option value="">-- Select --</option>
+                                        <?php foreach ($this->general_model->getFilteredClients() as $bkey => $bvalue) { ?>
+                                            <option value="<?= $bvalue['id'] ?>"><?= $bvalue['c_id'] ?> - <?= $bvalue['fname'] ?> <?= $bvalue['mname'] ?> <?= $bvalue['lname'] ?> - <?= $bvalue['mobile'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>For <span class="-req">*</span></label> 
+                                    <select class="form-control form-control-sm select2n" name="owner" required>
+                                        <option value="">-- Select --</option>
+                                        <option value="<?= get_user()['id'] ?>" selected>Me</option>
+                                        <?php foreach ($this->general_model->get_todo_users() as $bkey => $bvalue) { ?>
+                                            <option value="<?= $bvalue['id'] ?>"><?= $bvalue['name'] ?> - <?= getRole($bvalue['user_type']) ?> - <?= _user_type($bvalue['id']) ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <?= form_error('owner') ?>
+                                </div>        
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Select Service <span class="-req">*</span></label> 
+                                    <select class="form-control form-control-sm select2n" id="jobAddService" name="service" required>
+                                        <option value="">-- Select Service --</option>
+                                        <?php foreach ($this->general_model->get_services() as $sekey => $sevalue) { ?> 
+                                            <option value="<?= $sevalue['id'] ?>"><?= $sevalue['name'] ?></option>
+                                        <?php } ?>
+                                    </select>   
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Price <span class="-req">*</span></label> 
+                                    <input type="text" id="jobAddPrice" class="form-control form-control-sm decimal-num" name="price" autocomplete="off" placeholder="Price" required>   
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        <!-- <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label>Date <span class="-req">*</span></label> 
+                                <input name="date" type="text" placeholder="Date" class="form-control form-control-sm datepicker-new" value="<?= set_value('date',date('d-m-Y')); ?>" required>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Time</label> 
+                                <input name="ftime" type="text" placeholder="From" class="form-control form-control-sm hour-mask" value="">
+                                <input name="ttime" type="text" placeholder="To" class="form-control form-control-sm hour-mask" value="">
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal fade" id="addTaskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <form method="post" action="<?= base_url('task/save') ?>">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Task</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>For <span class="-req">*</span></label> 
+                            <select class="form-control form-control-sm select2n" name="to" required>
+                                <option value="">-- Select --</option>
+                                <?php foreach ($this->general_model->get_task_users() as $bkey => $bvalue) { ?>
+                                    <option value="<?= $bvalue['id'] ?>"><?= $bvalue['name'] ?> - <?= getRole($bvalue['user_type']) ?> - <?= _user_type($bvalue['id']) ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Name <span class="-req">*</span></label> 
+                            <input type="text" class="form-control form-control-sm" name="name" autocomplete="off" placeholder="Name" required>   
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

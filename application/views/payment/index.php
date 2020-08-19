@@ -8,7 +8,7 @@
             </div>
         </div>
         <div class="col-md-6 text-right">
-            <button class="btn btn-primary btn-mini add-payment"><i class="fa fa-plus"></i> Add Payment</button>
+            <button class="btn btn-primary btn-mini add-payment"><i class="fa fa-plus"></i> Add Receipt</button>
         </div>
     </div>
 </div>
@@ -27,7 +27,7 @@
                         <th>Remarks</th>
                         <th class="text-center">Approved</th>
                         <?php if(get_user()['user_type'] == 0){ ?>
-                            <th>Payment By</th>
+                            <th>Created By</th>
                         <?php } ?>
                         <th class="text-center">Action</th>
                     </tr>
@@ -38,7 +38,7 @@
                         <tr>
                             <td class="text-center"><?= $value['invoice'] ?></td>
                             <td class="text-center"><?= vd($value['date']) ?></td>
-                            <td><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?></td>
+                            <td>#<?= $client['c_id'] ?> <br><b><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?></b> <?= $client['firm'] != ""?'<br>'.$client['firm'] :'' ?> <br><small><?= $client['mobile'] ?></small></td>
                             <td class="text-left"><?= $value['pay_type'] ?><?= $value['pay_remarks'] != "" ? '<br>'.$value['pay_remarks']:''; ?></td>
                             <td class="text-right"><?= $value['amount'] ?></td>
                             <td><?= nl2br($value['remarks']) ?></td>

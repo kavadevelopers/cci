@@ -15,6 +15,38 @@ class Job extends CI_Controller
 		$this->load->theme('job/index',$data);
 	}
 
+	public function save()
+	{
+		$user = $this->general_model->_get_user($this->input->post('owner'));
+		if($this->input->post('owner') != 1){
+			$branch = $user['branch'];
+		}else{
+			$branch = '';
+		}
+
+		$data = [
+			'branch'		=> $branch,
+			'service'		=> $this->input->post('service'),
+			'price'			=> $this->input->post('price'),
+			'qty'			=> 1,
+			'client'		=> $this->input->post('client'),
+			'status'		=> 0,
+			'owner'			=> $this->input->post('owner'),
+			'importance'	=> 'NORMAL',
+			'f_date'		=> null,
+			'f_time'		=> null,
+			'created_by'	=> get_user()['id'],
+			'created_at'		=> date('Y-m-d H:i:s')
+		];
+
+		$this->db->insert('job',$data);
+		$job_id = $this->db->insert_id();
+		$this->db->where('id',$job_id)->update('job',['job_id' => "JOB_".$job_id]);
+
+		$this->session->set_flashdata('msg', 'Job Added');
+	    redirect(base_url('job'));
+	}
+
 	public function transfer()
 	{
 		$jobs = explode("-", $this->input->post('jobs'));

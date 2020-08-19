@@ -8,6 +8,9 @@
             </div>
         </div>
         <div class="col-md-6 text-right">
+            <button class="btn btn-primary btn-sm" type="button" id="addNewJob">
+                <i class="fa fa-plus"></i> Add Job
+            </button>
             <button class="btn btn-warning btn-sm" type="button" id="tranferJob"  data-type="1">
                 <i class="fa fa-share"></i> Transfer Job
             </button>
@@ -58,18 +61,20 @@
                             <td class="text-center"><?= $value['job_id'] ?></td>
                             <td id="jobService<?= $value['id'] ?>"><?= $this->general_model->_get_service($value['service'])['name'] ?></td>
                             <td class="text-right" id="jobPrice<?= $value['id'] ?>"><?= $value['price'] ?></td>
-                            <td><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?></td>
+                            <td>
+                                #<?= $client['c_id'] ?> <br><b><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?></b> <?= $client['firm'] != ""?'<br>'.$client['firm'] :'' ?> <br><small><?= $client['mobile'] ?></small>
+                            </td>
                             <td class="text-center" id="status-<?= $value['id'] ?>"><?= getjobStatus($value['status']) ?></td>
                             <td class="text-center" id="jobImportance<?= $value['id'] ?>"><?= $value['importance'] ?></td>
-                            <td class="text-center" id="jobFolllowupDate<?= $value['id'] ?>"><?= $value['f_date'] != null?vd($value['f_date']):'-'; ?></td>
+                            <td class="text-center" id="jobFolllowupDate<?= $value['id'] ?>"><?= $value['f_date'] != null?vd($value['f_date']):'NA'; ?></td>
                             <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){ ?>
                                 <td><?= $this->general_model->_get_user($value['owner'])['name'] ?></td>
                             <?php } ?>
                             <td class="text-center">
-                                <button class="btn btn-primary btn-mini edit-job" title="Edit" data-importance="<?= $value['importance'] ?>" data-job="<?= $value['id'] ?>" data-service="<?= $value['service'] ?>" data-price="<?= $value['price'] ?>" data-job_id="<?= $value['job_id'] ?>" data-client="<?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?>">
+                                <button class="btn btn-primary btn-mini edit-job" id="jobEditBtn_<?= $value['id'] ?>" title="Edit" data-importance="<?= $value['importance'] ?>" data-job="<?= $value['id'] ?>" data-service="<?= $value['service'] ?>" data-price="<?= $value['price'] ?>" data-job_id="<?= $value['job_id'] ?>" data-client="<?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?>">
                                     <i class="fa fa-pencil"></i>
                                 </button>
-                                <button type="button" class="btn btn-success btn-mini add-job-followup" data-status="<?= $value['status'] ?>" data-id="<?= $value['id'] ?>" data-stop="Job Is Closed" data-type="job" title="Check Followup">
+                                <button type="button" class="btn btn-success btn-mini add-job-followup" id="jobFollowupBtn_<?= $value['id'] ?>" data-status="<?= $value['status'] ?>" data-id="<?= $value['id'] ?>" data-stop="Job Is Closed" data-type="job" title="Check Followup">
                                     <i class="fa fa-question"></i>
                                 </button>
                             </td>

@@ -80,9 +80,15 @@ class Client extends CI_Controller
 
 		$lead = $this->general_model->_get_lead($this->input->post('lead'));
 		$source = $this->general_model->_get_source($lead['source']);
+		$referal_code = "";
+		$referal_get = $this->db->get_where('client' ,['c_id' => $this->input->post('refered_by')])->row_array();
+		if($referal_get){
+			$referal_code = $referal_get['c_id'];
+		}
 
 		$data = [
 			'client_type'	=> $this->input->post('client_type'),
+			'source'	=> $this->input->post('source'),
 			'fname'		=> strtoupper($this->input->post('fname')),
 			'mname'		=> strtoupper($this->input->post('mname')),
 			'lname'		=> strtoupper($this->input->post('lname')),
@@ -117,46 +123,77 @@ class Client extends CI_Controller
 			'turnover_notes'	=> strtoupper($this->input->post('goal')),
 			'quotation'			=> strtoupper($this->input->post('quotation')),
 			'contact_persons'	=> json_encode($contact_persons),
-			'status'			=> 0
+			'status'			=> 0,
+			'refered_by'		=> $referal_code
 		];
 
 		$this->db->where('id',$this->input->post('client_id'))->update('client',$data);
 
-
-		foreach ($this->input->post('services') as $key => $value) {
-			if($value != ''){
-				$service = explode('-',$value)[0];
-				$price = $this->input->post('amount')[$key];
-				if($this->input->post('qty')[$key] != ""){
-					$qty = $this->input->post('qty')[$key];
-				}else{
-					$qty = 1;
-				}
-				
-				$this->db->order_by('rand()');
-			    $this->db->limit(1);
-			    $this->db->where('user_type','2');
-			    $this->db->where('df','');
-			    $user = $this->db->get('user')->row_array();
-				$data = [
-					'branch'		=> $this->input->post('branch'),
-					'service'		=> $service,
-					'price'			=> $price,
-					'qty'			=> $qty,
-					'client'		=> $this->input->post('client_id'),
-					'status'		=> 0,
-					'owner'			=> $user['id'],
-					'importance'	=> 'REGULAR',
-					'f_date'		=> null,
-					'f_time'		=> null,
-					'created_by'	=> get_user()['id'],
-					'created_at'		=> date('Y-m-d H:i:s')
-				];
-				$this->db->insert('job',$data);
-				$job_id = $this->db->insert_id();
-				$this->db->where('id',$job_id)->update('job',['job_id' => "JOB_".$job_id]);			
+		if($referal_code != ""){
+			$this->db->where_in('service',[1,2,3]);
+			$jobs = $this->db->get_where('job' ,['client' => $this->input->post('client_id'),'status <' => 3])->result_array();
+			$amount = 0;
+			foreach ($jobs as $key => $value) {
+				$amount += $value['price'];
 			}
+
+			$rClient = $this->db->get_where('client' ,['c_id' => $this->input->post('refered_by')])->row_array();
+
+			$this->db->where('id',$rClient)->update('client',['referal_amount' => ($rClient->referal_amount + $amount)]);
+
+			$rClient = $this->db->get_where('client' ,['c_id' => $this->input->post('refered_by')])->row_array();
+
+
+			if($rClient['itr_amount'] != "0.00"){
+				if( ($rClient['referal_amount'] / 3) == $rClient['itr_amount']){
+					$data = [
+						'type'		=> referal(),
+						'client'	=> $rClient['id'],
+						'date'		=> date('Y-m-d'),
+						'main'		=> "",
+						'credit'	=> $rClient['itr_amount']
+					];
+					$this->db->insert('transaction',$data);
+				}
+			}			
 		}
+
+
+
+		// foreach ($this->input->post('services') as $key => $value) {
+		// 	if($value != ''){
+		// 		$service = explode('-',$value)[0];
+		// 		$price = $this->input->post('amount')[$key];
+		// 		if($this->input->post('qty')[$key] != ""){
+		// 			$qty = $this->input->post('qty')[$key];
+		// 		}else{
+		// 			$qty = 1;
+		// 		}
+				
+		// 		$this->db->order_by('rand()');
+		// 	    $this->db->limit(1);
+		// 	    $this->db->where('user_type','2');
+		// 	    $this->db->where('df','');
+		// 	    $user = $this->db->get('user')->row_array();
+		// 		$data = [
+		// 			'branch'		=> $this->input->post('branch'),
+		// 			'service'		=> $service,
+		// 			'price'			=> $price,
+		// 			'qty'			=> $qty,
+		// 			'client'		=> $this->input->post('client_id'),
+		// 			'status'		=> 0,
+		// 			'owner'			=> $user['id'],
+		// 			'importance'	=> 'NORMAL',
+		// 			'f_date'		=> null,
+		// 			'f_time'		=> null,
+		// 			'created_by'	=> get_user()['id'],
+		// 			'created_at'		=> date('Y-m-d H:i:s')
+		// 		];
+		// 		$this->db->insert('job',$data);
+		// 		$job_id = $this->db->insert_id();
+		// 		$this->db->where('id',$job_id)->update('job',['job_id' => "JOB_".$job_id]);			
+		// 	}
+		// }
 
 		$this->db->where('id',$this->input->post('lead'))->update('leads',['status' => 2]);		
 

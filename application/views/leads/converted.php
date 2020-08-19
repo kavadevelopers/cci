@@ -71,9 +71,9 @@
                                 <a href="<?= base_url('leads/edit_converted/').$value['id'] ?>" class="btn btn-primary btn-mini" title="Edit">
                                     <i class="fa fa-pencil"></i>
                                 </a>
-                                <a href="<?= base_url('leads/delete/').$value['id'].'/2' ?>" class="btn btn-danger btn-mini btn-delete" title="Delete">
+                                <!-- <a href="<?= base_url('leads/delete/').$value['id'].'/2' ?>" class="btn btn-danger btn-mini btn-delete" title="Delete">
                                     <i class="fa fa-trash"></i>
-                                </a>
+                                </a> -->
                             </td>
                         </tr>
                     <?php } ?>

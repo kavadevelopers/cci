@@ -39,6 +39,7 @@
                         <th class="text-center">Date</th>
                         <th>Customer Name</th>
                         <th class="">Area</th>
+                        <th class="">Importance</th>
                         <th class="text-center">Contact</th>
                         <th class="">Services</th>
                         <th class="text-center">Next Followup Date</th>
@@ -68,6 +69,7 @@
                             <td class="">
                                 <?= $this->general_model->_get_area($value['area'])['name'] ?>,<br> <?= $this->general_model->_get_city($value['city'])['name'] ?>,<br> <?= $this->general_model->_get_district($value['district'])['name'] ?>,<br> <?= $this->general_model->_get_state($value['state'])['name'] ?>
                             </td>
+                            <th class="text-center"><?= $value['importance'] ?></th>
                             <td class="text-center">
                                 <?php foreach (explode(",", $value['mobile']) as $mkey => $mvalue) { ?>
                                     <?php if($mkey > 0){ ?><br><?php } ?>
@@ -91,12 +93,12 @@
                                 </td>
                             <?php } ?>
                             <td class="text-center">
-                                <a href="<?= base_url('leads/edit/').$value['id'] ?>" class="btn btn-primary btn-mini" title="Edit">
+                                <!-- <a href="<?= base_url('leads/edit/').$value['id'] ?>" class="btn btn-primary btn-mini" title="Edit">
                                     <i class="fa fa-pencil"></i>
-                                </a>
-                                <a href="<?= base_url('leads/delete/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete" title="Delete">
+                                </a> -->
+                                <!-- <a href="<?= base_url('leads/delete/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete" title="Delete">
                                     <i class="fa fa-trash"></i>
-                                </a>
+                                </a> -->
                                 <a href="<?= base_url('leads/dump/').$value['id'] ?>" class="btn btn-warning btn-mini" title="Transfer To Dump">
                                     <i class="fa fa-exclamation"></i>
                                 </a>

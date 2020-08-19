@@ -201,7 +201,7 @@
                                     <select class="form-control form-control-sm" name="importance">
                                         <option value="">-- Select --</option>
                                         <option value="High">High</option>
-                                        <option value="Medium">Medium</option>
+                                        <option value="Medium" selected>Medium</option>
                                         <option value="Low">Low</option>
                                     </select>   
 		                            <?= form_error('importance') ?>

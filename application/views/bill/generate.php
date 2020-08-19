@@ -21,6 +21,7 @@
         		<table class="table table-striped table-bordered table-mini m-t2">
 	                <thead>
 	                    <tr>
+	                    	<th></th>
 	                        <th class="text-center">#</th>
 	                        <th>Service</th>
 	                        <th class="text-right">Price</th>
@@ -28,7 +29,8 @@
 	                        <th class="text-center">Status</th>
 	                        <th class="text-center">Importance</th>
 	                        <th class="text-center">
-	                        	<button class="btn btn-info btn-mini generateFullBill" data-client="<?= $value['client'] ?>">Generate Full Bill</button>
+	                        	<button class="btn btn-info btn-mini generateFullBill<?= $value['client'] ?>" onclick="generateMultipleBill('<?= $value['client'] ?>');">		Generate Full Bill
+	                        	</button>
 	                        </th>
 	                    </tr>
 	                </thead>
@@ -37,6 +39,14 @@
 	            		<?php foreach ($customer as $ckey => $cvalue) { ?>
 	            			<?php $client = $this->general_model->_get_client($cvalue['client']); ?>
 	            			<tr>
+	            				<td class="text-center">
+	                                <div class="checkbox-fade fade-in-primary d-">
+	                                    <label>
+	                                        <input type="checkbox" class="generateBill<?= $value['client'] ?>" value="<?= $cvalue['id'] ?>">
+	                                        <span class="cr"><i class="cr-icon icofont icofont-ui-check txt-primary"></i></span>
+	                                    </label>
+	                                </div>
+	                            </td>
 	            				<td class="text-center"><?= $cvalue['job_id'] ?></td>
 	            				<td><?= $this->general_model->_get_service($cvalue['service'])['name'] ?></td>
 	            				<td class="text-right"><?= $cvalue['price'] ?></td>

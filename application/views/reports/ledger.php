@@ -46,7 +46,7 @@
             </div>
         </div>
 
-        <?php if($client != ""){ ?>
+        <?php if($client != ""){ $cli = $this->general_model->_get_client($client); ?>
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-block">
@@ -139,35 +139,28 @@
            buttons: [ 
                 { 
                     extend: 'print',
-                    title: '<?= $_title ?>',
+                    title: 'Ledger - #<?= $cli['c_id'] ?> - <?= $cli['fname'] ?> <?= $cli['mname'] ?> <?= $cli['lname'] ?> <?= $cli['firm'] != ""?"- ".$cli['firm']:""; ?>',
                     exportOptions: {
-                        columns: [0,1,2,3,4]
+                        columns: [0,1,2,3,4,5]
                     }
                 },
                 { 
                     extend: 'pdf',
-                    title: '<?= $_title ?>',
+                    title: 'Ledger - #<?= $cli['c_id'] ?> - <?= $cli['fname'] ?> <?= $cli['mname'] ?> <?= $cli['lname'] ?> <?= $cli['firm'] != ""?"- ".$cli['firm']:""; ?>',
                     exportOptions: {
-                        columns: [0,1,2,3,4]
+                        columns: [0,1,2,3,4,5]
                     }
                 },
                 { 
                     extend: 'excel',
-                    title: '<?= $_title ?>',
+                    title: 'Ledger - #<?= $cli['c_id'] ?> - <?= $cli['fname'] ?> <?= $cli['mname'] ?> <?= $cli['lname'] ?> <?= $cli['firm'] != ""?"- ".$cli['firm']:""; ?>',
                     exportOptions: {
-                        columns: [0,1,2,3,4]
+                        columns: [0,1,2,3,4,5]
                     }
                 }
                 
             ],
-            order : [],
-            "aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-            "columnDefs": [
-                { 
-                    "orderable": false, 
-                    "targets": [0,1,2,3] 
-                }
-            ] 
+            order : []
         });  
          $('a[target^="_blank"]').click(function() {
             return openWindow(this.href);

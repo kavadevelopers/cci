@@ -19,7 +19,39 @@
                         </a>
                     </li>
                 </ul>
-                <?php if($this->session->userdata('user_type') != "3"){ ?>
+                <ul class="pcoded-item pcoded-left-item">
+                    <li class="pcoded-hasmenu <?= menu(1,["task"])[2]; ?>">
+                        <a href="javascript:void(0)">
+                            <span class="pcoded-micon"><i class="fa fa-tasks"></i></span>
+                            <span class="pcoded-mtext">Task</span>
+                         </a>   
+                        <ul class="pcoded-submenu">
+                            <li class="<?= menu(2,["my_task"])[0]; ?>">
+                                <a href="<?= base_url('task/my_task') ?>">
+                                    <span class="pcoded-micon"><i class="fa fa-user"></i></span>
+                                    <span class="pcoded-mtext">My</span>
+                                </a>
+                            </li>
+                            <li class="<?= menu(2,["other"])[0]; ?>">
+                                <a href="<?= base_url('task/other') ?>">
+                                    <span class="pcoded-micon"><i class="fa fa-user"></i></span>
+                                    <span class="pcoded-mtext">Other</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <?php if($this->session->userdata('user_type') == "0"){ ?>
+                    <ul class="pcoded-item pcoded-left-item">
+                        <li class="<?= menu(1,["due_date"])[0]; ?>">
+                            <a href="<?= base_url('due_date') ?>">
+                                <span class="pcoded-micon"><i class="fa fa-calendar-o"></i></span>
+                                <span class="pcoded-mtext">Due Dates</span>
+                            </a>
+                        </li>
+                    </ul>
+                <?php } ?>
+                
 
                     <ul class="pcoded-item pcoded-left-item">
                         <li class="pcoded-hasmenu <?= menu(1,["client"])[2]; ?>">
@@ -28,12 +60,14 @@
                                 <span class="pcoded-mtext">Client</span>
                              </a>   
                             <ul class="pcoded-submenu">
-                                <li class="<?= menu(2,["new_clients","new_client_register"])[0]; ?>">
-                                    <a href="<?= base_url('client/new_clients') ?>">
-                                        <span class="pcoded-micon"><i class="fa fa-user"></i></span>
-                                        <span class="pcoded-mtext">New Client</span>
-                                    </a>
-                                </li>
+                                <?php if($this->session->userdata('user_type') != "3"){ ?>
+                                    <li class="<?= menu(2,["new_clients","new_client_register"])[0]; ?>">
+                                        <a href="<?= base_url('client/new_clients') ?>">
+                                            <span class="pcoded-micon"><i class="fa fa-user"></i></span>
+                                            <span class="pcoded-mtext">New Client</span>
+                                        </a>
+                                    </li>
+                                <?php } ?>
                                 <li class="<?= $this->uri->segment(2) != 'new_clients' && $this->uri->segment(2) != 'new_client_register' && $this->uri->segment(2) != 'canceled'  && $this->uri->segment(2) != 'in_active' ?menu(1,["client"])[0]:''; ?>">
                                     <a href="<?= base_url('client') ?>">
                                         <span class="pcoded-micon"><i class="fa fa-user-circle-o"></i></span>
@@ -55,7 +89,7 @@
                             </ul>
                         </li>
                     </ul>
-
+                    <?php if($this->session->userdata('user_type') != "3"){ ?>
                     <ul class="pcoded-item pcoded-left-item">
                         <li class="pcoded-hasmenu <?= menu(1,["job"])[2]; ?>">
                             <a href="javascript:void(0)">
@@ -81,12 +115,12 @@
                                         <span class="pcoded-mtext">Billed</span>
                                     </a>
                                 </li>
-                                <li class="<?= menu(2,["paid"])[0] ?>">
+                                <!-- <li class="<?= menu(2,["paid"])[0] ?>">
                                     <a href="<?= base_url('job/paid') ?>">
                                         <span class="pcoded-micon"><i class="fa fa-user-circle-o"></i></span>
                                         <span class="pcoded-mtext">Paid</span>
                                     </a>
-                                </li>
+                                </li> -->
                             </ul>
                         </li>
                     </ul>
@@ -118,7 +152,7 @@
                             <li class="<?= menu(1,["payment"])[0]; ?>">
                                 <a href="<?= base_url('payment') ?>">
                                     <span class="pcoded-micon"><i class="fa fa-money"></i></span>
-                                    <span class="pcoded-mtext">Payment</span>
+                                    <span class="pcoded-mtext">Receipt</span>
                                 </a>
                             </li>
                         </ul>
@@ -209,6 +243,22 @@
                                     </a>
                                 </li>
                             <?php } ?>
+                            <?php if($this->session->userdata('user_type') == "0"){ ?>
+                                <li class="<?= menu(2,["payment"])[0]; ?>">
+                                    <a href="<?= base_url('followup/payment') ?>">
+                                        <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                        <span class="pcoded-mtext">Payment</span>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                            <?php if($this->session->userdata('user_type') == "3" && $this->session->userdata('type') == "4"){ ?>
+                                <li class="<?= menu(2,["payment"])[0]; ?>">
+                                    <a href="<?= base_url('followup/payment') ?>">
+                                        <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                        <span class="pcoded-mtext">Payment</span>
+                                    </a>
+                                </li>
+                            <?php } ?>
                         </ul>
                     </li>
                 </ul>
@@ -230,10 +280,49 @@
                     </li>
                 </ul>
 
+                <ul class="pcoded-item pcoded-left-item">
+                    <li class="pcoded-hasmenu <?= menu(1,["filters"])[2]; ?>">
+                        <a href="javascript:void(0)">
+                            <span class="pcoded-micon"><i class="fa fa-filter"></i></span>
+                            <span class="pcoded-mtext">Filters</span>
+                         </a>   
+                        <ul class="pcoded-submenu">
+                            <li class="<?= menu(2,["lead","lead_result"])[0]; ?>">
+                                <a href="<?= base_url('filters/lead') ?>">
+                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                    <span class="pcoded-mtext">Lead</span>
+                                </a>
+                            </li>
+                            <li class="<?= menu(2,["client","client_result"])[0]; ?>">
+                                <a href="<?= base_url('filters/client') ?>">
+                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                    <span class="pcoded-mtext">Client</span>
+                                </a>
+                            </li>
+                            <li class="<?= menu(2,["invoice","invoice_result"])[0]; ?>">
+                                <a href="<?= base_url('filters/invoice') ?>">
+                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                    <span class="pcoded-mtext">Invoice</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
                 <?php if($this->session->userdata('user_type') == "0"){ ?>
                     <div class="pcoded-navigatio-lavel">Master's Management</div>
                 <?php } ?>
                 <ul class="pcoded-item pcoded-left-item">
+                    <?php if($this->session->userdata('user_type') == "0"){ ?>
+                        <ul class="pcoded-item pcoded-left-item">
+                            <li class="<?= menu(1,["setting"])[0]; ?>">
+                                <a href="<?= base_url('setting') ?>">
+                                    <span class="pcoded-micon"><i class="fa fa-cog"></i></span>
+                                    <span class="pcoded-mtext">Setting</span>
+                                </a>
+                            </li>
+                        </ul>
+                    <?php } ?>
                     <?php if($this->session->userdata('user_type') == "0"){ ?>
 
                         <li class="<?= menu(1,["branch"])[0]; ?>">

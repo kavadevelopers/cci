@@ -57,7 +57,9 @@
                             <td class="text-center"><?= $value['job_id'] ?></td>
                             <td><?= $this->general_model->_get_service($value['service'])['name'] ?></td>
                             <td class="text-right"><?= $value['price'] ?></td>
-                            <td><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?></td>
+                            <td>
+                                #<?= $client['c_id'] ?> <br><b><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?></b> <?= $client['firm'] != ""?'<br>'.$client['firm'] :'' ?> <br><small><?= $client['mobile'] ?></small>
+                            </td>
                             <td class="text-center" id="status-<?= $value['id'] ?>"><?= getjobStatus($value['status']) ?></td>
                             <td class="text-center"><?= $value['importance'] ?></td>
                             <td><?= $this->general_model->_get_user($value['owner'])['name'] ?></td>
