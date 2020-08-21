@@ -32,7 +32,7 @@
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#profileTab" role="tab">Profile</a>
                         </li>
-                        <?php if(count(json_decode($client['contact_persons'])) > 0){ ?>
+                        <?php if( $client['contact_persons'] != "" && count(json_decode($client['contact_persons'])) > 0){ ?>
                             <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#contactPerson" role="tab">Contact Persons</a>
                             </li>
@@ -60,8 +60,7 @@
                         </li>
                     </ul>
                     <div class="tab-content tabs card-block">
-                        <?php if($client['contact_persons'] != ""){ ?>
-                        <?php if(count(json_decode($client['contact_persons'])) > 0){ ?>
+                        <?php if( $client['contact_persons'] != "" && count(json_decode($client['contact_persons'])) > 0){ ?>
                             <div class="tab-pane" id="contactPerson" role="tabpanel">
                                 <div class="row">
                                     <div class="col-md-12">
@@ -88,7 +87,7 @@
                                     </div>
                                 </div>
                             </div>    
-                        <?php } } ?>
+                        <?php } ?>
                     	<div class="tab-pane active" id="basicTab" role="tabpanel">
 	                        <div class="row">
 	                        	<div class="col-md-6">
