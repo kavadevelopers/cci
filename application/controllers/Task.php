@@ -10,6 +10,7 @@ class Task extends CI_Controller
 	public function my_task()
 	{
 		$data['_title']		= "My Task";		
+		$data['other']		= $this->db->order_by('id','desc')->get_where('task',['from' => get_user()['id'],'done' => 0])->result_array();
 		$data['task']		= $this->db->order_by('id','desc')->get_where('task',['to' => get_user()['id'],'done' => 0])->result_array();
 		$this->load->theme('task/my_task',$data);			
 	}
@@ -42,14 +43,14 @@ class Task extends CI_Controller
 		$this->db->insert('task_reply',$data);
 
 		$this->session->set_flashdata('msg', 'Task Added');
-	    redirect(base_url('task/other'));
+	    redirect(base_url('task/my_task'));
 	}
 
 	public function done($id)
 	{
 		$this->db->where('id',$id)->update('task',['done' => '1']);
 		$this->session->set_flashdata('msg', 'Task Completed');
-	    redirect(base_url('task/other'));
+	    redirect(base_url('task/my_task'));
 	}
 
 	public function view($id)

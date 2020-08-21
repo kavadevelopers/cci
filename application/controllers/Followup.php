@@ -190,6 +190,107 @@ class Followup extends CI_Controller
 		}
 	}
 
+	public function save_lead()
+	{
+		if($this->input->post('ftime') != ""){
+			$ftime = timeConverter($this->input->post('ftime'));
+		}else{
+			$ftime = null;
+		}
+
+		if($this->input->post('ttime') != ""){
+			$ttime = timeConverter($this->input->post('ttime'));
+		}else{
+			$ttime = null;
+		}
+
+		$cus = 0;
+		if($this->input->post('customer')){
+			$cus = 1;
+		}
+
+		$data = [
+			'remarks'		=> $this->input->post('remarks'),
+			'next_f'		=> dd($this->input->post('date')),
+			'customer'		=> $cus,
+			'date'			=> date('Y-m-d H:i:s'),
+			'ftime'			=> $ftime,
+			'ttime'			=> $ttime,
+			'type'			=> 'lead',
+			'main_id'		=> $this->input->post('id'),
+			'followup_by'	=> $this->session->userdata('id')
+		];
+		$this->db->insert('followup',$data);
+		$fId = $this->db->insert_id();
+
+		$status = $cus;
+		$this->db->where('id',$this->input->post('id'))->update('leads',['next_followup_date' => dd($this->input->post('date')),'tfrom'	=> $ftime,'tto' => $ttime,'status'	=> $status,'fstatus' => 0]);
+
+
+		$followup = $this->db->get_where('followup',['id' => $fId])->row_array();
+
+
+		if($cus == '1'){
+			$lead = $this->general_model->_get_lead($this->input->post('id'));
+			$source = $this->general_model->_get_source($lead['source']);
+
+			$client_count = $this->db->get_where('client',['branch' => $lead['branch']])->num_rows();
+			$branch = $this->general_model->_get_branch($lead['branch']);
+			$data = [
+				'c_id'				=> $branch['code'].getClientId($client_count + 1),
+				'lead'				=> $this->input->post('id'),
+				'group'				=> "GROUP_".$branch['code'].getClientId($client_count + 1),
+				'company'			=> $source['company'],
+				'branch'			=> $lead['branch'],
+				'fname'				=> strtoupper($lead['customer']),
+				'created_by'		=> get_user()['id'],
+				'created_at'		=> date('Y-m-d H:i:s'),
+				'owner'				=> $lead['owner'],
+				'status'			=> 1
+			];
+			$this->db->insert('client',$data);
+			$clientId = $this->db->insert_id();
+
+			$lead = $this->general_model->_get_lead($this->input->post('id'));
+
+
+			foreach (json_decode($lead['services']) as $key => $value) {
+				$qty = 1;
+				$amount = $value[1];
+				$service = $value[0];
+
+				$this->db->order_by('rand()');
+			    $this->db->limit(1);
+			    $this->db->where('user_type','2');
+			    $this->db->where('type !=','3');
+			    $this->db->where('df','');
+			    $user = $this->db->get('user')->row_array();
+
+			    $data = [
+					'branch'		=> $lead['branch'],
+					'service'		=> $service,
+					'price'			=> $amount,
+					'qty'			=> $qty,
+					'client'		=> $clientId,
+					'status'		=> 0,
+					'owner'			=> $user['id'],
+					'importance'	=> 'NORMAL',
+					'f_date'		=> null,
+					'f_time'		=> null,
+					'created_by'	=> get_user()['id'],
+					'created_at'		=> date('Y-m-d H:i:s')
+				];
+				$this->db->insert('job',$data);
+				$job_id = $this->db->insert_id();
+				$this->db->where('id',$job_id)->update('job',['job_id' => "JOB_".$job_id]);	
+			}
+		}
+
+
+		$this->session->set_flashdata('msg', 'Followup Added');
+	    redirect(base_url('leads/view/'.$this->input->post('id')));
+	}
+
 	public function saveJob()
 	{	
 		$customer = 0;

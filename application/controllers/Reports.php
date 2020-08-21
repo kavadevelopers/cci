@@ -15,6 +15,16 @@ class Reports extends CI_Controller
 		$this->load->theme('reports/ledger',$data);
 	}
 
+	public function task()
+	{
+		$data['_title']		= "Task Reports";
+		$data['for']		= "";
+		$data['from']		= "";
+		$data['fdate']		= "";
+		$data['tdate']		= "";
+		$this->load->theme('reports/task',$data);	
+	}
+
 	public function ledger_result()
 	{
 		$data['_title']		= "Ledger";
@@ -28,6 +38,35 @@ class Reports extends CI_Controller
 		$this->db->order_by('date','asc');
 		$data['list']		= $this->db->get('transaction')->result_array();
 		$this->load->theme('reports/ledger',$data);	
+	}
+
+	public function task_result()
+	{
+		$data['_title']		= "Task Results";
+		$data['for']		= $this->input->post('for');
+		$data['from']		= $this->input->post('from');
+		$data['fdate']		= $this->input->post('fdate');
+		$data['tdate']		= $this->input->post('tdate');
+
+
+		if($this->input->post('for') != ""){
+			$this->db->where('to',$this->input->post('for'));
+		}
+
+		if($this->input->post('from') != ""){
+			$this->db->where('from',$this->input->post('from'));
+		}
+
+		if($this->input->post('fdate') != ""){
+			$this->db->where('date >=',dd($this->input->post('fdate')));	
+		}		
+
+		if($this->input->post('tdate') != ""){
+			$this->db->where('date <=',dd($this->input->post('tdate')));	
+		}		
+		$this->db->order_by('id','desc');
+		$data['task'] = $this->db->get('task')->result_array();
+		$this->load->theme('reports/task',$data);
 	}
 }
 ?>

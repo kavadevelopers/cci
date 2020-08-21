@@ -106,4 +106,16 @@
 	.small-table-kava td,.small-table-kava th{
 		padding: 5px;
 	}
+
+	.kava-form-group{
+		margin-bottom: 0;
+	}
+	.view-p-kava{
+		margin-bottom: 0;
+	    padding-top: calc(.5rem - 1px * 2);
+	    padding-bottom: calc(.5rem - 1px * 2);
+	}
+	.kava-bottom-border{
+		border-bottom: 1px solid #ccc;
+	}
 </style>

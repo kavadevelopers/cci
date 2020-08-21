@@ -80,7 +80,7 @@
 		                <thead>
 		                    <tr>
 		                        <th class="text-center">Date</th>
-		                        <th>Name</th>
+		                        <th>Particulars</th>
 		                        <th>From</th>
 		                        <th class="text-center">New Reply</th>
 		                        <th class="text-center">Action</th>

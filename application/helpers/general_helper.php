@@ -86,7 +86,24 @@ function get_from_to($from,$to){
     if(!empty($to)){
         $ret .= " - ".vt($to)."</small>";
     }else{
-        $ret .= " - NA";
+        $ret .= " - NA"."</small>";
+    }
+
+    return $ret;
+}
+
+function get_from_to_wbr($from,$to){
+    $ret = "";
+    if(!empty($from)){
+        $ret .= "<small>".vt($from);
+    }else{
+        $ret .= "<small> NA ";
+    }
+
+    if(!empty($to)){
+        $ret .= " - ".vt($to)."</small>";
+    }else{
+        $ret .= " - NA"."</small>";
     }
 
     return $ret;

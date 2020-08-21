@@ -31,6 +31,39 @@ class Leads extends CI_Controller
 		$this->load->theme('leads/add',$data);
 	}
 
+	public function view($id = false,$red = false)
+	{
+		if($id){
+			if($red){
+				$reda = $red;
+			}else{
+				$reda = "";
+			}
+			$lead = $this->general_model->_get_lead($id);
+			if($lead){	
+
+				$data['_title']		= "LEAD #".$lead['lead'];
+				$data['lead']		= $lead;
+				$data['red']		= $reda;
+				$this->load->theme('leads/view',$data);
+
+			}else{
+				if($red){
+					redirect(base_url('leads'));
+				}else{
+					redirect(base_url('leads'));
+				}
+			}
+
+		}else{
+			if($red){
+				redirect(base_url('leads'));
+			}else{
+				redirect(base_url('leads'));
+			}
+		}
+	}
+
 	public function save()
 	{
 
@@ -266,13 +299,7 @@ class Leads extends CI_Controller
 	    }
 
 		$this->session->set_flashdata('msg', 'Lead Updated');
-		if($this->input->post('dump') == 1){
-			redirect(base_url('leads/dump_leads'));	
-		}else if($this->input->post('dump') == 2){
-			redirect(base_url('leads/converted_leads'));	
-		}else{
-	    	redirect(base_url('leads'));
-	    }
+	    redirect(base_url('leads/view/').$this->input->post('id'));
 	}
 
 	public function transfer()

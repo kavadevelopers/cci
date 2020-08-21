@@ -7,6 +7,14 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-6 text-right">
+            <a href="<?= base_url('task/my_task') ?>" class="btn btn-danger btn-mini"><i class="fa fa-arrow-left"></i> Back</a>
+            <?php if($task['from'] == get_user()['id']){ ?>
+                <a href="<?= base_url('task/done/').$task['id'] ?>" class="btn btn-danger btn-mini" onclick="return confirm('Are You sure you want to confirm?')" title="Delete">
+                    Done ?
+                </a>
+            <?php } ?>
+        </div>
     </div>
 </div>
 <?php $this->db->where('to',get_user()['id'])->where('task',$task['id'])->update('task_reply',['read' => '1']) ?>

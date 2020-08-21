@@ -68,9 +68,13 @@
                                 </td>
                             <?php } ?>
                             <td class="text-center">
+                                <a href="<?= base_url('leads/view/').$value['id'] ?>/2" class="btn btn-success btn-mini" title="View">
+                                    <i class="fa fa-eye"></i>
+                                </a><!-- 
                                 <a href="<?= base_url('leads/edit_converted/').$value['id'] ?>" class="btn btn-primary btn-mini" title="Edit">
                                     <i class="fa fa-pencil"></i>
-                                </a>
+                                </a> -->
+
                                 <!-- <a href="<?= base_url('leads/delete/').$value['id'].'/2' ?>" class="btn btn-danger btn-mini btn-delete" title="Delete">
                                     <i class="fa fa-trash"></i>
                                 </a> -->

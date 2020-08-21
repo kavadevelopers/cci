@@ -243,7 +243,7 @@
 		            	</div>
 	            	</div>
 	            	<div class="card-footer text-right">
-	            		<button class="btn btn-mini btn-success" type="submit"><i class="fa fa-filter"></i> Filter</button>
+	            		<button class="btn btn-success" type="submit"><i class="fa fa-filter"></i> Filter</button>
 	            	</div>
             	</form>
             </div>

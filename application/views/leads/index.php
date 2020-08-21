@@ -99,7 +99,10 @@
                                 <!-- <a href="<?= base_url('leads/delete/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete" title="Delete">
                                     <i class="fa fa-trash"></i>
                                 </a> -->
-                                <a href="<?= base_url('leads/dump/').$value['id'] ?>" class="btn btn-warning btn-mini" title="Transfer To Dump">
+                                <a href="<?= base_url('leads/view/').$value['id'] ?>" class="btn btn-success btn-mini" title="View">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                                <a href="<?= base_url('leads/dump/').$value['id'] ?>" class="btn btn-warning btn-mini" title="Transfer To Dump" onclick="return confirm('Are you sure you want to transfer in dump?')">
                                     <i class="fa fa-exclamation"></i>
                                 </a>
                                 <?php if(get_user()['user_type'] == '0' || get_user()['user_type'] == '1'){ ?>

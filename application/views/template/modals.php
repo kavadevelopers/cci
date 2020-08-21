@@ -783,8 +783,8 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Name <span class="-req">*</span></label> 
-                            <input type="text" class="form-control form-control-sm" name="name" autocomplete="off" placeholder="Name" required>   
+                            <label>Particulars <span class="-req">*</span></label> 
+                            <input type="text" class="form-control form-control-sm" name="Particulars" autocomplete="off" placeholder="Name" required>   
                         </div>
                     </div>
                 </div>

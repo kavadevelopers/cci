@@ -129,7 +129,8 @@ class General_model extends CI_Model
 		if(get_user()['user_type'] == '1'){
 			return $this->db->get_where('user',['df' => '','branch' => get_user()['branch'],'user_type' => '2'])->result_array();
 		}else{
-			return $this->db->get_where('user',['df' => '','user_type' => '2'])->result_array();
+			$this->db->where_in('user_type',['2','0']);
+			return $this->db->get_where('user',['df' => ''])->result_array();
 		}
 	}
 
