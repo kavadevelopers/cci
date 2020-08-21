@@ -784,7 +784,7 @@
                         </div>
                         <div class="form-group">
                             <label>Particulars <span class="-req">*</span></label> 
-                            <input type="text" class="form-control form-control-sm" name="Particulars" autocomplete="off" placeholder="Name" required>   
+                            <input type="text" class="form-control form-control-sm" name="name" autocomplete="off" placeholder="Particulars" required>   
                         </div>
                     </div>
                 </div>

@@ -2,6 +2,9 @@
 	/*::-webkit-scrollbar {
 	display: none;
 	}*/
+	th, td {
+	    white-space: normal;
+	}
 	.notifyMy li{
 		padding: 2px 5px;
 		border-bottom: 1px solid #ccc;

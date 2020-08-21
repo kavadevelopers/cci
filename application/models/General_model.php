@@ -459,6 +459,19 @@ class General_model extends CI_Model
 		return $this->db->get('todo')->result_array();
 	}
 
+	public function getDashbordTask()
+	{
+		$myId = get_user()['id'];
+		$this->db->limit(5);
+		$this->db->order_by('id','desc');
+		$this->db->where('done',"0");
+		$this->db->group_start();
+			$this->db->where('to',$myId);
+			$this->db->or_where('from',$myId);
+		$this->db->group_end();
+		return $this->db->get('task')->result_array();
+	}
+
 	public function getOutStandingClient($client_id)
 	{
 		$query = $this->db->select_sum('credit')->from('transaction')->where('client', $client_id)->get();

@@ -88,7 +88,9 @@
     
     <script type="text/javascript">
         $(document).ready(function($) {
-            $('#mobile-collapse').click(); 
+            if(window.innerWidth > 990){
+                $('#mobile-collapse').click(); 
+            }
         });
     </script>
 
