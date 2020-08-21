@@ -518,7 +518,7 @@
 						$('#jobfollowup_table').show();
 						$('#status-'+$('#id_jobModel').val()).html(out[1]);
 						if(needed == 1){
-							$('#jobFolllowupDate'+$('#id_jobModel').val()).html($('#followup_date').val());
+							$('#jobFolllowupDate'+$('#id_jobModel').val()).html(out[2]);
 						}else{
 							$('#jobFolllowupDate'+$('#id_jobModel').val()).html('NA');
 						}
@@ -832,7 +832,63 @@
 		$('.customer-industry-select2').select2();
 		$('.customer-sub-industry-select2').select2();
 		
+
+		$('#new_client_form').submit(function(event) {
+			var pan = $('#panNo').val();
+			$.ajax({
+                type: "POST",
+                url : "<?= base_url('client/panCheck'); ?>",
+                data : "pan="+pan,
+                cache : false,
+                dataType: "JSON",
+                context: this,
+                beforeSend: function() {
+                    $('#ajaxLoader').fadeIn('fast');
+                },
+                success: function(out){
+                	if(out[0] == '0'){
+                		this.submit();
+                	}else{
+                		PNOTY(out[1],'error');  
+                		$('#panNo').focus();
+                	}
+                	$('#ajaxLoader').fadeOut('slow');
+                }
+            });
+            return false;
+		});
+
+		$('#editNewWorkBtn').click(function() {
+			$('.select2n').select2({
+			    dropdownParent: $('#editNewFollowupJobModel .modal-content')
+			});
+			$('#editNewFollowupJobModel').modal('show');
+		});
+
+		$('#addNewFollowupJob').click(function(event) {
+			$('.select2n').select2({
+			    dropdownParent: $('#addNewFollowupJobModel .modal-content')
+			});
+			$('#addNewFollowupJobModel').modal('show');
+		});
+
+		$('.serviceToPrice').change(function(event) {
+			if($(this).val() != ""){
+				$('.serviewFromPrice').val($(this).val().split("-")[1]);
+			}else{
+				$('.serviewFromPrice').val("");
+			}
+		});
+
+		$('#serviceJobFollowupNew').change(function(event) {
+			if($(this).val() != ""){
+				$('#servicePriceJobFollowupNew').val($(this).val().split("-")[1]);
+			}else{
+				$('#servicePriceJobFollowupNew').val("");
+			}
+		});
 	})
+	
 
 
 
@@ -901,7 +957,7 @@
 	setInterval(function(){ 
 	    getNotification();
 	    getTodoNotification();
-	}, 30000);
+	}, 2000);
 
 	$(function(){
 		$('#zeroNotificationCounter').click(function(){

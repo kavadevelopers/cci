@@ -131,7 +131,7 @@
                                 <?php } ?>
                             </select>   
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" <?php if(get_user()['user_type'] == '2'){ ?>style="display:none;"<?php } ?>>
                             <label>Price <span class="-req">*</span></label> 
                             <input type="text" id="jobEditPrice" class="form-control form-control-sm decimal-num" autocomplete="off" placeholder="Price" required>   
                         </div>
@@ -290,7 +290,7 @@
                             <div class="row" style="display: none;" id="followUpNeededJob">
                                 <div class="col-md-6 form-group">
                                     <label>Next Followup Date <span class="-req">*</span></label> 
-                                    <input name="date" type="text" placeholder="Next Followup Date" class="form-control form-control-sm datepicker-new" value="" id="followup_date">
+                                    <input name="date" type="text" placeholder="Next Followup Date" class="form-control form-control-sm datepicker-new" value="" id="followup_date" autocomplete="off">
                                 </div>
                                 <div class="col-md-6 form-group">
                                     <label>Next Follow up Time</label> 
@@ -722,10 +722,10 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Select Service <span class="-req">*</span></label> 
-                                    <select class="form-control form-control-sm select2n" id="jobAddService" name="service" required>
+                                    <select class="form-control form-control-sm serviceToPrice select2n" id="jobAddService" name="service" required>
                                         <option value="">-- Select Service --</option>
                                         <?php foreach ($this->general_model->get_services() as $sekey => $sevalue) { ?> 
-                                            <option value="<?= $sevalue['id'] ?>"><?= $sevalue['name'] ?></option>
+                                            <option value="<?= $sevalue['id'] ?>-<?= $sevalue['price'] ?>"><?= $sevalue['name'] ?></option>
                                         <?php } ?>
                                     </select>   
                                 </div>
@@ -733,7 +733,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Price <span class="-req">*</span></label> 
-                                    <input type="text" id="jobAddPrice" class="form-control form-control-sm decimal-num" name="price" autocomplete="off" placeholder="Price" required>   
+                                    <input type="text" id="jobAddPrice" class="form-control form-control-sm decimal-num serviewFromPrice" name="price" autocomplete="off" placeholder="Price" required>   
                                 </div>
                             </div>
                         </div>
@@ -796,3 +796,93 @@
         </div>
     </form>
 </div>
+
+
+<div class="modal fade" id="addNewFollowupJobModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <form method="post" action="<?= base_url('newjob/save') ?>">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add New Work Followup</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <?php if(get_user()['user_type'] == "0"){ ?>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Branch <span class="-req">*</span></label> 
+                                    <select class="form-control form-control-sm select2n" name="branch" required>
+                                        <option value="">-- Select Branch --</option>
+                                        <?php foreach ($this->general_model->get_branches() as $bkey => $bvalue) { ?>
+                                            <option value="<?= $bvalue['id'] ?>"><?= $bvalue['name'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                        <?php }else{ ?>
+                            <input type="hidden" name="branch" value="<?= get_user()['branch'] ?>">
+                        <?php } ?>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Select Client <span class="-req">*</span></label> 
+                                <select class="form-control form-control-sm select2n" name="client" required>
+                                    <option value="">-- Select --</option>
+                                    <?php foreach ($this->general_model->getFilteredClients() as $bkey => $bvalue) { ?>
+                                        <option value="<?= $bvalue['id'] ?>"><?= $bvalue['c_id'] ?> - <?= $bvalue['fname'] ?> <?= $bvalue['mname'] ?> <?= $bvalue['lname'] ?> - <?= $bvalue['mobile'] ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label>Next Followup Date </label> 
+                            <input name="date" type="text" placeholder="Next Followup Date" class="form-control form-control-sm datepicker-new" value="" autocomplete="off">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label>Next Follow up Time</label> 
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input name="from" type="text" placeholder="From" class="form-control form-control-sm hour-mask" value="">
+                                </div>
+                                <div class="col-md-6">
+                                    <input name="to" type="text" placeholder="To" class="form-control form-control-sm hour-mask" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Select Service <span class="-req">*</span></label> 
+                                <select class="form-control form-control-sm select2n" id="serviceJobFollowupNew" name="service" required>
+                                    <option value="">-- Select Service --</option>
+                                    <?php foreach ($this->general_model->get_services() as $sekey => $sevalue) { ?> 
+                                        <option value="<?= $sevalue['id'] ?>-<?= $sevalue['price'] ?>"><?= $sevalue['name'] ?></option>
+                                    <?php } ?>
+                                </select>   
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Price <span class="-req">*</span></label> 
+                                <input type="text" id="servicePriceJobFollowupNew" class="form-control form-control-sm decimal-num" name="price" autocomplete="off" placeholder="Price" required>   
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Remarks</label> 
+                                <textarea class="form-control" placeholder="Remarks" name="remarks" ></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+

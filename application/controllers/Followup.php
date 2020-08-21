@@ -291,6 +291,83 @@ class Followup extends CI_Controller
 	    redirect(base_url('leads/view/'.$this->input->post('id')));
 	}
 
+	public function save_newwork()
+	{
+		if($this->input->post('from') != ""){
+			$from = timeConverter($this->input->post('from'));
+		}else{
+			$from = null;
+		}
+
+		if($this->input->post('to') != ""){
+			$to = timeConverter($this->input->post('to'));
+		}else{
+			$to = null;
+		}
+
+		if($this->input->post('date') != ""){
+			$date = dd($this->input->post('date'));
+		}else{
+			$date = null;
+		}
+
+		$cus = 0;
+		if($this->input->post('customer')){
+			$cus = 1;
+		}
+
+		$data = [
+			'remarks'		=> $this->input->post('remarks'),
+			'next_f'		=> $date,
+			'customer'		=> $cus,
+			'date'			=> date('Y-m-d H:i:s'),
+			'ftime'			=> $from,
+			'ttime'			=> $to,
+			'type'			=> 'newWork',
+			'main_id'		=> $this->input->post('id'),
+			'followup_by'	=> $this->session->userdata('id')
+		];
+		$this->db->insert('followup',$data);
+
+		$status = $cus;
+		$this->db->where('id',$this->input->post('id'))->update('newjob',['fdate' => $date,'from'	=> $from,'to' => $to,'status'	=> $status]);
+
+		if($cus == 1){
+			$newWork = $this->db->get_where('newjob',['id' => $this->input->post('id')])->row_array();
+			$qty = 1;
+			$amount = $newWork['price'];
+			$service = $newWork['service'];
+
+			$this->db->order_by('rand()');
+		    $this->db->limit(1);
+		    $this->db->where('user_type','2');
+		    $this->db->where('type !=','3');
+		    $this->db->where('df','');
+		    $user = $this->db->get('user')->row_array();
+
+		    $data = [
+				'branch'		=> $newWork['branch'],
+				'service'		=> $service,
+				'price'			=> $amount,
+				'qty'			=> $qty,
+				'client'		=> $newWork['client'],
+				'status'		=> 0,
+				'owner'			=> $user['id'],
+				'importance'	=> 'NORMAL',
+				'f_date'		=> null,
+				'f_time'		=> null,
+				'created_by'	=> get_user()['id'],
+				'created_at'		=> date('Y-m-d H:i:s')
+			];
+			$this->db->insert('job',$data);
+			$job_id = $this->db->insert_id();
+			$this->db->where('id',$job_id)->update('job',['job_id' => "JOB_".$job_id]);	
+		}
+
+		$this->session->set_flashdata('msg', 'Followup Added');
+	    redirect(base_url('newjob/view/'.$this->input->post('id')));
+	}
+
 	public function saveJob()
 	{	
 		$customer = 0;
@@ -330,7 +407,11 @@ class Followup extends CI_Controller
 		$fId = $this->db->insert_id();
 
 		$status = $this->input->post('status');
-		$this->db->where('id',$this->input->post('id'))->update('job',['f_date' => $ndate,'f_time'	=> $ftime,'t_time' => $ttime,'status'	=> $status]);
+		$fstatus = 1;
+		if($ndate != null){
+			$fstatus = 0;
+		}
+		$this->db->where('id',$this->input->post('id'))->update('job',['f_date' => $ndate,'f_time'	=> $ftime,'t_time' => $ttime,'status'	=> $status,'fstatus'	=> $fstatus]);
 
 
 		$followup = $this->db->get_where('followup',['id' => $fId])->row_array();
@@ -350,7 +431,8 @@ class Followup extends CI_Controller
 
 		
 		$status = getjobStatus($this->input->post('status'));
-		echo json_encode([$str,$status]);
+		$date_str = vd($ndate).get_from_to($ftime,$ttime);
+		echo json_encode([$str,$status,$date_str]);
 	}
 
 	public function job_get()
@@ -405,8 +487,6 @@ class Followup extends CI_Controller
 
 	public function payment_save()
 	{
-
-		
 		
 		$ndate = dd($this->input->post('date'));
 		
@@ -486,7 +566,7 @@ class Followup extends CI_Controller
 				$list = "";
 	    		$list .= "<li onclick='redirectUrl(".'"'.$url.'"'.");'><div class='media'>";
                     $list .= '<div class="media-body">';
-                        $list .= '<h5 class="notification-user">'."#".$value['lead'].date('Y-m-d H:i:s').'</h5>';
+                        $list .= '<h5 class="notification-user">'."#".$value['lead'].'</h5>';
                         $list .= '<p class="notification-msg">'.$desc.'</p>';
                         $list .= '<span class="notification-time timeago" date="'.date('Y-m-d H:i:s').'">'.time_elapsed_string(date('Y-m-d H:i:s')).'</span>';
                     $list .= '</div>';
@@ -497,9 +577,10 @@ class Followup extends CI_Controller
 			}			
 		}
 
-		if(get_user()['user_type'] == "2"){
+		if(get_user()['user_type'] == "2" || get_user()['user_type'] == "0"){
 			$this->db->where('owner',get_user()['id']);
 			$this->db->where('status <',3);
+			$this->db->where('fstatus',0);
 			$this->db->where('f_date',date('Y-m-d'));
 			$this->db->where('f_time <=',date('H:i:s'));
 			$data = $this->db->get('job')->result_array();
@@ -517,8 +598,73 @@ class Followup extends CI_Controller
 				array_push($array, $ar);
 				$this->db->where('id',$value['id'])->update('job',['fstatus' => 1]);
 			}
+
+			foreach ($data as $key => $value) {
+				$leadcounter++;
+				if($value['f_time'] != null){
+					$desc = "Followup At ".vt($value['f_time']);
+				}else{
+					$desc = "New Followup";
+				}
+				$url = base_url('job');
+				$list = "";
+	    		$list .= "<li onclick='redirectUrl(".'"'.$url.'"'.");'><div class='media'>";
+                    $list .= '<div class="media-body">';
+                        $list .= '<h5 class="notification-user">'."#".$value['job_id'].'</h5>';
+                        $list .= '<p class="notification-msg">'.$desc.'</p>';
+                        $list .= '<span class="notification-time timeago" date="'.date('Y-m-d H:i:s').'">'.time_elapsed_string(date('Y-m-d H:i:s')).'</span>';
+                    $list .= '</div>';
+                $list .= '</div></li>';
+    			$list .= '<div class="dropdown-divider"></div>';
+				$strArray .= $list;
+				$this->db->where('id',$value['id'])->update('job',['fstatus' => 1]);
+			}			
 		}
 
+		if(get_user()['user_type'] == "3"){
+			$this->db->where('owner',get_user()['id']);
+			$this->db->where('fstatus',0);
+			$this->db->where('status',0);
+			$this->db->where('fdate <=',date('Y-m-d'));
+			$this->db->where('from <=',date('H:i:s'));
+			$data = $this->db->get('newjob')->result_array();
+			foreach ($data as $key => $value) {
+				if($value['from'] != null){
+					$desc = "Followup At ".vt($value['from']);
+				}else{
+					$desc = "New Followup";
+				}
+				$ar = [
+					'title'	=> "#NEW_WORK_".$value['id'],
+					'desc'	=> $desc,
+					'url'	=> base_url('newjob')
+				];
+				array_push($array, $ar);
+				$this->db->where('id',$value['id'])->update('newjob',['fstatus' => 1]);
+			}
+
+			
+			foreach ($data as $key => $value) {
+				$leadcounter++;
+				if($value['from'] != null){
+					$desc = "Followup At ".vt($value['from']);
+				}else{
+					$desc = "New Followup";
+				}
+				$url = base_url('newjob');
+				$list = "";
+	    		$list .= "<li onclick='redirectUrl(".'"'.$url.'"'.");'><div class='media'>";
+                    $list .= '<div class="media-body">';
+                        $list .= '<h5 class="notification-user">'."#NEW_WORK_".$value['id'].'</h5>';
+                        $list .= '<p class="notification-msg">'.$desc.'</p>';
+                        $list .= '<span class="notification-time timeago" date="'.date('Y-m-d H:i:s').'">'.time_elapsed_string(date('Y-m-d H:i:s')).'</span>';
+                    $list .= '</div>';
+                $list .= '</div></li>';
+    			$list .= '<div class="dropdown-divider"></div>';
+				$strArray .= $list;
+				$this->db->where('id',$value['id'])->update('newjob',['fstatus' => 1]);
+			}			
+		}
 
 		echo json_encode([$array,$strArray,$leadcounter]);
 	}

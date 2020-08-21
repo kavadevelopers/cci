@@ -26,7 +26,7 @@ class Job extends CI_Controller
 
 		$data = [
 			'branch'		=> $branch,
-			'service'		=> $this->input->post('service'),
+			'service'		=> explode('-',$this->input->post('service'))[0],
 			'price'			=> $this->input->post('price'),
 			'qty'			=> 1,
 			'client'		=> $this->input->post('client'),

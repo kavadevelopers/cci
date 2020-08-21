@@ -353,4 +353,15 @@ class Client extends CI_Controller
 
         $this->db->where('id',$data['id'])->delete('documents');
 	}
+
+	public function panCheck()
+	{
+		$client = $this->db->get_where('client' ,['pan' => $this->input->post('pan')])->row_array();
+		if($client){
+			if($client['status'] == 0){ $type = "Active"; }else if($client['status'] == 9){ $type = "Canceled"; }else if($client['status'] == 8){ $type = "In-Active"; }
+			echo json_encode(['1','This PAN No. is already exists in '.$type.' Clients']);
+		}else{
+			echo json_encode(['0']);
+		}
+	}
 }

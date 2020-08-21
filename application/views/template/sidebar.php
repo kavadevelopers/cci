@@ -65,7 +65,16 @@
                         </li>
                     </ul>
                 <?php } ?>
-
+                <?php if($this->session->userdata('user_type') == "3"){ ?>
+                    <ul class="pcoded-item pcoded-left-item">
+                        <li class="<?= menu(1,["newjob"])[0]; ?>">
+                            <a href="<?= base_url('newjob') ?>">
+                                <span class="pcoded-micon"><i class="fa fa-phone"></i></span>
+                                <span class="pcoded-mtext">New Work Followup</span>
+                            </a>
+                        </li>
+                    </ul>
+                <?php } ?>
                 <ul class="pcoded-item pcoded-left-item">
                     <li class="pcoded-hasmenu <?= menu(1,["client"])[2]; ?>">
                         <a href="javascript:void(0)">

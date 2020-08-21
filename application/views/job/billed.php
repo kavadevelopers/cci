@@ -62,7 +62,9 @@
                             </td>
                             <td class="text-center" id="status-<?= $value['id'] ?>"><?= getjobStatus($value['status']) ?></td>
                             <td class="text-center"><?= $value['importance'] ?></td>
-                            <td><?= $this->general_model->_get_user($value['owner'])['name'] ?></td>
+                            <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){ ?>
+                                <td><?= $this->general_model->_get_user($value['owner'])['name'] ?></td>
+                            <?php } ?>
                             <td class="text-center">
                                 <button type="button" class="btn btn-success btn-mini add-job-followup" data-status="<?= $value['status'] ?>" data-id="<?= $value['id'] ?>" data-stop="Job Is Closed" data-type="job" title="Check Followup">
                                     <i class="fa fa-question"></i>

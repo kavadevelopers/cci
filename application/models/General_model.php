@@ -350,6 +350,11 @@ class General_model extends CI_Model
 		return $this->db->get_where('payment',['id' => $id])->row_array();
 	}
 
+	public function get_new_work($id)
+	{
+		return $this->db->get_where('newjob',['id' => $id])->row_array();
+	}
+
 	public function get_jobs()
 	{
 		$myId = get_user()['id'];
@@ -363,6 +368,22 @@ class General_model extends CI_Model
 		}else{
 			$this->db->order_by('status','asc');
 			return $this->db->get_where('job',['owner' => $myId,'status <' => 3])->result_array();
+		}
+	}
+
+	public function get_fjobs()
+	{
+		$myId = get_user()['id'];
+		$myBranch = get_user()['branch'];
+		if(get_user()['user_type'] == 0){
+			$this->db->order_by('fdate','asc');
+			return $this->db->get_where('newjob',['status' => 0])->result_array();
+		}else if(get_user()['user_type'] == 1){
+			$this->db->order_by('fdate','asc');
+			return $this->db->get_where('newjob',['branch' => $myBranch,'status' => 0])->result_array();	
+		}else{
+			$this->db->order_by('fdate','asc');
+			return $this->db->get_where('newjob',['owner' => $myId,'status' => 0])->result_array();
 		}
 	}
 

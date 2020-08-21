@@ -12,7 +12,7 @@
 
 <div class="page-body">
     <div class="card">
-        <form method="post" action="<?= base_url('client/save') ?>" enctype="multipart/form-data">
+        <form method="post" action="<?= base_url('client/save') ?>" enctype="multipart/form-data" id="new_client_form">
             <div class="card-block">
                 <div class="row">
 
@@ -78,7 +78,7 @@
 		                    <div class="col-md-3">
 		                        <div class="form-group">
 		                            <label>PAN No.<span class="-req">*</span></label> 
-		                            <input name="pan" type="text" placeholder="PAN No." class="form-control form-control-sm" value="<?= set_value('pan'); ?>" minlength="10" maxlength="10" pattern="[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}" required>
+		                            <input name="pan" type="text" placeholder="PAN No." class="form-control form-control-sm" value="<?= set_value('pan'); ?>" minlength="10" maxlength="10" pattern="[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}" id="panNo" required>
 		                            <?= form_error('pan') ?>
 		                        </div>
 		                    </div>
