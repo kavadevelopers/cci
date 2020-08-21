@@ -5,14 +5,26 @@ class Welcome extends CI_Controller {
 
 	public function index()
 	{
-		if($this->session->userdata('id')){
-			redirect(base_url('dashboard'));
+		if($this->db->get_where('setting',['id' => '1'])->row_array()['cunstruction'] == '0'){
+			if($this->session->userdata('id')){
+				redirect(base_url('dashboard'));
+			}
+			else
+			{
+				$this->load->helper('cookie');
+				$this->load->view('login');
+			}
+		}else{
+			redirect(base_url('welcome/off'));
 		}
-		else
-		{
-			$this->load->helper('cookie');
-			$this->load->view('login');
-		}	
-		//$this->load->view('off');
+	}
+
+	public function off()
+	{
+		if($this->db->get_where('setting',['id' => '1'])->row_array()['cunstruction'] == '1'){
+			$this->load->view('off');
+		}else{
+			redirect(base_url('welcome'));	
+		}
 	}
 }

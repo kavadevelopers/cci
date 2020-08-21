@@ -14,11 +14,15 @@ class Auth
 
 	public function check_session()
 	{
-        $admin = $this->CI->session->userdata('id');
-        if(!$admin)
-        {
-        	$this->CI->session->set_flashdata('error', 'Your Session Is Expire Please Login Again.');
-            redirect(base_url());
+        if($this->CI->db->get_where('setting',['id' => '1'])->row_array()['cunstruction'] == '0'){
+            $admin = $this->CI->session->userdata('id');
+            if(!$admin)
+            {
+            	$this->CI->session->set_flashdata('error', 'Your Session Is Expire Please Login Again.');
+                redirect(base_url());
+            }
+        }else{
+            redirect(base_url('welcome/off'));
         }
 
     }
