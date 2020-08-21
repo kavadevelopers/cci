@@ -15,11 +15,11 @@ class Welcome extends CI_Controller {
 				$this->load->view('login');
 			}
 		}else{
-			redirect(base_url('welcome/off'));
+			redirect(base_url('welcome/working_on_updates'));
 		}
 	}
 
-	public function off()
+	public function working_on_updates()
 	{
 		if($this->db->get_where('setting',['id' => '1'])->row_array()['cunstruction'] == '1'){
 			$this->load->view('off');

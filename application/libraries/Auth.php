@@ -22,7 +22,7 @@ class Auth
                 redirect(base_url());
             }
         }else{
-            redirect(base_url('welcome/off'));
+            redirect(base_url('welcome/working_on_updates'));
         }
 
     }
