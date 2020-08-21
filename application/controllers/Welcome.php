@@ -13,5 +13,6 @@ class Welcome extends CI_Controller {
 			$this->load->helper('cookie');
 			$this->load->view('login');
 		}	
+		//$this->load->view('off');
 	}
 }
