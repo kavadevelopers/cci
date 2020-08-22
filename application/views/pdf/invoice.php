@@ -4,9 +4,10 @@
         
     </head>
     <body>
+        <br><br>
         <table style="width:100%">
             <tr>
-                <td style="font-size: 20px; text-align: center;">
+                <td style="font-size: 20px; text-align: center; font-weight: bold;">
                    INVOICE
                 </td>
             </tr>
@@ -87,8 +88,8 @@
             </table>
         <?php } ?>
 
-        <?php if(count($details) - 12 != 0){
-            for ($i=1; $i < (13 - count($details)); $i++) {  ?>
+        <?php 
+            for ($i=1; $i <= 2; $i++) {  ?>
                 <table style="width: 100%; border-bottom: 1px solid #ddd;" cellpadding="5px;">
                     <tr>
                         <td style="width: 10%; text-align: center; height: 5px;"></td>
@@ -97,7 +98,7 @@
                         <td style="width: 20%; text-align: right;"></td>
                     </tr>
                 </table>
-            <?php }
+            <?php
         } ?>
 
 
@@ -136,7 +137,7 @@
 
 
 
-        <table style="width: 100%; font-size: 10px; border-bottom: 1px solid #ddd;" cellpadding="5px;">
+        <table style="width: 100%; border-bottom: 1px solid #ddd;" cellpadding="5px;">
             <tr>
                 <td colspan="2" style="font-size: 12px;">Company's Bank Details</td>
             </tr>
@@ -164,11 +165,11 @@
                 <td style="width: 50%;">
                     <table style="width: 100%; text-align: center;">
                         <tr>
-                            <td style="width: 50%;">
-                                GOOGLE PAY,<br>
-                                PHONE PAY,<br>
-                                PAYTM
+                            <td align="center">
+                                GOOGLE PAY | PHONE PAY | PAYTM
                             </td>
+                        </tr>
+                        <tr>
                             <td style="font-size: 13px;" align="center">
                                 <?= $this->general_model->_get_company($invoice['company'])['upi'] ?>
                             </td>
@@ -184,10 +185,16 @@
 
         <table style="width: 100%">
             <tr>
-                <td>Have A Grate Day.</td>
+                <td>Have a Great Day...</td>
                 <td style="text-align: right;">
                     <b>For, <?= $this->general_model->_get_company($invoice['company'])['name'] ?></b>
                 </td>
+            </tr>
+        </table>
+        <br><br>
+        <table style="width: 100%">
+            <tr>
+                <td align="center" style="font-style: italic; font-size: 10px; ">This is computer generated invoice doesn't required signature</td>
             </tr>
         </table>
     </body>

@@ -13,9 +13,9 @@ class Invoice extends TCPDF
 
     public function Footer()
     {
-    	$this->SetY(-10);
-    	$this->SetFont('helvetica', 'I', 8);
-        $this->Cell(0, 10, "This is computer generated invoice doesn't required signature", 0, false, 'C', 0, '', 0, false, 'T', 'M');
+    	// $this->SetY(-10);
+    	// $this->SetFont('helvetica', 'I', 8);
+     //    $this->Cell(0, 10, "This is computer generated invoice doesn't required signature", 0, false, 'C', 0, '', 0, false, 'T', 'M');
     }
 
     public function Header()
