@@ -7,7 +7,7 @@
         <br><br>
         <table style="width:100%">
             <tr>
-                <td style="font-size: 20px; text-align: center; font-weight: bold;">
+                <td style="font-size: 25px; text-align: center; font-weight: bold; color: #6e6e6e;">
                    INVOICE
                 </td>
             </tr>
@@ -80,7 +80,7 @@
             <table style="width: 100%; border-bottom: 1px solid #ddd;" cellpadding="5px;">
                 <tr>
                     <td style="width: 5%; text-align: center;"><?= $key + 1 ?></td>
-                    <td style="width: 50%; font-size: 10px;"><?= $this->general_model->_get_service($value['service'])['name'] ?></td>
+                    <td style="width: 50%; font-size: 11px;"><?= $this->general_model->_get_service($value['service'])['name'] ?></td>
                     <td style="width: 10%; text-align: center;"><?= $value['qty'] ?></td>
                     <td style="width: 15%; text-align: right;"><?= $value['price'] ?></td>
                     <td style="width: 20%; text-align: right;"><?= $value['total'] ?></td>
@@ -170,7 +170,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td style="font-size: 13px;" align="center">
+                            <td style="font-size: 15px;" align="center">
                                 <?= $this->general_model->_get_company($invoice['company'])['upi'] ?>
                             </td>
                         </tr>
@@ -185,7 +185,7 @@
 
         <table style="width: 100%">
             <tr>
-                <td>Have a Great Day...</td>
+                <td>Have a Great Day!!!</td>
                 <td style="text-align: right;">
                     <b>For, <?= $this->general_model->_get_company($invoice['company'])['name'] ?></b>
                 </td>
