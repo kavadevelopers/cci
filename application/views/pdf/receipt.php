@@ -4,9 +4,10 @@
         
     </head>
     <body>
+        <br><br>
         <table style="width:100%">
             <tr>
-                <td style="font-size: 20px; text-align: center;">
+                <td style="font-size: 25px; text-align: center; font-weight: bold; color: #6e6e6e;">
                    RECEIPT
                 </td>
             </tr>
@@ -126,6 +127,13 @@
                 <td style="text-align: right;">
                     <b>For, <?= $this->general_model->_get_company($invoice['company'])['name'] ?></b>
                 </td>
+            </tr>
+        </table>
+
+        <br><br>
+        <table style="width: 100%">
+            <tr>
+                <td align="center" style="font-style: italic; font-size: 10px; ">This is computer generated invoice doesn't required signature</td>
             </tr>
         </table>
     </body>

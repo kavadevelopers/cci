@@ -249,7 +249,7 @@ function typestring($str){
     if($str == 1){
         return "Invoice";
     }else if($str == 2){
-        return "Payment";
+        return "Receipt";
     }else if($str == 3){
         return "Referal Amount";
     }

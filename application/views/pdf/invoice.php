@@ -89,6 +89,7 @@
         <?php } ?>
 
         <?php 
+        if(count($details) < 11){
             for ($i=1; $i <= 2; $i++) {  ?>
                 <table style="width: 100%; border-bottom: 1px solid #ddd;" cellpadding="5px;">
                     <tr>
@@ -99,7 +100,7 @@
                     </tr>
                 </table>
             <?php
-        } ?>
+        } } ?>
 
 
         <table style="width: 100%; background-color: #6e6e6e; color: #fff; border-bottom: 1px solid #ddd;" cellpadding="5px;">
