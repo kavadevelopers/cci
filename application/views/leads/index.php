@@ -105,7 +105,7 @@
                                 <a href="<?= base_url('leads/dump/').$value['id'] ?>" class="btn btn-warning btn-mini" title="Transfer To Dump" onclick="return confirm('Are you sure you want to transfer in dump?')">
                                     <i class="fa fa-exclamation"></i>
                                 </a>
-                                <?php if(get_user()['user_type'] == '0' || get_user()['user_type'] == '1'){ ?>
+                                <?php if(get_user()['user_type'] == '0' || get_user()['user_type'] == '1' || get_user()['user_type'] == '3'){ ?>
                                     <button type="button" class="btn btn-success btn-mini add-followup" data-id="<?= $value['id'] ?>" data-stop="Lead Already Converted To Customer" data-type="lead" title="Check Followup">
                                         <i class="fa fa-question"></i>
                                     </button>

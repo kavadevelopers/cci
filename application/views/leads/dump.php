@@ -7,11 +7,11 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6 text-right">
+        <!-- <div class="col-md-6 text-right">
             <a href="<?= base_url('leads/add_lead') ?>" class="btn btn-info btn-sm">
                 <i class="fa fa-plus"></i> Add
             </a>
-        </div>
+        </div> -->
     </div>
 </div>
 
@@ -57,13 +57,16 @@
                                 </td>
                             <?php } ?>
                             <td class="text-center">
-                                <a href="<?= base_url('leads/edit_dump/').$value['id'] ?>" class="btn btn-primary btn-mini" title="Edit">
-                                    <i class="fa fa-pencil"></i>
+                                <a href="<?= base_url('leads/view/').$value['id'] ?>" class="btn btn-success btn-mini" title="View">
+                                    <i class="fa fa-eye"></i>
                                 </a>
+                                <!-- <a href="<?= base_url('leads/edit_dump/').$value['id'] ?>" class="btn btn-primary btn-mini" title="Edit">
+                                    <i class="fa fa-pencil"></i>
+                                </a> -->
                                 <!-- <a href="<?= base_url('leads/delete/').$value['id'].'/1' ?>" class="btn btn-danger btn-mini btn-delete" title="Delete">
                                     <i class="fa fa-trash"></i>
                                 </a> -->
-                                <a href="<?= base_url('leads/normal/').$value['id'] ?>" class="btn btn-warning btn-mini" title="Transfer To Normal">
+                                <a href="<?= base_url('leads/normal/').$value['id'] ?>" onclick="return confirm('Are you sure want to transfer to normal.?')" class="btn btn-warning btn-mini" title="Transfer To Normal">
                                     <i class="fa fa-exclamation"></i>
                                 </a>
                             </td>

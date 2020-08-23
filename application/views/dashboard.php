@@ -12,6 +12,44 @@
 
 
 <div class="page-body">
+	<?php if(get_user()['user_type'] == '3'){ ?>
+	   	<div class="row">
+	   		<div class="col-md-6 col-xl-3">
+                <div class="card user-widget-card bg-c-green">
+                    <div class="card-block">
+                        <i class="feather icon-file-text bg-simple-c-green card1-icon"></i>
+                        <h4><?= $this->db->get_where('leads',['df' => '','owner'   => get_user()['id'] ,'date >=' => date("Y-m-1"),'date <=' => date("Y-m-t")])->num_rows(); ?></h4>
+                        <p>Total Leads</p>
+                        <a href="<?= base_url('leads') ?>" class="more-info">More Info</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <div class="card user-widget-card bg-c-yellow">
+                    <div class="card-block">
+                        <i class="feather icon-file-text bg-simple-c-yellow card1-icon"></i>
+                        <h4><?= $this->db->get_where('leads',['df' => '','status !=' => '0','owner'    => get_user()['id'],'date >=' => date("Y-m-1"),'date <=' => date("Y-m-t")])->num_rows(); ?></h4>
+                        <p>Converted Leads</p>
+                        <a href="<?= base_url('leads/converted_leads') ?>" class="more-info">More Info</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+            	<div class="card">
+	            	<div class="card-header" style="padding: 10px;">
+	   					<div class="row"> 
+		                    <div class="col-md-6">
+		                    	<h5>Top 5 Services Sold</h5>
+		                    </div>
+				        </div>
+	                </div>
+	                <div class="card-block" style="height: 100px; overflow-y: scroll;">
+
+	                </div>
+            	</div>
+            </div>
+	   	</div>
+	<?php } ?>
 	<?php if(get_user()['user_type'] == '0'){ ?>
 
    		<div class="row">
@@ -233,44 +271,7 @@
 
    	
 
-   	<?php if(get_user()['user_type'] == '3'){ ?>
-	   	<div class="row">
-	   		<div class="col-md-6 col-xl-3">
-                <div class="card user-widget-card bg-c-green">
-                    <div class="card-block">
-                        <i class="feather icon-file-text bg-simple-c-green card1-icon"></i>
-                        <h4><?= $this->db->get_where('leads',['df' => '','owner'   => get_user()['id'] ,'date >=' => date("Y-m-1"),'date <=' => date("Y-m-t")])->num_rows(); ?></h4>
-                        <p>Total Leads</p>
-                        <a href="<?= base_url('leads') ?>" class="more-info">More Info</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-xl-3">
-                <div class="card user-widget-card bg-c-yellow">
-                    <div class="card-block">
-                        <i class="feather icon-file-text bg-simple-c-yellow card1-icon"></i>
-                        <h4><?= $this->db->get_where('leads',['df' => '','status !=' => '0','owner'    => get_user()['id'],'date >=' => date("Y-m-1"),'date <=' => date("Y-m-t")])->num_rows(); ?></h4>
-                        <p>Converted Leads</p>
-                        <a href="<?= base_url('leads/converted_leads') ?>" class="more-info">More Info</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-            	<div class="card">
-	            	<div class="card-header" style="padding: 10px;">
-	   					<div class="row"> 
-		                    <div class="col-md-6">
-		                    	<h5>Top 5 Services Sold</h5>
-		                    </div>
-				        </div>
-	                </div>
-	                <div class="card-block" style="height: 100px; overflow-y: scroll;">
-
-	                </div>
-            	</div>
-            </div>
-	   	</div>
-	<?php } ?>
+   	
 </div>
 
 

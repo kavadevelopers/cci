@@ -10,8 +10,9 @@
         <div class="col-md-6 text-right">
             <a href="<?= base_url('newjob') ?>" class="btn btn-danger btn-mini"><i class="fa fa-arrow-left"></i> Back</a>
 
-            <a href="<?= base_url('newjob/dump/').$job['id'] ?>" class="btn btn-warning btn-mini" onclick="return confirm('Are you sure you want to tranfer to dump?')"><i class="fa fa-question"></i> Dump</a>
-
+            <?php if($job['status'] == "0"){ ?>
+                <a href="<?= base_url('newjob/dump/').$job['id'] ?>" class="btn btn-warning btn-mini" onclick="return confirm('Are you sure you want to tranfer to dump?')"><i class="fa fa-question"></i> Dump</a>
+            <?php } ?>
             <?php if($job['status'] == "0"){ ?>
                 <button href="" class="btn btn-primary btn-mini" id="editNewWorkBtn"><i class="fa fa-pencil"></i> Edit</button>
             <?php } ?>
@@ -30,14 +31,6 @@
                                 <label class="col-sm-5 col-form-label">Date</label>
                                 <div class="col-sm-7">
                                     <p class="view-p-kava"><?= vd($job['created_at']) ?></p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group row kava-form-group">
-                                <label class="col-sm-5 col-form-label">Branch</label>
-                                <div class="col-sm-7">
-                                    <p class="view-p-kava"><?= $this->general_model->_get_branch($job['branch'])['name'] ?></p>
                                 </div>
                             </div>
                         </div>
