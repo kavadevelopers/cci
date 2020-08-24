@@ -171,6 +171,7 @@
 		                        <th class="text-center">Date</th>
 		                        <th>Particulars</th>
 		                        <th>From</th>
+		                        <th>To</th>
 		                        <th class="text-center">New Reply</th>
 		                        <th class="text-center">Action</th>
 		                    </tr>
@@ -183,6 +184,7 @@
 		                            </td>
 		                            <td><?= $value['name'] ?></td>
 		                            <td><?= $this->general_model->_get_user($value['from'])['name'] ?></td>
+		                            <td><?= $this->general_model->_get_user($value['to'])['name'] ?></td>
 		                            <td class="text-center">
 		                            	<span class="pcoded-badge label label-danger">
 		                            		<?php $coReply = $this->db->get_where('task_reply',['to' => get_user()['id'],'read' => '0','task' => $value['id']])->num_rows(); ?>
