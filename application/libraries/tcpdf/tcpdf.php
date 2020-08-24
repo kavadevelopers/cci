@@ -134,7 +134,7 @@ require_once(dirname(__FILE__).'/include/tcpdf_static.php');
  * @IgnoreAnnotation("public")
  * @IgnoreAnnotation("pre")
  */
-class TCPDF {
+class Tcpdf {
 
 	// Protected properties
 
