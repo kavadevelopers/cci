@@ -74,7 +74,7 @@
                             <div class="form-group row kava-form-group">
                                 <label class="col-sm-2 col-form-label">Address</label>
                                 <div class="col-sm-10">
-                                    <p class="view-p-kava">aaa
+                                    <p class="view-p-kava">
                                         <?php if($lead['area'] != ""){ ?>
                                         <?= $lead['area'] == "3244" ? $lead['other_area'] . ' - ':$this->general_model->_get_area($lead['area'])['name'] . ' - '; ?>   
                                         <?php } ?>
