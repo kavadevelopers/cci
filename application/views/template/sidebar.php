@@ -478,6 +478,15 @@
 
                             </ul>
                         </li>
+
+                        <ul class="pcoded-item pcoded-left-item">
+                            <li class="<?= menu(1,["importexport"])[0]; ?>">
+                                <a href="<?= base_url('importexport/client') ?>">
+                                    <span class="pcoded-micon"><i class="fa fa-file-excel-o"></i></span>
+                                    <span class="pcoded-mtext">Import Client</span>
+                                </a>
+                            </li>
+                        </ul>
                     <?php } ?>
 
                 </ul>

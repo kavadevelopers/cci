@@ -245,6 +245,16 @@ function referal()
     return "3";
 }
 
+function opening()
+{
+    return "4";
+}
+
+function reimbursement()
+{
+    return "5";
+}
+
 function typestring($str){
     if($str == 1){
         return "Invoice";
@@ -252,6 +262,8 @@ function typestring($str){
         return "Receipt";
     }else if($str == 3){
         return "Referal Amount";
+    }else if($str == 5){
+        return "Reimbursement Amount";
     }
 }
 
@@ -296,10 +308,10 @@ function vch_no($type,$tra_id)
     $CI =& get_instance();
     if($type == "1"){
         $invoice = $CI->db->get_where('invoice',['id' => $tra_id])->row_array();
-        return $invoice['inv'];
+        return '<a href="'.base_url('pdf/invoice/').$invoice['id'].'" target="_blank">'.$invoice['inv'].'<a>';
     }else if($type == "2"){
         $invoice = $CI->db->get_where('payment',['id' => $tra_id])->row_array();
-        return $invoice['invoice'];
+        return '<a href="'.base_url('pdf/receipt/').$invoice['id'].'" target="_blank">'.$invoice['invoice'].'<a>';
     }
 }
 

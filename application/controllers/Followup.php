@@ -162,11 +162,11 @@ class Followup extends CI_Controller
 				$amount = $value[1];
 				$service = $value[0];
 
-				$this->db->order_by('rand()');
 			    $this->db->limit(1);
 			    $this->db->where('user_type','2');
 			    $this->db->where('type !=','3');
 			    $this->db->where('df','');
+				$this->db->order_by('rand()');
 			    $user = $this->db->get('user')->row_array();
 
 			    $data = [

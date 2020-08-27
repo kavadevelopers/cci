@@ -282,6 +282,12 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
+                                    <label>Referal Code</label> 
+                                    <input name="refered_by" type="text" placeholder="Referal Code" class="form-control form-control-sm" value="<?= set_value('refered_by',$lead['referal_code']); ?>">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
                                     <label>Remarks</label> 
                                     <textarea name="remarks" type="text" placeholder="Remarks" class="form-control form-control-sm" value=""><?= set_value('remarks',$lead['remarks']); ?></textarea>
                                     <?= form_error('remarks') ?>

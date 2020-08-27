@@ -127,6 +127,7 @@ class Leads extends CI_Controller
 			'tfrom'							=> $ftime,
 			'tto'							=> $ttime,
 			'source'						=> $this->input->post('source'),
+			'referal_code'					=> $this->input->post('refered_by'),
 			'occupation'					=> $this->input->post('occupation'),
 			'quotation'						=> strtoupper($this->input->post('special_quote')),
 			'landline'						=> rtrim($landline,',')
@@ -256,6 +257,7 @@ class Leads extends CI_Controller
 			'tfrom'							=> $ftime,
 			'tto'							=> $ttime,
 			'source'						=> $this->input->post('source'),
+			'referal_code'					=> $this->input->post('refered_by'),
 			'occupation'					=> $this->input->post('occupation'),
 			'quotation'						=> strtoupper($this->input->post('special_quote')),
 			'landline'						=> rtrim($landline,',')

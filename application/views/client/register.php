@@ -380,7 +380,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Referal Code</label> 
-                                    <input name="refered_by" type="text" placeholder="Referal Code" class="form-control form-control-sm" value="<?= set_value('refered_by'); ?>">
+                                    <input name="refered_by" type="text" placeholder="Referal Code" class="form-control form-control-sm" value="<?= set_value('refered_by',$lead['referal_code']); ?>">
                                     <?= form_error('refered_by') ?>
                                 </div>
                             </div>

@@ -182,6 +182,18 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row kava-bottom-border">
+                        <div class="col-md-12">
+                            <div class="form-group row kava-form-group">
+                                <label class="col-sm-2 col-form-label">Referal Code</label>
+                                <div class="col-sm-10">
+                                    <p class="view-p-kava">
+                                        <?= $lead['referal_code'] ?>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <?php $docs = $this->db->get_where('files',['for' => 'Lead' , 'for_id' => $lead['id']])->result_array() ?>
                     <?php if($docs){ ?>
                         <div class="row">

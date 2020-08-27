@@ -12,6 +12,8 @@ class Reports extends CI_Controller
 	{
 		$data['_title']		= "Ledger";
 		$data['client']		= "";
+		$data['fdate']		= "";
+		$data['tdate']		= "";
 		$this->load->theme('reports/ledger',$data);
 	}
 
@@ -29,12 +31,21 @@ class Reports extends CI_Controller
 	{
 		$data['_title']		= "Ledger";
 		$data['client']		= $this->input->post('client');
-
+		$data['fdate']		= $this->input->post('fdate');
+		$data['tdate']		= $this->input->post('tdate');
+		$data['opening']    = $this->general_model->opening_balance($this->input->post('client'),dd($this->input->post('fdate')));
         $this->db->where('client', $this->input->post('client'));
 		$this->db->group_start();
 		    $this->db->where('type',invoice());
             $this->db->or_where('type',payment());
 		$this->db->group_end();
+		if($this->input->post('fdate') != ""){
+			$this->db->where('date >=',dd($this->input->post('fdate')));	
+		}		
+
+		if($this->input->post('tdate') != ""){
+			$this->db->where('date <=',dd($this->input->post('tdate')));	
+		}	
 		$this->db->order_by('date','asc');
 		$data['list']		= $this->db->get('transaction')->result_array();
 		$this->load->theme('reports/ledger',$data);	

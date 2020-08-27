@@ -16,12 +16,12 @@
 <div class="page-body">
     <div class="row">
 
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="card">
                 <form method="post" action="<?= base_url('reports/ledger_result') ?>">
                     <div class="card-block">
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Client <span class="-req">*</span></label>
                                     <select class="form-control form-control-sm select2" name="client" required>
@@ -30,9 +30,21 @@
                                             <option value="<?= $value['id'] ?>" <?= $value['id'] == $client?'selected':''; ?>><?= $value['c_id'].' - '.$value['fname'].' '.$value['mname'].' '.$value['lname'] ?></option>
                                         <?php } ?>
                                     </select>
-                                    <?= form_error('client') ?>
                                 </div>
                             </div>   
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>From Date <span class="-req">*</span></label> 
+                                    <input name="fdate" type="text" placeholder="From Date" autocomplete="off" class="form-control form-control-sm datepicker" value="<?= $fdate ?>">
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>To Date</label> 
+                                    <input name="tdate" type="text" placeholder="To Date" autocomplete="off" class="form-control form-control-sm datepicker" value="<?= $tdate ?>">
+                                </div>
+                            </div>
 
                             <div class="col-md-4">
                                 <button class="btn btn-success btn-mini" style="margin-top: 30px;">
@@ -63,6 +75,25 @@
                             </thead>
                             <tbody>
                                 <?php $credit_total = 0;$debit_total = 0; ?>
+                                <?php if($fdate != ""){ ?>
+                                    <tr>
+                                        <td class="text-center"><?= vd($fdate) ?></td>
+                                        <th>Opening Balance</th>
+                                        <td class="text-center">
+                                            -
+                                        </td>
+                                        <?php if($opening[0] == 'd'){ ?>
+                                            <td class="text-right"><?= moneyFormatIndia($opening[1]) ?></td>
+                                            <td class="text-right"></td>
+                                            <?php $debit_total += $opening[1]; ?>
+                                        <?php }else{ ?>
+                                            <td class="text-right"></td>
+                                            <td class="text-right"><?= moneyFormatIndia($opening[1]) ?></td>
+                                            <?php $credit_total += $opening[1]; ?>
+                                        <?php } ?>
+                                        <th class="text-right"><?= moneyFormatIndia($credit_total - $debit_total) ?></th>
+                                    </tr>
+                                <?php } ?>
                                 <?php foreach($list as $key => $value){ ?>
                                     <?php $debit_total += tledamtc($value['debit'],$value['credit']); ?>
                                     <?php $credit_total += tledamtd($value['debit'],$value['credit']); ?>
@@ -149,6 +180,11 @@
                     title: 'Ledger - #<?= $cli['c_id'] ?> - <?= $cli['fname'] ?> <?= $cli['mname'] ?> <?= $cli['lname'] ?> <?= $cli['firm'] != ""?"- ".$cli['firm']:""; ?>',
                     exportOptions: {
                         columns: [0,1,2,3,4,5]
+                    },customize: function (doc) {
+                        doc.content[1].table.widths = ['*','*','*','*','*','*'];
+                        doc.styles.tableHeader.alignment = 'center';
+                        doc.styles.tableBodyOdd.alignment = 'center';
+                        doc.styles.tableBodyEven.alignment = 'center';
                     }
                 },
                 { 
@@ -162,9 +198,9 @@
             ],
             order : []
         });  
-         $('a[target^="_blank"]').click(function() {
-            return openWindow(this.href);
-        });
+        //  $('.dt-buttons .buttons-pdf').click(function() {
+        //     return openWindow(this.href);
+        // });
     });
 
   function openWindow(url) {

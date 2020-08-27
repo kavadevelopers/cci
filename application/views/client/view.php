@@ -138,6 +138,10 @@
                                                     <th scope="row">Pin</th>
                                                     <td><?= $client['pin'] ?></td>
                                                 </tr>
+                                                <tr>
+                                                    <th scope="row">Source</th>
+                                                    <td><?= $this->general_model->_get_source($client['source'])['name'] ?></td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>

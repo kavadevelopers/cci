@@ -565,5 +565,57 @@ class General_model extends CI_Model
 		$this->db->group_by('client');
     	return $this->db->get('job')->num_rows();
 	}
+
+	public function opening_balance($client_id,$date)
+	{
+
+		$query = $this->db->select_sum('credit')
+					->from('transaction')
+					->where('client', $client_id)
+					->group_start()
+				    	->where('type',opening())
+					->group_end()->get();
+		$ocredit = $query->row()->credit;
+
+		$query = $this->db->select_sum('debit')
+					->from('transaction')
+					->where('client', $client_id)
+					->group_start()
+				    	->where('type',opening())
+					->group_end()->get();
+		$odebit = $query->row()->debit;
+
+		$query = $this->db->select_sum('credit')
+					->from('transaction')
+					->where('date <', $date)
+					->where('client', $client_id)
+					->group_start()
+				    	->where('type',invoice())
+		            	->or_where('type',payment())
+		            	->or_where('type',referal())
+					->group_end()->get();
+		$credit = $query->row()->credit;
+
+		$query = $this->db->select_sum('debit')
+					->from('transaction')
+					->where('date <', $date)
+					->where('client', $client_id)
+					->group_start()
+				    	->where('type',invoice())
+		            	->or_where('type',payment())
+		            	->or_where('type',referal())
+					->group_end()->get();
+		$debit = $query->row()->debit;
+
+		$credit += $ocredit;
+		$debit 	+= $odebit;
+
+		if($credit > $debit){
+			return ['c',$credit - $debit];
+		}
+		else{
+			return ['d',$debit - $credit];
+		}
+	}
 }
 ?>
