@@ -48,7 +48,7 @@
                             <th>Date</th>
                             <th>Remarks</th>
                         </tr>
-                        <?php $dueDates = $this->db->get_where('due_dates',['dt <=' => date('Y-m-d'),'dt >=' => date('Y-m-d')])->result_array(); ?>
+                        <?php $dueDates = $this->db->get_where('due_dates',['dt <=' => date('Y-m-01'),'dt >=' => date('Y-m-t')])->result_array(); ?>
                         <?php foreach ($dueDates as $dueDateskey => $dueDatesvalue) { ?>
                             <tr>
                                 <td><?= vd($dueDatesvalue['date']) ?></td>
