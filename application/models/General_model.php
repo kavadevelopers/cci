@@ -343,7 +343,11 @@ class General_model extends CI_Model
 		}else if(get_user()['user_type'] == 1){
 			return $this->db->get_where('client',['branch' => get_user()['branch'],'status' => '0'])->result_array();
 		}else if(get_user()['user_type'] == 3){
-			return $this->db->get_where('client',['status' => '0','owner' => get_user()['id']])->result_array();
+			if(get_user()['type'] == 4){
+				return $this->db->get_where('client',['status' => '0'])->result_array();
+			}else{
+				return $this->db->get_where('client',['status' => '0','owner' => get_user()['id']])->result_array();
+			}
 		}
 	}
 
