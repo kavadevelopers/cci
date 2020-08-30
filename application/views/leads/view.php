@@ -20,7 +20,7 @@
                 <a href="<?= base_url('leads') ?>" class="btn btn-danger btn-mini"><i class="fa fa-arrow-left"></i> Back</a>
             <?php } ?>
 
-            <?php if($lead['status'] == "0"){ ?>
+            <?php if($lead['status'] == "0" && $lead['dump'] == ""){ ?>
                 <a href="<?= base_url('leads/edit/').$lead['id'] ?>" class="btn btn-primary btn-mini"><i class="fa fa-pencil"></i> Edit</a>
             <?php } ?>
         </div>
