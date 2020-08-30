@@ -454,7 +454,11 @@ class General_model extends CI_Model
 		}else if(get_user()['user_type'] == 1){
 			return $this->db->order_by('id','desc')->get_where('invoice',['branch' => get_user()['branch']])->result_array();	
 		}else if(get_user()['user_type'] == 3){
-			$clients = $this->db->get_where('client',['owner' => get_user()['id']])->result_array();
+			if(get_user()['type'] == 4){
+				$clients = $this->db->get_where('client')->result_array();
+			}else{
+				$clients = $this->db->get_where('client',['owner' => get_user()['id']])->result_array();
+			}
 			$cli = [];
 			foreach ($clients as $key => $value) {
 				array_push($cli, $value['id']);
@@ -471,7 +475,12 @@ class General_model extends CI_Model
 		}else if(get_user()['user_type'] == 1){
 			return $this->db->order_by('id','desc')->get_where('payment',['branch' => get_user()['branch']])->result_array();	
 		}else if(get_user()['user_type'] == 3){
-			$clients = $this->db->get_where('client',['owner' => get_user()['id']])->result_array();
+			if(get_user()['type'] == 4){
+				$clients = $this->db->get_where('client')->result_array();
+			}else{
+				$clients = $this->db->get_where('client',['owner' => get_user()['id']])->result_array();
+			}
+			$cli = [];
 			$cli = [];
 			foreach ($clients as $key => $value) {
 				array_push($cli, $value['id']);
