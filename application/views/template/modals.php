@@ -580,6 +580,45 @@
     </form>
 </div>
 
+<div class="modal fade" id="edit_todo_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <form method="post" action="<?= base_url('todo/update') ?>">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="">Edit To-Do</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label>Date <span class="-req">*</span></label> 
+                                <input name="date" type="text" id="editToDoDate" placeholder="Date" class="form-control form-control-sm datepicker" value="" required>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Time</label> 
+                                <input name="ftime" type="text" id="editToDoFtime" placeholder="From" class="form-control form-control-sm hour-mask" value="">
+                                <input name="ttime" type="text" id="editToDoTtime" placeholder="To" class="form-control form-control-sm hour-mask" value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Remarks <span class="-req">*</span></label> 
+                            <textarea class="form-control" name="remarks" id="editToDoRemarks" placeholder="Remarks" required></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="id" id="editToDoId">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
 <div class="modal fade bd-example-modal-lg" id="generateBillModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <form method="post" action="<?= base_url('generate_bill/single') ?>">
         <div class="modal-dialog modal-lg" role="document">
@@ -591,6 +630,11 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12" id="clientDataBill">
+                            
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-3">
                               <div class="form-group">
@@ -647,6 +691,11 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12" id="clientDataBills">
+                            
+                        </div>
+                    </div>
                     <div class="row" id="generateAllBillAppend">
                            
                     </div>

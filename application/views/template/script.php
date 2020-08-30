@@ -687,6 +687,7 @@
                 	$('#generateBillQty').val(out['qty']);
                 	$('#generateBillTotal').val(out['qty'] * out['price']);
                 	$('#generateBillJob').val(out['job']);
+                	$('#clientDataBill').html(_this.data('client_data'));
                 	$('#generateBillModal').modal('show');
                 	_this.removeAttr('disabled');
                     _this.html('Generate Bill');
@@ -808,6 +809,16 @@
 			$('.select2n').select2({
 			    dropdownParent: $('#add_todo_modal .modal-content')
 			});
+		});
+
+		$(document).on('click','.edit-todo',function(){
+			var _this = $(this);
+			$('#edit_todo_modal').modal('show');
+			$('#editToDoDate').val(_this.data('date'));
+			$('#editToDoFtime').val(_this.data('ftime'));
+			$('#editToDoTtime').val(_this.data('ttime'));
+			$('#editToDoRemarks').val(_this.data('remarks'));
+			$('#editToDoId').val(_this.data('id'));
 		});
 
 		$(document).on('click','.delete-todo',function(){
@@ -937,6 +948,7 @@
                 },
                 success: function(out)
                 {
+                	$('#clientDataBills').html(_this.data('client_data'));
                 	$('#generateAllBillAppend').html(out['list']);
                 	$('#generateAllBillClient').val(out['client']);
                 	$('#generateAllBillModal').modal('show');

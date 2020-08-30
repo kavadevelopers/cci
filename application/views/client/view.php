@@ -374,10 +374,12 @@
 							                        <th class="text-center">Status</th>
 							                        <th class="text-center">Importance</th>
                                                     <th class="text-center">Next Followup Date</th>
-							                        <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){ ?>
+							                        <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1 || get_user()['user_type'] == 3){ ?>
 							                            <th>Owner</th>
 							                        <?php } ?>
-							                        <th class="text-center">Action</th>
+                                                    <?php if(get_user()['user_type'] != 3){ ?>
+							                             <th class="text-center">Action</th>
+                                                    <?php } ?>
 							                    </tr>
 							                </thead>
 							                <tbody>
@@ -392,17 +394,19 @@
 							                            <td class="text-center" id="status-<?= $value['id'] ?>"><?= getjobStatus($value['status']) ?></td>
 							                            <td class="text-center" id="jobImportance<?= $value['id'] ?>"><?= $value['importance'] ?></td>
                                                         <td class="text-center" id="jobFolllowupDate<?= $value['id'] ?>"><?= $value['f_date'] != null?vd($value['f_date']):'NA'; ?><?= get_from_to($value['f_time'],$value['t_time']) ?></td>
-                                                        <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){ ?>
+                                                        <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1 || get_user()['user_type'] == 3){ ?>
 							                                 <td><?= $this->general_model->_get_user($value['owner'])['name'] ?></td>
                                                         <?php } ?>
-							                            <td class="text-center">
-							                                <button class="btn btn-primary btn-mini edit-job" title="Edit" data-importance="<?= $value['importance'] ?>" data-job="<?= $value['id'] ?>" data-service="<?= $value['service'] ?>" data-price="<?= $value['price'] ?>" data-job_id="<?= $value['job_id'] ?>" data-client="<?= $nclient['fname'] ?> <?= $nclient['mname'] ?> <?= $nclient['lname'] ?>">
-							                                    <i class="fa fa-pencil"></i>
-							                                </button>
-							                                <button type="button" class="btn btn-success btn-mini add-job-followup" data-status="<?= $value['status'] ?>" data-id="<?= $value['id'] ?>" data-stop="Job Is Closed" data-type="job" title="Check Followup">
-							                                    <i class="fa fa-question"></i>
-							                                </button>
-							                            </td>
+                                                        <?php if(get_user()['user_type'] != 3){ ?>
+    							                            <td class="text-center">
+    							                                <button class="btn btn-primary btn-mini edit-job" title="Edit" data-importance="<?= $value['importance'] ?>" data-job="<?= $value['id'] ?>" data-service="<?= $value['service'] ?>" data-price="<?= $value['price'] ?>" data-job_id="<?= $value['job_id'] ?>" data-client="<?= $nclient['fname'] ?> <?= $nclient['mname'] ?> <?= $nclient['lname'] ?>">
+    							                                    <i class="fa fa-pencil"></i>
+    							                                </button>
+    							                                <button type="button" class="btn btn-success btn-mini add-job-followup" data-status="<?= $value['status'] ?>" data-id="<?= $value['id'] ?>" data-stop="Job Is Closed" data-type="job" title="Check Followup">
+    							                                    <i class="fa fa-question"></i>
+    							                                </button>
+    							                            </td>
+                                                        <?php } ?>
 							                        </tr>
 							                    <?php } ?>
 							                </tbody>
@@ -427,10 +431,12 @@
 							                        <th>Client</th>
 							                        <th class="text-center">Status</th>
 							                        <th class="text-center">Importance</th>
-							                        <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){ ?>
+							                        <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1 || get_user()['user_type'] == 3){ ?>
 							                            <th>Owner</th>
 							                        <?php } ?>
-							                        <th class="text-center">Action</th>
+                                                    <?php if(get_user()['user_type'] != 3){ ?>
+							                             <th class="text-center">Action</th>  
+                                                     <?php } ?>
 							                    </tr>
 							                </thead>
 							                <tbody>
@@ -444,14 +450,16 @@
 							                            <td><?= $nclient['fname'] ?> <?= $nclient['mname'] ?> <?= $nclient['lname'] ?></td>
 							                            <td class="text-center" id="status-<?= $value['id'] ?>"><?= getjobStatus($value['status']) ?></td>
 							                            <td class="text-center"><?= $value['importance'] ?></td>
-                                                        <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){ ?>
+                                                        <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1 || get_user()['user_type'] == 3){ ?>
 							                                 <td><?= $this->general_model->_get_user($value['owner'])['name'] ?></td>
                                                         <?php } ?>
-							                            <td class="text-center">
-							                                <button type="button" class="btn btn-success btn-mini add-job-followup" data-status="<?= $value['status'] ?>" data-id="<?= $value['id'] ?>" data-stop="Job Is Closed" data-type="job" title="Check Followup">
-							                                    <i class="fa fa-question"></i>
-							                                </button>
-							                            </td>
+                                                        <?php if(get_user()['user_type'] != 3){ ?>
+    							                            <td class="text-center">
+    							                                <button type="button" class="btn btn-success btn-mini add-job-followup" data-status="<?= $value['status'] ?>" data-id="<?= $value['id'] ?>" data-stop="Job Is Closed" data-type="job" title="Check Followup">
+    							                                    <i class="fa fa-question"></i>
+    							                                </button>
+    							                            </td>
+                                                        <?php } ?>
 							                        </tr>
 							                    <?php } ?>
 							                </tbody>
