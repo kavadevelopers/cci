@@ -412,6 +412,17 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Select Client <span class="-req">*</span></label> 
+                                <select class="form-control form-control-sm addPaymentClient" name="client" required>
+                                    <option value="">-- Select --</option>
+                                    <?php foreach ($this->general_model->getFilteredClients() as $bkey => $bvalue) { ?>
+                                        <option value="<?= $bvalue['id'] ?>"><?= $bvalue['c_id'] ?> - <?= $bvalue['fname'] ?> <?= $bvalue['mname'] ?> <?= $bvalue['lname'] ?> - <?= $bvalue['mobile'] ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Date <span class="-req">*</span></label> 
@@ -425,7 +436,7 @@
                         </div>
                         <div class="col-md-6">
                             <label>Payment Type <span class="-req">*</span></label> 
-                            <select class="form-control" name="payment_type" required>
+                            <select class="form-control form-control-sm" name="payment_type" required>
                                 <option value="">-- Select --</option>
                                 <option value="Cash">Cash</option>
                                 <option value="Bank">Bank</option>
@@ -436,17 +447,6 @@
                         <div class="col-md-6">
                             <label>Payment Remarks </label> 
                             <input type="text" name="pay_remarks" class="form-control form-control-sm" autocomplete="off" placeholder="Payment Remarks" > 
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Select Client <span class="-req">*</span></label> 
-                                <select class="form-control form-control-sm addPaymentClient" name="client" required>
-                                    <option value="">-- Select --</option>
-                                    <?php foreach ($this->general_model->getFilteredClients() as $bkey => $bvalue) { ?>
-                                        <option value="<?= $bvalue['id'] ?>"><?= $bvalue['c_id'] ?> - <?= $bvalue['fname'] ?> <?= $bvalue['mname'] ?> <?= $bvalue['lname'] ?> - <?= $bvalue['mobile'] ?></option>
-                                    <?php } ?>
-                                </select>
-                            </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
