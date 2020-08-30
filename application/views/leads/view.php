@@ -12,7 +12,7 @@
                 <a href="<?= base_url('leads/converted_leads') ?>" class="btn btn-danger btn-mini"><i class="fa fa-arrow-left"></i> Back</a>
             <?php } ?>
 
-            <?php if($lead['status'] == "1"){ ?>
+            <?php if($lead['dump'] == "yes"){ ?>
                 <a href="<?= base_url('leads/dump_leads') ?>" class="btn btn-danger btn-mini"><i class="fa fa-arrow-left"></i> Back</a>
             <?php } ?>
 
@@ -242,7 +242,7 @@
         </div>
         <div class="col-md-6">
             <div class="card">
-                <?php if($lead['status'] == 0){ ?>
+                <?php if($lead['status'] == 0 && $lead['dump'] == ''){ ?>
                 <div class="card-block">
                     <form method="post" action="<?= base_url('followup/save_lead') ?>">
                         <div class="row">   
