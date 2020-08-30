@@ -65,7 +65,7 @@
                             <tr>
                                 <th class="text-center">Date</th>
                                 <th>Particulars</th>
-                                <th>From</th>
+                                <th>To</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -76,7 +76,7 @@
                                         <?= vd($value['date']) ?>        
                                     </td>
                                     <td><?= $value['name'] ?></td>
-                                    <td><?= $this->general_model->_get_user($value['from'])['name'] ?></td>
+                                    <td><?= $this->general_model->_get_user($value['to'])['name'] ?></td>
                                     <td class="text-center">
                                         <a href="<?= base_url('task/view/').$value['id'] ?>" class="btn btn-success btn-mini" data-id="<?= $value['id'] ?>" title="View">
                                             <i class="fa fa-eye"></i>

@@ -30,7 +30,7 @@
 	                        <th class="text-center">Importance</th>
 	                        <th class="text-center">
 	                        	<?php $client = $this->general_model->_get_client($value['client']); ?>
-	                        	<button class="btn btn-info btn-mini generateFullBill<?= $value['client'] ?>" data-client_data="#<?= $client['c_id'] ?><br><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?><br><?= $client['add1'] ?><br><?= $this->general_model->_get_area($client['area'])['name'] ?>,<?= $this->general_model->_get_city($client['city'])['name'] ?>,<?= $this->general_model->_get_district($client['district'])['name'] ?>,<?= $this->general_model->_get_state($client['state'])['name'] ?><br><br>" onclick="generateMultipleBill('<?= $value['client'] ?>');">		Generate Full Bill
+	                        	<button class="btn btn-info btn-mini generateFullBill<?= $value['client'] ?>" data-client_data="#<?= $client['c_id'] ?><br><b><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?></b><br><?= $client['mobile'] ?><br><?= $client['add1'] ?><br><?= $this->general_model->_get_area($client['area'])['name'] ?>,<?= $this->general_model->_get_city($client['city'])['name'] ?>,<?= $this->general_model->_get_district($client['district'])['name'] ?>,<?= $this->general_model->_get_state($client['state'])['name'] ?><br><br>" onclick="generateMultipleBill('<?= $value['client'] ?>');">		Generate Full Bill
 	                        	</button>
 	                        </th>
 	                    </tr>
