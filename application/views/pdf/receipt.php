@@ -77,7 +77,7 @@
         <table style="width: 100%; border-bottom: 1px solid #ddd;" cellpadding="5px;">
             <tr>
                 <td style="width: 15%; text-align: center;">1</td>
-                <td style="width: 60%;">Amount Paid(<?= $invoice['pay_type'] ?> - <?= $invoice['pay_remarks'] ?>)</td>
+                <td style="width: 60%;">PAID BY : <?= $invoice['pay_type'] ?> - <?= $invoice['pay_remarks'] ?></td>
                 <td style="width: 25%; text-align: right;"><?= $invoice['amount'] ?></td>
             </tr>
 
