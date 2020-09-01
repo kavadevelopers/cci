@@ -13,6 +13,7 @@ class Pdf extends CI_Controller
 		if($id){
 			if($this->general_model->_get_invoice($id)){
 				$invoice = $this->general_model->_get_invoice($id);
+				$client = $this->general_model->_get_client($invoice['client']);
 				$company = $this->general_model->_get_company($invoice['company']);
 				$pdf = new Invoice(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 				$invoiceData['image'] = base_url('uploads/company/').$company['letter_head'];
@@ -21,7 +22,7 @@ class Pdf extends CI_Controller
 				$pdf->SetMargins(10, 35, 10);
 		        $pdf->SetCreator(PDF_CREATOR);
 		        $pdf->SetAuthor('Kava Developers');
-		        $pdf->SetTitle('Invoice - #'.$invoice['inv']);
+		        $pdf->SetTitle($client['fname'].' '.$client['mname'].' '.$client['lname'].' '.$client['c_id']);
 		        $pdf->SetSubject('Invoice - #'.$invoice['inv']);
 		        $pdf->SetKeywords('PDF');
 		        $pdf->SetFontSize(11);
@@ -32,7 +33,7 @@ class Pdf extends CI_Controller
 		        $data['invoice'] = $invoice;
 		        $html = $this->load->view('pdf/invoice',$data,true);
 		        $pdf->writeHTML($html, true, false, true, false, '');
-		        $pdf->Output('Invoice_#'.$invoice['inv'].'.pdf', 'I');
+		        $pdf->Output($client['fname'].' '.$client['mname'].' '.$client['lname'].' '.$client['c_id'].' '.$invoice['inv'].'.pdf', 'I');
 		    }
 		    else{
 	    		redirect(base_url('invoices'));
@@ -47,6 +48,7 @@ class Pdf extends CI_Controller
 		if($id){
 			if($this->general_model->_get_payment($id)){
 				$invoice = $this->general_model->_get_payment($id);
+				$client = $this->general_model->_get_client($invoice['client']);
 				$company = $this->general_model->_get_company($invoice['company']);
 				$pdf = new Invoice(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 				$invoiceData['image'] = base_url('uploads/company/').$company['letter_head'];
@@ -55,7 +57,7 @@ class Pdf extends CI_Controller
 		        $pdf->SetCreator(PDF_CREATOR);
 		        $pdf->SetMargins(10, 35, 10);
 		        $pdf->SetAuthor('Kava Developers');
-		        $pdf->SetTitle('Receipt - #'.$invoice['invoice']);
+		        $pdf->SetTitle($client['fname'].' '.$client['mname'].' '.$client['lname'].' '.$client['c_id']);
 		        $pdf->SetSubject('Receipt - #'.$invoice['invoice']);
 		        $pdf->SetKeywords('PDF');
 		        $pdf->SetFontSize(11);
@@ -66,7 +68,7 @@ class Pdf extends CI_Controller
 		        $data['invoice'] = $invoice;
 		        $html = $this->load->view('pdf/receipt',$data,true);
 		        $pdf->writeHTML($html, true, false, true, false, '');
-		        $pdf->Output('Receipt_#'.$invoice['invoice'].'.pdf', 'I');
+		        $pdf->Output($client['fname'].' '.$client['mname'].' '.$client['lname'].' '.$client['c_id'].' '.$invoice['invoice'].'.pdf', 'I');
 		    }
 		    else{
 	    		redirect(base_url('payment'));
@@ -81,6 +83,7 @@ class Pdf extends CI_Controller
 		if($id){
 			if($this->general_model->_get_invoice($id)){
 				$invoice = $this->general_model->_get_invoice($id);
+				$client = $this->general_model->_get_client($invoice['client']);
 				$company = $this->general_model->_get_company($invoice['company']);
 				$pdf = new Invoice(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 				$invoiceData['image'] = base_url('uploads/company/').$company['letter_head'];
@@ -89,7 +92,7 @@ class Pdf extends CI_Controller
 				$pdf->SetMargins(10, 35, 10);
 		        $pdf->SetCreator(PDF_CREATOR);
 		        $pdf->SetAuthor('Kava Developers');
-		        $pdf->SetTitle('Invoice - #'.$invoice['inv']);
+		        $pdf->SetTitle($client['fname'].' '.$client['mname'].' '.$client['lname'].' '.$client['c_id']);
 		        $pdf->SetSubject('Invoice - #'.$invoice['inv']);
 		        $pdf->SetKeywords('PDF');
 		        $pdf->SetFontSize(11);
@@ -100,7 +103,7 @@ class Pdf extends CI_Controller
 		        $data['invoice'] = $invoice;
 		        $html = $this->load->view('pdf/invoice',$data,true);
 		        $pdf->writeHTML($html, true, false, true, false, '');
-		        $pdf->Output('Invoice_#'.$invoice['inv'].'.pdf', 'D');
+		        $pdf->Output($client['fname'].' '.$client['mname'].' '.$client['lname'].' '.$client['c_id'].' '.$invoice['inv'].'.pdf', 'D');
 		    }
 		    else{
 	    		redirect(base_url('invoices'));
@@ -115,6 +118,7 @@ class Pdf extends CI_Controller
 		if($id){
 			if($this->general_model->_get_payment($id)){
 				$invoice = $this->general_model->_get_payment($id);
+				$client = $this->general_model->_get_client($invoice['client']);
 				$company = $this->general_model->_get_company($invoice['company']);
 				$pdf = new Invoice(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 				$invoiceData['image'] = base_url('uploads/company/').$company['letter_head'];
@@ -123,7 +127,7 @@ class Pdf extends CI_Controller
 		        $pdf->SetCreator(PDF_CREATOR);
 		        $pdf->SetMargins(10, 35, 10);
 		        $pdf->SetAuthor('Kava Developers');
-		        $pdf->SetTitle('Receipt - #'.$invoice['invoice']);
+		        $pdf->SetTitle($client['fname'].' '.$client['mname'].' '.$client['lname'].' '.$client['c_id']);
 		        $pdf->SetSubject('Receipt - #'.$invoice['invoice']);
 		        $pdf->SetKeywords('PDF');
 		        $pdf->SetFontSize(11);
@@ -134,7 +138,7 @@ class Pdf extends CI_Controller
 		        $data['invoice'] = $invoice;
 		        $html = $this->load->view('pdf/receipt',$data,true);
 		        $pdf->writeHTML($html, true, false, true, false, '');
-		        $pdf->Output('Receipt_#'.$invoice['invoice'].'.pdf', 'D');
+		        $pdf->Output($client['fname'].' '.$client['mname'].' '.$client['lname'].' '.$client['c_id'].' '.$invoice['invoice'].'.pdf', 'D');
 		    }
 		    else{
 	    		redirect(base_url('payment'));

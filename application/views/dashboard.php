@@ -74,7 +74,7 @@
 			<div class="col-md-3">
 				<div class="card text-center text-white bg-c-lite-green">
 					<div class="card-block">
-						<h6 class="m-b-0">30 Days Payment Pending</h6>
+						<h6 class="m-b-0">More than 30 Days Payment</h6>
 						<h4 class="m-t-10 m-b-10"><?= rs().moneyFormatIndia($this->general_model->pastThDaysPendingPayment()); ?></h4>
 						<p class="m-b-0">-</p>
 					</div>
@@ -102,7 +102,7 @@
 
    	<?php } ?>		
    	<div class="row">
-   		<div class="col-md-12">
+   		<div class="col-md-6">
    			<div class="card">
    				<div class="card-header">
    					<div class="row"> 
@@ -117,13 +117,11 @@
 			        </div>
                 </div>
                 <div class="card-block" style="max-height: 500px; overflow-y: scroll;">
-                	<table class="table table-striped table-bordered table-mini">
+                	<table class="table table-striped table-bordered table-mini table-ndt">
 		                <thead>
 		                    <tr>
 		                        <th class="text-center">Date</th>
-		                        <th>Remarks</th>
-		                        <th>For</th>
-		                        <th>From</th>
+		                        <th>Remarks</th> 
 		                        <th class="text-center">Action</th>
 		                    </tr>
 		                </thead>
@@ -135,8 +133,6 @@
 		                            	<?= get_from_to($value['ftime'],$value['ttime']) ?>        
 		                            </td>
 		                            <td><?= nl2br($value['remarks']) ?></td>
-		                            <td><?= $this->general_model->_get_user($value['to'])['name'] ?></td>
-		                            <td><?= $this->general_model->_get_user($value['from'])['name'] ?></td>
 		                            <td class="text-center">
 		                                <button class="btn btn-danger btn-mini btn-delete delete-todo" data-id="<?= $value['id'] ?>" title="Delete">
 		                                    <i class="fa fa-trash"></i>
@@ -149,124 +145,242 @@
                 </div>
    			</div>
    		</div>
-
-   		<div class="col-md-12">
-   			<div class="card">
-   				<div class="card-header">
+   		<div class="col-md-6">
+        	<div class="card">
+            	<div class="card-header" style="padding: 10px;">
    					<div class="row"> 
 	                    <div class="col-md-6">
-	                    	<h5>My Task List</h5>
+	                    	<h5>Panding For Approval Receipt</h5>
 	                    </div>
-	                    <div class="col-md-6 text-right">
-				            <a class="btn btn-primary btn-sm" type="button" href="<?= base_url('task/my_task') ?>">
-				                View All
-				            </a>
-				        </div>
 			        </div>
                 </div>
-                <div class="card-block" style="max-height: 500px; overflow-y: scroll;">
+                <div class="card-block table-responsive">
                 	<table class="table table-striped table-bordered table-mini table-dt">
 		                <thead>
 		                    <tr>
+		                    	<th class="text-center">Action</th>
 		                        <th class="text-center">Date</th>
-		                        <th>Particulars</th>
-		                        <th>From</th>
-		                        <th>To</th>
-		                        <th class="text-center">New Reply</th>
-		                        <th class="text-center">Action</th>
+		                        <th>Customer Name</th>
+		                        <th class="text-right">Amount</th>
+		                        <th>Remarks</th>
+		                        <?php if(get_user()['user_type'] == 0){ ?>
+		                            <th>Payment By</th>
+		                        <?php } ?>
 		                    </tr>
 		                </thead>
 		                <tbody>
-		                    <?php foreach ($task as $key => $value) { ?>
+		                    <?php foreach ($receipt_request as $key => $value) { ?>
+		                        <?php $client = $this->general_model->_get_client($value['client']); ?>
 		                        <tr>
-		                            <td class="text-center">
-		                                <?= vd($value['date']) ?>        
+		                        	<td class="text-center">
+		                                <button class="btn btn-success btn-mini approve-payment" data-id="<?= $value['id'] ?>" title="Approve">
+		                                    <i class="fa fa-check"></i>
+		                                </button>
 		                            </td>
-		                            <td><?= $value['name'] ?></td>
-		                            <td><?= $this->general_model->_get_user($value['from'])['name'] ?></td>
-		                            <td><?= $this->general_model->_get_user($value['to'])['name'] ?></td>
-		                            <td class="text-center">
-		                            	<span class="pcoded-badge label label-danger">
-		                            		<?php $coReply = $this->db->get_where('task_reply',['to' => get_user()['id'],'read' => '0','task' => $value['id']])->num_rows(); ?>
-                                            <?php 
-                                            	if($coReply > 9){
-                                            		echo "9+";
-                                            	}else{
-                                            		echo $coReply;
-                                            	}
-                                            ?>
-                                        </span>
-		                            </td>
-		                            <td class="text-center">
-		                                <a href="<?= base_url('task/view/').$value['id'] ?>" class="btn btn-success btn-mini" data-id="<?= $value['id'] ?>" title="View">
-		                                    <i class="fa fa-eye"></i>
-		                                </a>
-		                            </td>
+		                            <td class="text-center"><?= vd($value['date']) ?></td>
+		                            <td><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?></td>
+		                            <td class="text-right"><?= $value['amount'] ?></td>
+		                            <td><?= nl2br($value['remarks']) ?></td>
+		                            <?php if(get_user()['user_type'] == 0){ ?>
+		                                <td><?= $this->general_model->_get_user($value['created_by'])['name'] ?></td>
+		                            <?php } ?>
 		                        </tr>
 		                    <?php } ?>
 		                </tbody>
 		            </table>
                 </div>
-   			</div>
+        	</div>
+        </div>
+   		<div class="col-md-12">
+   			<div class="row">
+            	<div class="col-md-6">
+            		<div class="card">
+            			<div class="card-header">
+		   					<div class="row"> 
+			                    <div class="col-md-6">
+			                    	<h5>My Task</h5>
+			                    </div>
+					        </div>
+		                </div>
+		                <div class="card-block dt-responsive table-responsive">
+		                    <table class="table table-striped table-bordered table-mini table-dt">
+		                        <thead>
+		                            <tr>
+		                                <th class="text-center">Action</th>
+		                                <th class="text-center">Date</th>
+		                                <th class="text-center">New Reply</th>
+		                                <th>Particulars</th>
+		                                <th>From</th>
+		                            </tr>
+		                        </thead>
+		                        <tbody>
+		                            <?php foreach ($my_task as $key => $value) { ?>
+		                                <tr>
+		                                	<td class="text-center">
+		                                        <a href="<?= base_url('task/view/').$value['id'] ?>" class="btn btn-success btn-mini" data-id="<?= $value['id'] ?>" title="View">
+		                                            <i class="fa fa-eye"></i>
+		                                        </a>
+		                                    </td>
+		                                    <td class="text-center">
+		                                        <?= vd($value['date']) ?>        
+		                                    </td>
+		                                    <td class="text-center">
+		                                    	<span class="pcoded-badge label label-danger">
+				                            		<?php $coReply = $this->db->get_where('task_reply',['to' => get_user()['id'],'read' => '0','task' => $value['id']])->num_rows(); ?>
+		                                            <?php 
+		                                            	if($coReply > 9){
+		                                            		echo "9+";
+		                                            	}else{
+		                                            		echo $coReply;
+		                                            	}
+		                                            ?>
+		                                        </span>
+		                                    </td>
+		                                    <td class="td-big"><?= $value['name'] ?></td>
+		                                    <td><?= $this->general_model->_get_user($value['from'])['name'] ?></td>
+		                                </tr>
+		                            <?php } ?>
+		                        </tbody>
+		                    </table>
+		                </div>
+		            </div>
+            	</div>
+            	<div class="col-md-6">
+            		<div class="card">
+            			<div class="card-header">
+		   					<div class="row"> 
+			                    <div class="col-md-6">
+			                    	<h5>Other Task</h5>
+			                    </div>
+					        </div>
+		                </div>
+		                <div class="card-block dt-responsive table-responsive">
+		                    <table class="table table-striped table-bordered table-mini table-dt">
+		                        <thead>
+		                            <tr>
+		                                <th class="text-center">Action</th>
+		                                <th class="text-center">Date</th>
+		                                <th class="text-center">New Reply</th>
+		                                <th>Particulars</th>
+		                                <th>To</th>
+		                            </tr>
+		                        </thead>
+		                        <tbody>
+		                            <?php foreach ($other_task as $key => $value) { ?>
+		                                <tr>
+		                                	<td class="text-center">
+		                                        <a href="<?= base_url('task/view/').$value['id'] ?>" class="btn btn-success btn-mini" data-id="<?= $value['id'] ?>" title="View">
+		                                            <i class="fa fa-eye"></i>
+		                                        </a>
+		                                    </td>
+		                                    <td class="text-center">
+		                                        <?= vd($value['date']) ?>        
+		                                    </td>
+		                                    <td class="text-center">
+		                                    	<span class="pcoded-badge label label-danger">
+				                            		<?php $coReply = $this->db->get_where('task_reply',['to' => get_user()['id'],'read' => '0','task' => $value['id']])->num_rows(); ?>
+		                                            <?php 
+		                                            	if($coReply > 9){
+		                                            		echo "9+";
+		                                            	}else{
+		                                            		echo $coReply;
+		                                            	}
+		                                            ?>
+		                                        </span>
+		                                    </td>
+		                                    <td class="td-big"><?= $value['name'] ?></td>
+		                                    <td><?= $this->general_model->_get_user($value['to'])['name'] ?></td>
+		                                </tr>
+		                            <?php } ?>
+		                        </tbody>
+		                    </table>
+		                </div>
+		            </div>
+            	</div>
+            </div>
    		</div>
 	   		<?php if(get_user()['user_type'] == '0'){ ?>
+
+	   	<div class="col-md-6">
+	   		<div class="card">
+            	<div class="card-header" style="padding: 10px;">
+   					<div class="row"> 
+	                    <div class="col-md-6">
+	                    	<h5>Leads By Sales Person</h5>
+	                    </div>
+			        </div>
+                </div>
+                <div class="card-block table-responsive">
+                	<table class="table table-striped table-bordered table-mini table-ndt">
+                		<thead>
+                			<tr>
+		                        <th>Name</th>
+		                        <th class="text-center">Today</th>
+		                        <th class="text-center">This Month</th>
+		                        <th class="text-center">Total Active</th>
+		                        <th class="text-center">Total Converted</th>
+		                        <th class="text-center">Total Dump</th>
+		                        <th class="text-center">Total</th>
+		                    </tr>
+                		</thead>
+                		<tbody>
+                			<?php foreach ($this->db->order_by('type','desc')->get_where('user',['user_type' => '3'])->result_array() as $key => $value) { ?>
+                				<tr>
+	                				<td><?= $value['name'] ?><br><small>-<?= _user_type($value['id']) ?></small></td>
+	                				<td class="text-center"><?= $this->general_model->getUserLeadByRange($value['id'],'today'); ?></td>
+	                				<td class="text-center"><?= $this->general_model->getUserLeadByRange($value['id'],'month'); ?></td>
+	                				<td class="text-center"><?= $this->general_model->getUserLeadByRange($value['id'],'total_active'); ?></td>
+	                				<td class="text-center"><?= $this->general_model->getUserLeadByRange($value['id'],'total_converted'); ?></td>
+	                				<td class="text-center"><?= $this->general_model->getUserLeadByRange($value['id'],'total_dump'); ?></td>
+	                				<td class="text-center"><?= $this->general_model->getUserLeadByRange($value['id'],''); ?></td>
+	                			</tr>
+                			<?php } ?>
+                		</tbody>
+                	</table>
+                </div>
+            </div>
+	   	</div>
+	   	<div class="col-md-6">
+	   		<div class="card">
+            	<div class="card-header" style="padding: 10px;">
+   					<div class="row"> 
+	                    <div class="col-md-6">
+	                    	<h5>Leads By Source</h5>
+	                    </div>
+			        </div>
+                </div>
+                <div class="card-block table-responsive">
+                	<table class="table table-striped table-bordered table-mini table-ndt">
+                		<thead>
+                			<tr>
+		                        <th>Source Name</th>
+		                        <th class="text-center">Today</th>
+		                        <th class="text-center">This Month</th>
+		                        <th class="text-center">Total Active</th>
+		                        <th class="text-center">Total Converted</th>
+		                        <th class="text-center">Total Dump</th>
+		                        <th class="text-center">Total</th>
+		                    </tr>
+                		</thead>
+                		<tbody>
+                			<?php foreach ($this->db->order_by('id','desc')->get_where('source',['df' => ''])->result_array() as $key => $value) { ?>
+                				<tr>
+	                				<td><?= $value['name'] ?></td>
+	                				<td class="text-center"><?= $this->general_model->getSourceLeadByRange($value['id'],'today'); ?></td>
+	                				<td class="text-center"><?= $this->general_model->getSourceLeadByRange($value['id'],'month'); ?></td>
+	                				<td class="text-center"><?= $this->general_model->getSourceLeadByRange($value['id'],'total_active'); ?></td>
+	                				<td class="text-center"><?= $this->general_model->getSourceLeadByRange($value['id'],'total_converted'); ?></td>
+	                				<td class="text-center"><?= $this->general_model->getSourceLeadByRange($value['id'],'total_dump'); ?></td>
+	                				<td class="text-center"><?= $this->general_model->getSourceLeadByRange($value['id'],''); ?></td>
+	                			</tr>
+                			<?php } ?>
+                		</tbody>
+                	</table>
+                </div>
+            </div>
+	   	</div>
 	   	
-	   		<div class="col-md-12">
-	        	<div class="card">
-	            	<div class="card-header" style="padding: 10px;">
-	   					<div class="row"> 
-		                    <div class="col-md-6">
-		                    	<h5>Panding For Approval Receipt</h5>
-		                    </div>
-				        </div>
-	                </div>
-	                <div class="card-block table-responsive">
-	                	<table class="table table-striped table-bordered table-mini table-dt">
-			                <thead>
-			                    <tr>
-			                        <th class="text-center">#</th>
-			                        <th class="text-center">Date</th>
-			                        <th>Customer Name</th>
-			                        <th class="text-right">Amount</th>
-			                        <th>Remarks</th>
-			                        <th class="text-center">Approved</th>
-			                        <?php if(get_user()['user_type'] == 0){ ?>
-			                            <th>Payment By</th>
-			                        <?php } ?>
-			                        <th class="text-center">Action</th>
-			                    </tr>
-			                </thead>
-			                <tbody>
-			                    <?php foreach ($receipt_request as $key => $value) { ?>
-			                        <?php $client = $this->general_model->_get_client($value['client']); ?>
-			                        <tr>
-			                            <td class="text-center"><?= $value['invoice'] ?></td>
-			                            <td class="text-center"><?= vd($value['date']) ?></td>
-			                            <td><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?></td>
-			                            <td class="text-right"><?= $value['amount'] ?></td>
-			                            <td><?= nl2br($value['remarks']) ?></td>
-			                            <td class="text-center">
-			                                <?php if($value['status'] == 1){ ?>
-			                                    <span class="pcoded-badge label label-success">Yes</span>
-			                                <?php }else{ ?>
-			                                    <span class="pcoded-badge label label-danger">No</span>
-			                                <?php } ?>
-			                            </td>
-			                            <?php if(get_user()['user_type'] == 0){ ?>
-			                                <td><?= $this->general_model->_get_user($value['created_by'])['name'] ?></td>
-			                            <?php } ?>
-			                            <td class="text-center">
-			                                <button class="btn btn-success btn-mini approve-payment" data-id="<?= $value['id'] ?>" title="Approve">
-			                                    <i class="fa fa-check"></i>
-			                                </button>
-			                            </td>
-			                        </tr>
-			                    <?php } ?>
-			                </tbody>
-			            </table>
-	                </div>
-	        	</div>
-	        </div>
+   		
 
 	   	<?php } ?>	
    	</div>

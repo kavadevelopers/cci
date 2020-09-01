@@ -43,6 +43,40 @@ class Todo extends CI_Controller
 	    redirect(base_url('todo'));
 	}
 
+	public function update()
+	{
+
+		if($this->input->post('ftime') != ""){
+			$ftime = timeConverter($this->input->post('ftime'));
+		}else{
+			$ftime = null;
+		}
+
+		if($this->input->post('ttime') != ""){
+			$ttime = timeConverter($this->input->post('ttime'));
+		}else{
+			$ttime = null;
+		}
+
+		$fstatus = 1;
+		if($this->input->post('needed')){
+			$fstatus = 0;
+		}
+
+		$data = [
+			'ftime'	=> $ftime,
+			'ttime'	=> $ttime,
+			'remarks'	=>  $this->input->post('remarks'),
+			'date'	=>  dd($this->input->post('date')),
+			'fstatus'	=> $fstatus
+		];
+
+		$this->db->where('id',$this->input->post('id'))->update('todo',$data);
+
+		$this->session->set_flashdata('msg', 'To-Do Saved');
+	    redirect(base_url('todo'));
+	}
+
 	public function delete()
 	{
 		$this->db->where('id',$this->input->post('id'))->delete('todo');

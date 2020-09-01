@@ -11,7 +11,7 @@
             <div class="page-header-title">
                 <div class="d-inline">
                     <h4 class="text-right">
-                        OUTSTANDING : RS. <?= $this->general_model->getOutStandingClient($client['id'])[0]; ?> SINCE <?= $this->general_model->getOutStandingClient($client['id'])[1]; ?> DAYS
+                        OUTSTANDING : RS. <?= moneyFormatIndia($this->general_model->getOutStandingClient($client['id'])[0]); ?> SINCE <?= $this->general_model->getOutStandingClient($client['id'])[1]; ?> DAYS
                     </h4>
                 </div>
             </div>

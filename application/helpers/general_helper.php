@@ -204,7 +204,7 @@ function getjobStatus($s){
     }else if($s == "2"){
         return "WORK IN PROGRESS";
     }else if($s == "3"){
-        return "WORK DONE & PANDING FOR BILLING";
+        return "WORK DONE";
     }else if($s == "4"){
         return "BILLED";
     }else{
@@ -217,7 +217,7 @@ function getjobStatusList(){
         '0' => "WORK PENDING",
         '1' => "DOCUMENTS RECEIVED",
         '2' => "WORK IN PROGRESS",
-        '3' => "WORK DONE & PANDING FOR BILLING",
+        '3' => "WORK DONE",
         '4' => "BILLED",
         '5' => "PAID"
     ];

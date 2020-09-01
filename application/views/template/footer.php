@@ -72,6 +72,11 @@
         <?php if(!empty($this->session->flashdata('msg'))){ ?>
             PNOTY('<?= $this->session->flashdata('msg'); ?>','success');
         <?php $this->session->set_flashdata('msg',''); } ?>
+
+        <?php if(!empty($this->session->flashdata('invoice'))){ ?>
+            var popup = window.open('<?= base_url('pdf/invoice/').$this->session->flashdata('invoice') ?>','_blank');
+            popupBlockerChecker.check(popup);
+        <?php $this->session->set_flashdata('invoice',''); } ?>
     </script>
 
     <script type="text/javascript">

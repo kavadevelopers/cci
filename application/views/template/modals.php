@@ -48,7 +48,7 @@
                             <th>Date</th>
                             <th>Remarks</th>
                         </tr>
-                        <?php $dueDates = $this->db->get_where('due_dates',['dt <=' => date('Y-m-01'),'dt >=' => date('Y-m-t')])->result_array(); ?>
+                        <?php $dueDates = $this->db->get_where('due_dates',['date >=' => '2020-08-01','date <=' => '2020-08-31'])->result_array(); ?>
                         <?php foreach ($dueDates as $dueDateskey => $dueDatesvalue) { ?>
                             <tr>
                                 <td><?= vd($dueDatesvalue['date']) ?></td>
@@ -542,19 +542,9 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>For <span class="-req">*</span></label> 
-                            <select class="form-control form-control-sm select2n" name="owner" required>
-                                <option value="">-- Select --</option>
-                                <option value="<?= get_user()['id'] ?>" selected>Me</option>
-                                <?php foreach ($this->general_model->get_todo_users() as $bkey => $bvalue) { ?>
-                                    <option value="<?= $bvalue['id'] ?>"><?= $bvalue['name'] ?> - <?= getRole($bvalue['user_type']) ?> - <?= _user_type($bvalue['id']) ?></option>
-                                <?php } ?>
-                            </select>
-                            <?= form_error('owner') ?>
-                        </div>
+                    <div class="col-md-12"> 
                         <div class="row">
+                            <input type="hidden" name="owner" value="<?= get_user()['id'] ?>">
                             <div class="col-md-6 form-group">
                                 <label>Date <span class="-req">*</span></label> 
                                 <input name="date" type="text" placeholder="Date" class="form-control form-control-sm datepicker" value="<?= set_value('date',date('d-m-Y')); ?>" readonly required>
@@ -607,12 +597,19 @@
                             <label>Remarks <span class="-req">*</span></label> 
                             <textarea class="form-control" name="remarks" id="editToDoRemarks" placeholder="Remarks" required></textarea>
                         </div>
+                        <div class="checkbox-fade fade-in-primary d-">
+                            <label>
+                                <input type="checkbox" value="1" name="needed" id="">
+                                <span class="cr"><i class="cr-icon icofont icofont-ui-check txt-primary"></i></span>
+                                <span class="text-inverse">Followup Needed ?</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" name="id" id="editToDoId">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Add</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
                 </div>
             </div>
         </div>

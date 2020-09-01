@@ -22,17 +22,17 @@
 	                <thead>
 	                    <tr>
 	                    	<th></th>
+	                        <th class="text-center">
+	                        	<?php $client = $this->general_model->_get_client($value['client']); ?>
+	                        	<button class="btn btn-info btn-mini generateFullBill<?= $value['client'] ?>" data-client_data="#<?= $client['c_id'] ?><br><b><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?></b><br><?= $client['mobile'] ?><br><?= $client['add1'] ?><br><?= $this->general_model->_get_area($client['area'])['name'] ?>,<?= $this->general_model->_get_city($client['city'])['name'] ?>,<?= $this->general_model->_get_district($client['district'])['name'] ?>,<?= $this->general_model->_get_state($client['state'])['name'] ?><br><br>" onclick="generateMultipleBill('<?= $value['client'] ?>');">		Generate Full Bill
+	                        	</button>
+	                        </th>
 	                        <th class="text-center">#</th>
 	                        <th>Service</th>
 	                        <th class="text-right">Price</th>
 	                        <th>Client</th>
 	                        <th class="text-center">Status</th>
 	                        <th class="text-center">Importance</th>
-	                        <th class="text-center">
-	                        	<?php $client = $this->general_model->_get_client($value['client']); ?>
-	                        	<button class="btn btn-info btn-mini generateFullBill<?= $value['client'] ?>" data-client_data="#<?= $client['c_id'] ?><br><b><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?></b><br><?= $client['mobile'] ?><br><?= $client['add1'] ?><br><?= $this->general_model->_get_area($client['area'])['name'] ?>,<?= $this->general_model->_get_city($client['city'])['name'] ?>,<?= $this->general_model->_get_district($client['district'])['name'] ?>,<?= $this->general_model->_get_state($client['state'])['name'] ?><br><br>" onclick="generateMultipleBill('<?= $value['client'] ?>');">		Generate Full Bill
-	                        	</button>
-	                        </th>
 	                    </tr>
 	                </thead>
 	                <tbody>
@@ -48,17 +48,18 @@
 	                                    </label>
 	                                </div>
 	                            </td>
+	                            <td class="text-center">
+	                            	<?php if($cvalue['status'] == 3){ ?>
+	                            		<button class="btn btn-info btn-mini generateBill" data-client_data="#<?= $client['c_id'] ?><br><b><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?></b><br><?= $client['mobile'] ?><br><?= $client['add1'] ?><br><?= $this->general_model->_get_area($client['area'])['name'] ?>,<?= $this->general_model->_get_city($client['city'])['name'] ?>,<?= $this->general_model->_get_district($client['district'])['name'] ?>,<?= $this->general_model->_get_state($client['state'])['name'] ?><br><br>" data-job="<?= $cvalue['id'] ?>">Generate Bill</button>
+	                            	<?php } ?>
+	                            </td>
 	            				<td class="text-center"><?= $cvalue['job_id'] ?></td>
 	            				<td><?= $this->general_model->_get_service($cvalue['service'])['name'] ?></td>
 	            				<td class="text-right"><?= $cvalue['price'] ?></td>
 	                            <td><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?></td>
 	                            <td class="text-center" id="status-<?= $cvalue['id'] ?>"><?= getjobStatus($cvalue['status']) ?></td>
 	                            <td class="text-center"><?= $cvalue['importance'] ?></td>
-	                            <td class="text-center">
-	                            	<?php if($cvalue['status'] == 3){ ?>
-	                            		<button class="btn btn-info btn-mini generateBill" data-client_data="#<?= $client['c_id'] ?><br><b><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?></b><br><?= $client['mobile'] ?><br><?= $client['add1'] ?><br><?= $this->general_model->_get_area($client['area'])['name'] ?>,<?= $this->general_model->_get_city($client['city'])['name'] ?>,<?= $this->general_model->_get_district($client['district'])['name'] ?>,<?= $this->general_model->_get_state($client['state'])['name'] ?><br><br>" data-job="<?= $cvalue['id'] ?>">Generate Bill</button>
-	                            	<?php } ?>
-	                            </td>
+	                            
 	            			</tr>
 						<?php } ?>	
 

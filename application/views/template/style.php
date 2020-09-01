@@ -2,8 +2,11 @@
 	/*::-webkit-scrollbar {
 	display: none;
 	}*/
-	th, td {
+	/*th, td {
 	    white-space: normal;
+	}*/
+	.td-big{
+		white-space: normal;
 	}
 	.notifyMy li{
 		padding: 2px 5px;

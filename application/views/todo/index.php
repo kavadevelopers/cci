@@ -23,8 +23,6 @@
                     <tr>
                         <th class="text-center">Date</th>
                         <th>Remarks</th>
-                        <th>For</th>
-                        <th>From</th>
                         <th class="text-center">Action</th>
                     </tr>
                 </thead>
@@ -36,8 +34,6 @@
                                 <?= get_from_to($value['ftime'],$value['ttime']) ?>        
                             </td>
                             <td><?= nl2br($value['remarks']) ?></td>
-                            <td><?= $this->general_model->_get_user($value['to'])['name'] ?></td>
-                            <td><?= $this->general_model->_get_user($value['from'])['name'] ?></td>
                             <td class="text-center">
                                 <button class="btn btn-primary btn-mini edit-todo" data-id="<?= $value['id'] ?>" data-remarks="<?= $value['remarks'] ?>" data-date="<?= vd($value['date']) ?>" data-ftime="<?= $value['ftime'] ?>" data-ttime="<?= $value['ttime'] ?>" title="Delete">
                                     <i class="fa fa-pencil"></i>

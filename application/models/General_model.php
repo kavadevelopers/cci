@@ -497,6 +497,7 @@ class General_model extends CI_Model
 	public function getToDo()
 	{
 		$myId = get_user()['id'];
+		$this->db->limit(10);
 		$this->db->order_by('date','asc');
 		$this->db->group_start();
 			$this->db->where('to',$myId);
@@ -530,11 +531,11 @@ class General_model extends CI_Model
 		if($odebit > $ocredit){
 			$tra = $this->db->order_by('id','desc')->get_where('transaction',['client' => $client_id,'type' => invoice()])->row_array();
 			$days = daysBeetweenDates($tra['date']);
-			return [number_format($odebit - $ocredit,2),$days];
+			return [($odebit - $ocredit),$days];
 		}else if($odebit < $ocredit){
 			$tra = $this->db->order_by('id','desc')->get_where('transaction',['client' => $client_id,'type' => payment()])->row_array();
 			$days = daysBeetweenDates($tra['date']);
-			return [number_format($odebit - $ocredit ,2),$days];
+			return [($odebit - $ocredit ),$days];
 		}else{
 			return [0,0];
 		}
@@ -571,17 +572,24 @@ class General_model extends CI_Model
 
 	public function pastThDaysPendingPayment()
 	{
-		$this->db->select_sum('total');
-    	$this->db->where('date >=' , date('Y-m-d', strtotime('-30 days')));
-    	$this->db->where('date <=' , date("Y-m-d"));
-    	return  $this->db->get('invoice')->row()->total;
+		$clients = $this->db->get('client')->result_array();
+		$total = 0;
+		foreach ($clients as $key => $value) {
+			if(30 <= $this->general_model->getOutStandingClient($value['id'])[1]){
+				$total += $this->general_model->getOutStandingClient($value['id'])[0];
+			}
+		}
+		return $total;
 	}
 
 	public function pastDaysPendingPayment()
 	{
-		$this->db->select_sum('total');
-    	$this->db->from('invoice');
-    	return  $this->db->get()->row()->total;
+		$clients = $this->db->get('client')->result_array();
+		$total = 0;
+		foreach ($clients as $key => $value) {
+			$total += $this->general_model->getOutStandingClient($value['id'])[0];
+		}
+		return $total;
 	}
 
 	public function pendingForPaymentClient()
@@ -640,6 +648,133 @@ class General_model extends CI_Model
 		}
 		else{
 			return ['d',$debit - $credit];
+		}
+	}
+
+	public function getUserLeadByRange($id,$type)
+	{
+		if($type == 'today'){
+			return $this->db->get_where('leads',['date' => date('Y-m-d'),'owner' => $id])->num_rows();
+		}else if($type == 'month'){
+			return $this->db->get_where('leads',['date >=' => date('Y-m-01'),'date <=' => date('Y-m-t'),'owner' => $id])->num_rows();
+		}else if($type == 'total_active'){
+			return $this->db->get_where('leads',['owner' => $id,'dump' => '','status' => '0'])->num_rows();
+		}else if($type == 'total_converted'){
+			return $this->db->get_where('leads',['owner' => $id,'dump' => '','status >' => '0'])->num_rows();
+		}else if($type == 'total_dump'){
+			return $this->db->get_where('leads',['owner' => $id,'dump' => 'yes'])->num_rows();
+		}else{
+			return $this->db->get_where('leads',['owner' => $id])->num_rows();
+		}
+	}
+
+	public function getSourceLeadByRange($id,$type)
+	{
+		if($type == 'today'){
+			return $this->db->get_where('leads',['date' => date('Y-m-d'),'source' => $id])->num_rows();
+		}else if($type == 'month'){
+			return $this->db->get_where('leads',['date >=' => date('Y-m-01'),'date <=' => date('Y-m-t'),'source' => $id])->num_rows();
+		}else if($type == 'total_active'){
+			return $this->db->get_where('leads',['source' => $id,'dump' => '','status' => '0'])->num_rows();
+		}else if($type == 'total_converted'){
+			return $this->db->get_where('leads',['source' => $id,'dump' => '','status >' => '0'])->num_rows();
+		}else if($type == 'total_dump'){
+			return $this->db->get_where('leads',['source' => $id,'dump' => 'yes'])->num_rows();
+		}else{
+			return $this->db->get_where('leads',['source' => $id])->num_rows();
+		}
+	}
+
+	public function getParentClient($id)
+	{
+		return $this->db->get_where('grouping',['child' => $id])->row_array();
+	}
+
+	public function getChildsClient($id)
+	{
+		return $this->db->get_where('grouping',['main' => $id])->result_array();
+	}
+
+	public function getActiveJobByClient($id)
+	{
+		return $this->db->get_where('job',['client' => $id,'status <' => '3'])->row_array();
+	}
+
+	public function getParentClientActiveJob($child)
+	{
+		$parent = $this->getParentClient($child);
+		if($parent){
+			$job = $this->getActiveJobByClient($parent['main']);
+			if($job){
+				return $job;
+			}else{
+				return false;	
+			}
+		}else{
+			return false;
+		}
+	}
+
+	public function getChildClientActiveJob($parent)
+	{
+		$child = $this->getChildsClient($parent);
+		if($child){
+			$job = "";
+			foreach ($child as $key => $value) {
+				if($this->getActiveJobByClient($value['child'])){
+					$job = $this->getActiveJobByClient($value['child']);
+					break;
+				}
+			}
+			if($job != ""){
+				return $job;
+			}else{
+				return false;
+			}
+		}else{
+			return false;
+		}
+	}
+
+	public function getFamilyJob($child)
+	{
+		$parent = $this->getParentClient($child);
+		if($parent){
+			$childs = $this->getChildsClient($parent['main']);
+			$job = "";
+			foreach ($childs as $key => $value) {
+				if($this->getActiveJobByClient($value['child'])){
+					$job = $this->getActiveJobByClient($value['child']);
+					break;
+				}
+			}
+			if($job != ""){
+				return $job;
+			}else{
+				return false;
+			}
+		}else{
+			return false;
+		}	
+	}
+
+	public function getJobAllocationUser($id)
+	{
+		if($this->getActiveJobByClient($id)){
+			return $this->getActiveJobByClient($id)['owner'];
+		}else if($this->getParentClientActiveJob($id)){
+			return $this->getParentClientActiveJob($id)['owner'];
+		}else if($this->getChildClientActiveJob($id)){
+			return $this->getChildClientActiveJob($id)['owner'];
+		}else if($this->getFamilyJob($id)){
+			return $this->getFamilyJob($id)['owner'];
+		}else{
+			$this->db->order_by('rand()');
+		    $this->db->limit(1);
+		    $this->db->where('user_type','2');
+		    $this->db->where('type !=','3');
+		    $this->db->where('df','');
+		    return $this->db->get('user')->row_array()['id'];
 		}
 	}
 }

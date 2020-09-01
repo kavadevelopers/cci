@@ -291,6 +291,11 @@ class Followup extends CI_Controller
 	    redirect(base_url('leads/view/'.$this->input->post('id')));
 	}
 
+	// public function checkAllocation()
+	// {
+	// 	echo $this->general_model->getJobAllocationUser(10);
+	// }
+
 	public function save_newwork()
 	{
 		if($this->input->post('from') != ""){
@@ -338,12 +343,7 @@ class Followup extends CI_Controller
 			$amount = $newWork['price'];
 			$service = $newWork['service'];
 
-			$this->db->order_by('rand()');
-		    $this->db->limit(1);
-		    $this->db->where('user_type','2');
-		    $this->db->where('type !=','3');
-		    $this->db->where('df','');
-		    $user = $this->db->get('user')->row_array();
+			$owner = $this->general_model->getJobAllocationUser($newWork['client']);
 
 		    $data = [
 				'branch'		=> $newWork['branch'],
@@ -352,7 +352,7 @@ class Followup extends CI_Controller
 				'qty'			=> $qty,
 				'client'		=> $newWork['client'],
 				'status'		=> 0,
-				'owner'			=> $user['id'],
+				'owner'			=> $owner,
 				'importance'	=> 'NORMAL',
 				'f_date'		=> null,
 				'f_time'		=> null,

@@ -101,6 +101,7 @@ class Generate_bill extends CI_Controller
 		$this->db->insert('transaction',$data);
 
 		$this->session->set_flashdata('msg', 'Bill Generated');
+		$this->session->set_flashdata('invoice', $inv_id);
 	    redirect(base_url('generate_bill'));
 	}
 
@@ -172,6 +173,7 @@ class Generate_bill extends CI_Controller
 		$this->db->insert('transaction',$data);
 
 		$this->session->set_flashdata('msg', 'Bill Generated');
+		$this->session->set_flashdata('invoice', $inv_id);
 	    redirect(base_url('generate_bill'));
 	}
 

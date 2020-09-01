@@ -24,6 +24,8 @@ class Filters extends CI_Controller
 		$data['nfdate']			= "";
 		$data['fdate']			= "";
 		$data['tdate']			= "";
+		$data['ffdate']			= "";
+		$data['ftdate']			= "";
 		$this->load->theme('filters/lead/index',$data);		
 	}
 
@@ -85,6 +87,14 @@ class Filters extends CI_Controller
 		if($this->input->post('tdate') != ""){
 			$this->db->where('date <=',dd($this->input->post('tdate')));	
 		}		
+
+		if($this->input->post('ffdate') != ""){
+			$this->db->where('next_followup_date >=',dd($this->input->post('ffdate')));	
+		}		
+
+		if($this->input->post('ftdate') != ""){
+			$this->db->where('next_followup_date <=',dd($this->input->post('ftdate')));	
+		}		
 		$this->db->where('df','');	
 
 
@@ -108,6 +118,8 @@ class Filters extends CI_Controller
 		$data['nfdate']			= $this->input->post('nfdate');
 		$data['fdate']			= $this->input->post('fdate');
 		$data['tdate']			= $this->input->post('tdate');
+		$data['ffdate']			= $this->input->post('ffdate');
+		$data['ftdate']			= $this->input->post('ftdate');
 		$this->load->theme('filters/lead/index',$data);
 	}
 

@@ -174,19 +174,19 @@
                                     </div>
                                     <ul class="show-notification profile-notification dropdown-menu" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
                                         <?php if(get_user()['user_type'] == '0'){ ?>
-                                            <li>
-                                                <a href="<?= base_url('setting') ?>" class="dis-block">
+                                            <li style="padding: 0;">
+                                                <a href="<?= base_url('setting') ?>" class="dis-block" style="padding: 0.7em 20px;">
                                                     <i class="feather icon-settings"></i> Settings
                                                 </a>
                                             </li>
                                         <?php } ?>
-                                        <li>
-                                            <a href="<?= base_url('profile') ?>" class="dis-block">
+                                        <li style="padding: 0;">
+                                            <a href="<?= base_url('profile') ?>" class="dis-block" style="padding: 0.7em 20px;">
                                                 <i class="feather icon-user"></i> Profile
                                             </a>
                                         </li>
-                                        <li>
-                                            <a href="<?= base_url('login/logout') ?>" class="dis-block">
+                                        <li style="padding: 0;">
+                                            <a href="<?= base_url('login/logout') ?>" class="dis-block" style="padding: 0.7em 20px;">
                                                 <i class="feather icon-log-out"></i> Logout
                                             </a>
                                         </li>

@@ -162,6 +162,20 @@
 		                            <input name="tdate" type="text" placeholder="To Date" autocomplete="off" class="form-control form-control-sm datepicker" value="<?= $tdate ?>">
 		                        </div>
 		                    </div>
+
+		                    <div class="col-md-3">
+		                        <div class="form-group">
+		                            <label>From Date(Followup)</label> 
+		                            <input name="ffdate" type="text" placeholder="From Date(Followup)" autocomplete="off" class="form-control form-control-sm datepicker" value="<?= $ffdate ?>">
+		                        </div>
+		                    </div>
+
+		                    <div class="col-md-3">
+		                        <div class="form-group">
+		                            <label>To Date(Followup)</label> 
+		                            <input name="ftdate" type="text" placeholder="To Date(Followup)" autocomplete="off" class="form-control form-control-sm datepicker" value="<?= $ftdate ?>">
+		                        </div>
+		                    </div>
 		            	</div>
 	            	</div>
 	            	<div class="card-footer text-right">
@@ -179,7 +193,7 @@
 	<div class="page-body">
 	    <div class="card">
 	        <div class="card-block dt-responsive table-responsive">
-	            <table class="table table-striped table-bordered table-mini" id="res">
+	            <table class="table table-striped table-bordered table-mini table-ndt" id="res">
 	                <thead>
 	                    <tr>
 	                        <th class="text-center">#</th>
