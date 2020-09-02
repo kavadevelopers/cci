@@ -932,3 +932,142 @@
 </div>
 
 
+<div class="modal fade" id="resone_for_dump_model" tabindex="-1" role="dialog" aria-hidden="true">
+    <form method="post" action="<?= base_url('leads/dump') ?>">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Transfer To Dump</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12"> 
+                        <input type="hidden" name="lead" id="dump_model_lead_id" value="">    
+                        <div class="form-group">
+                            <label>Reson Remarks <span class="-req">*</span></label> 
+                            <textarea class="form-control" name="remarks" placeholder="Remarks" required></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Transfer</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal fade" id="add_reimburs_modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <form method="post" action="<?= base_url('reimburs/save') ?>">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Reimbursement</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Select Client <span class="-req">*</span></label> 
+                            <select class="form-control form-control-sm select2n" name="client" required>
+                                <option value="">-- Select --</option>
+                                <?php foreach ($this->general_model->getFilteredClients() as $bkey => $bvalue) { ?>
+                                    <option value="<?= $bvalue['id'] ?>"><?= $bvalue['c_id'] ?> - <?= $bvalue['fname'] ?> <?= $bvalue['mname'] ?> <?= $bvalue['lname'] ?> - <?= $bvalue['mobile'] ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Date <span class="-req">*</span></label> 
+                                    <input name="date" type="text" placeholder="Date" class="form-control form-control-sm datepicker" value="" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Amount <span class="-req">*</span></label> 
+                                    <input type="text" class="form-control form-control-sm decimal-num" name="amount" autocomplete="off" placeholder="Amount" required>   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12"> 
+                        <input type="hidden" name="lead" id="dump_model_lead_id" value="">    
+                        <div class="form-group">
+                            <label>Perticulars <span class="-req">*</span></label> 
+                            <textarea class="form-control" name="remarks" placeholder="Perticulars" required></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal fade" id="edit_reimburs_modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <form method="post" action="<?= base_url('reimburs/update') ?>">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Reimbursement</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Select Client <span class="-req">*</span></label> 
+                            <select class="form-control form-control-sm select2n" name="client" id="editReimbursClient" required>
+                                <option value="">-- Select --</option>
+                                <?php foreach ($this->general_model->getFilteredClients() as $bkey => $bvalue) { ?>
+                                    <option value="<?= $bvalue['id'] ?>"><?= $bvalue['c_id'] ?> - <?= $bvalue['fname'] ?> <?= $bvalue['mname'] ?> <?= $bvalue['lname'] ?> - <?= $bvalue['mobile'] ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Date <span class="-req">*</span></label> 
+                                    <input name="date" type="text" id="editReimbursDate" placeholder="Date" class="form-control form-control-sm datepicker" value="" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Amount <span class="-req">*</span></label> 
+                                    <input type="text" class="form-control form-control-sm decimal-num" id="editReimbursAmount" name="amount" autocomplete="off" placeholder="Amount" required>   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12"> 
+                        <input type="hidden" name="lead" id="dump_model_lead_id" value="">    
+                        <div class="form-group">
+                            <label>Perticulars <span class="-req">*</span></label> 
+                            <textarea class="form-control" name="remarks" id="editReimbursRemarks" placeholder="Perticulars" required></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="id" id="editReimbursId">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+

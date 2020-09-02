@@ -636,7 +636,31 @@
 	                        <div class="row">
 	                        	<div class="col-md-12">
 	                        		<div class="table-responsive">
-
+                                        <div class="col-md-6">
+                                            <h5>Opening Balance</h5>
+                                            <br>
+                                            <form method="post" action="<?= base_url('client/opening_update') ?>">
+                                            <table class="table table-striped table-bordered table-mini">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Opening </th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <input type="text" name="opening" class="form-control form-control-sm minus-decimal-num" placeholder="Amount ex:10000 or -10000" value="<?= $client['opening_balance'] ?>"  required>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <input type="hidden" name="client" value="<?= $client['id'] ?>">
+                                                            <button type="submit" class="btn btn-warning btn-mini">update</button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody> 
+                                            </table>
+                                            </form>
+                                        </div>
                                         <?php $parentGet = $this->db->get_where('grouping',['child' => $client['id']])->row_array() ?>
                                         <?php if($parentGet){ ?>
                                             <div class="col-md-12">

@@ -35,7 +35,7 @@
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label>From Date <span class="-req">*</span></label> 
-                                    <input name="fdate" type="text" placeholder="From Date" autocomplete="off" class="form-control form-control-sm datepicker" value="<?= $fdate ?>">
+                                    <input name="fdate" type="text" placeholder="From Date" autocomplete="off" class="form-control form-control-sm datepicker" value="<?= $fdate ?>" required>
                                 </div>
                             </div>
 

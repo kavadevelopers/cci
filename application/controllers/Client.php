@@ -344,6 +344,39 @@ class Client extends CI_Controller
 	    redirect(base_url('client/view/').$this->input->post('client'));	
 	}
 
+	public function opening_update()
+	{
+		$this->db->where('id',$this->input->post('client'))->update('client',['opening_balance' => $this->input->post('opening')]);
+		$this->db->where('main',0);
+        $this->db->where('client',$this->input->post('client'));
+        $this->db->where('type',opening());
+        $this->db->delete('transaction');
+
+        if($this->input->post('opening') > 0){
+            $data = [
+                'client'    => $this->input->post('client'),
+                'type'      => opening(),
+                'debit'    => $this->input->post('opening'),
+                'main'    => 0,
+                'date'      => date('Y-m-d')
+            ];
+            $this->db->insert('transaction',$data);
+        }
+        else{
+            $data = [
+                'client'    => $this->input->post('client'),
+                'type'      => opening(),
+                'credit'    => abs($this->input->post('opening')),
+                'main'    => 0,
+                'date'      => date('Y-m-d')
+            ];
+            $this->db->insert('transaction',$data);
+        } 
+
+        $this->session->set_flashdata('msg', 'Opening Balance Updated');
+	    redirect(base_url('client/view/').$this->input->post('client'));	
+	}
+
 	public function file_delete()
 	{
 		$data = $this->db->get_where('documents',['id' => $this->input->post('id')])->row_array();

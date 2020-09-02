@@ -366,6 +366,11 @@ class General_model extends CI_Model
 		return $this->db->get_where('payment',['id' => $id])->row_array();
 	}
 
+	public function _get_reimburs($id)
+	{
+		return $this->db->get_where('reimbursement',['id' => $id])->row_array();
+	}
+
 	public function get_new_work($id)
 	{
 		return $this->db->get_where('newjob',['id' => $id])->row_array();

@@ -358,19 +358,11 @@ class Leads extends CI_Controller
 		}
 	}
 
-	public function dump($id = false)
+	public function dump()
 	{
-		if($id){
-			if($this->general_model->get_lead($id)){
-				$this->db->where('id',$id)->update('leads',['dump' => 'yes']);
-				$this->session->set_flashdata('msg', 'Lead Tranfered to Dump');
-	    		redirect(base_url('leads'));			
-			}else{
-				redirect(base_url('leads'));	
-			}
-		}else{
-			redirect(base_url('leads'));
-		}
+		$this->db->where('id',$this->input->post('lead'))->update('leads',['dump' => 'yes','dump_remarks' => $this->input->post('remarks')]);
+		$this->session->set_flashdata('msg', 'Lead Tranfered to Dump');
+		redirect(base_url('leads'));			
 	}
 
 	public function dump_leads()

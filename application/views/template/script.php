@@ -702,6 +702,26 @@
 			});
 		});
 
+		$(document).on('click','.add-reimburs',function(){
+			$('#add_reimburs_modal').modal('show');
+			$('.select2n').select2({
+			    dropdownParent: $('#add_reimburs_modal .modal-content')
+			});
+		});
+
+		$(document).on('click','.edit-reimburs-btn',function(){
+			var _this = $(this);
+			$('#edit_reimburs_modal').modal('show');
+			$('#editReimbursClient').val(_this.data('client'));
+			$('#editReimbursDate').val(_this.data('date'));
+			$('#editReimbursAmount').val(_this.data('amount'));
+			$('#editReimbursRemarks').val(_this.data('remarks'));
+			$('#editReimbursId').val(_this.data('id'));
+			$('.select2n').select2({
+			    dropdownParent: $('#edit_reimburs_modal .modal-content')
+			});
+		});
+
 		$(document).on('keyup','#generateBillQty',function(){
 			if($('#generateBillQty').val() != "" && $('#generateBillPrice').val() != ""){
 				total = parseFloat($('#generateBillQty').val())  * parseFloat($('#generateBillPrice').val());
@@ -820,6 +840,14 @@
 			$('#editToDoRemarks').val(_this.data('remarks'));
 			$('#editToDoId').val(_this.data('id'));
 		});
+
+
+		$(document).on('click','.tranfer-to-dump-lead-btn',function(){
+			var _this = $(this);
+			$('#resone_for_dump_model').modal('show');
+			$('#dump_model_lead_id').val(_this.data('id'));
+		});
+		
 
 		$(document).on('click','.delete-todo',function(){
 			var _this = $(this);

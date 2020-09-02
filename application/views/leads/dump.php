@@ -29,6 +29,7 @@
                         <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){ ?>
                             <th>User</th>
                         <?php } ?>
+                        <th>Remarks</th>
                         <th class="text-center">Action</th>
                     </tr>
                 </thead>
@@ -56,6 +57,7 @@
                                     <br><p><b>Branch</b> : <?= $this->general_model->_get_branch($value['branch'])['name'] ?></p>        
                                 </td>
                             <?php } ?>
+                            <td><?= nl2br($value['dump_remarks']) ?></td>
                             <td class="text-center">
                                 <a href="<?= base_url('leads/view/').$value['id'] ?>" class="btn btn-success btn-mini" title="View">
                                     <i class="fa fa-eye"></i>

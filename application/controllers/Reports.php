@@ -38,6 +38,8 @@ class Reports extends CI_Controller
 		$this->db->group_start();
 		    $this->db->where('type',invoice());
             $this->db->or_where('type',payment());
+            $this->db->or_where('type',reimbursement());
+            $this->db->or_where('type',referal());
 		$this->db->group_end();
 		if($this->input->post('fdate') != ""){
 			$this->db->where('date >=',dd($this->input->post('fdate')));	

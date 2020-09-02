@@ -312,6 +312,9 @@ function vch_no($type,$tra_id)
     }else if($type == "2"){
         $invoice = $CI->db->get_where('payment',['id' => $tra_id])->row_array();
         return '<a href="'.base_url('pdf/receipt/').$invoice['id'].'" target="_blank">'.$invoice['invoice'].'<a>';
+    }else if($type == "5"){
+        $invoice = $CI->db->get_where('reimbursement',['id' => $tra_id])->row_array();
+        return '<a href="'.base_url('pdf/reimburs/').$invoice['id'].'" target="_blank">'.$invoice['id'].'<a>';
     }
 }
 

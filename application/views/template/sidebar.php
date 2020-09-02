@@ -178,6 +178,14 @@
                                     <span class="pcoded-mtext">Receipt</span>
                                 </a>
                             </li>
+                            <?php if($this->session->userdata('user_type') != "3"){ ?>
+                                <li class="<?= menu(1,["reimburs"])[0]; ?>">
+                                    <a href="<?= base_url('reimburs') ?>">
+                                        <span class="pcoded-micon"><i class="fa fa-money"></i></span>
+                                        <span class="pcoded-mtext">Reimbursement</span>
+                                    </a>
+                                </li>
+                            <?php } ?>
                         </ul>
                     </li>
                 </ul>
