@@ -214,15 +214,27 @@
                                                 </tr>
                                                 <tr>
                                                     <th scope="row">Industry</th>
-                                                    <td><?= $this->general_model->_get_industry($client['industry'])['name'] ?></td>
+                                                    <td>
+                                                        <?php foreach (explode(",", $client['industry']) as $inkey => $invalue) { ?>
+                                                            <?= $this->general_model->_get_industry($invalue)['name'] ?><br>
+                                                        <?php } ?>
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <th scope="row">Sub Industry</th>
-                                                    <td><?= $this->general_model->_get_subindustry($client['sub_industry'])['name'] ?></td>
+                                                    <td>
+                                                        <?php foreach (explode(",", $client['sub_industry']) as $inkey => $invalue) { ?>
+                                                            <?= $this->general_model->_get_subindustry($invalue)['name'] ?><br>
+                                                        <?php } ?>
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <th scope="row">Industry Remarks</th>
-                                                    <td><?= nl2br($client['ind_remarks']) ?></td>
+                                                    <td>
+                                                        <?php foreach (explode(",", $client['ind_remarks']) as $inkey => $invalue) { ?>
+                                                            <?= nl2br($invalue) ?>    <br>
+                                                        <?php } ?>
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <th scope="row">Created By</th>
@@ -249,7 +261,7 @@
                                                     <td><?= nl2br($client['goal']) ?></td>
                                                 </tr>
                                                 <tr>
-                                                    <th scope="row">Special Quotation</th>
+                                                    <th scope="row">Special Remarks</th>
                                                     <td><?= nl2br($client['quotation']) ?></td>
                                                 </tr>
                                                 <tr>

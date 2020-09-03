@@ -372,8 +372,8 @@
 
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label>Special Quotation</label> 
-                                    <textarea name="quotation" type="text" placeholder="Special Quotation" class="form-control form-control-sm" value="" ></textarea>
+                                    <label>Special Remarks</label> 
+                                    <textarea name="quotation" type="text" placeholder="Special Remarks" class="form-control form-control-sm" value="" ></textarea>
                                 </div>
                             </div>
 

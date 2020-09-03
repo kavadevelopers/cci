@@ -57,18 +57,17 @@ class Import_model extends CI_Model
 	public function getNotRequired($str)
 	{
 		if($str != "" || $str != null || $str){
-			return $str;
+			return strtoupper($str);
 		}else{
 			return "";
 		}
 	}
 
-
 	public function getClientStatus($str)
 	{
 		if($str == "ACTIVE"){
 			return "0";
-		}else if($str == "IN-ACTIVE"){
+		}else if($str == "INACTIVE"){
 			return "8";
 		}else if($str == "CANCELED"){
 			return "9";
