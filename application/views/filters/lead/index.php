@@ -204,6 +204,7 @@
 	                        <th class="text-center">Contact</th>
 	                        <th class="">Services</th>
 	                        <th class="text-center">Next Followup Date</th>
+	                        <th class="text-center">Lead Type</th>
 	                        <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){ ?>
 	                            <th>User</th>
 	                        <?php } ?>
@@ -237,6 +238,15 @@
 	                            <td class="text-center" id="fdate-<?= $value['id'] ?>">
 	                                <?= vd($value['next_followup_date']) ?>
 	                                <?= get_from_to($value['tfrom'],$value['tto']) ?>
+	                            </td>
+	                            <td class="text-center">
+	                            	<?php if($value['dump'] == "yes"){ ?>
+	                            		Dump
+	                            	<?php }else if($value['status'] > 0){ ?>
+	                            		Converted
+	                            	<?php }else{ ?>
+	                            		Active
+	                            	<?php } ?>
 	                            </td>
 	                            <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){ ?>
 	                                <td>

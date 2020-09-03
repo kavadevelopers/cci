@@ -156,18 +156,17 @@ class Followup extends CI_Controller
 
 			$lead = $this->general_model->_get_lead($this->input->post('id'));
 
+			$this->db->limit(1);
+		    $this->db->where('user_type','2');
+		    $this->db->where('type !=','3');
+		    $this->db->where('df','');
+			$this->db->order_by('rand()');
+		    $user = $this->db->get('user')->row_array();
 
 			foreach (json_decode($lead['services']) as $key => $value) {
 				$qty = 1;
 				$amount = $value[1];
 				$service = $value[0];
-
-			    $this->db->limit(1);
-			    $this->db->where('user_type','2');
-			    $this->db->where('type !=','3');
-			    $this->db->where('df','');
-				$this->db->order_by('rand()');
-			    $user = $this->db->get('user')->row_array();
 
 			    $data = [
 					'branch'		=> $lead['branch'],
@@ -252,19 +251,17 @@ class Followup extends CI_Controller
 			$clientId = $this->db->insert_id();
 
 			$lead = $this->general_model->_get_lead($this->input->post('id'));
-
+			$this->db->order_by('rand()');
+		    $this->db->limit(1);
+		    $this->db->where('user_type','2');
+		    $this->db->where('type !=','3');
+		    $this->db->where('df','');
+		    $user = $this->db->get('user')->row_array();
 
 			foreach (json_decode($lead['services']) as $key => $value) {
 				$qty = 1;
 				$amount = $value[1];
 				$service = $value[0];
-
-				$this->db->order_by('rand()');
-			    $this->db->limit(1);
-			    $this->db->where('user_type','2');
-			    $this->db->where('type !=','3');
-			    $this->db->where('df','');
-			    $user = $this->db->get('user')->row_array();
 
 			    $data = [
 					'branch'		=> $lead['branch'],
@@ -339,29 +336,29 @@ class Followup extends CI_Controller
 
 		if($cus == 1){
 			$newWork = $this->db->get_where('newjob',['id' => $this->input->post('id')])->row_array();
-			$qty = 1;
-			$amount = $newWork['price'];
-			$service = $newWork['service'];
-
 			$owner = $this->general_model->getJobAllocationUser($newWork['client']);
-
-		    $data = [
-				'branch'		=> $newWork['branch'],
-				'service'		=> $service,
-				'price'			=> $amount,
-				'qty'			=> $qty,
-				'client'		=> $newWork['client'],
-				'status'		=> 0,
-				'owner'			=> $owner,
-				'importance'	=> 'NORMAL',
-				'f_date'		=> null,
-				'f_time'		=> null,
-				'created_by'	=> get_user()['id'],
-				'created_at'		=> date('Y-m-d H:i:s')
-			];
-			$this->db->insert('job',$data);
-			$job_id = $this->db->insert_id();
-			$this->db->where('id',$job_id)->update('job',['job_id' => "JOB_".$job_id]);	
+			foreach (json_decode($newWork['service']) as $key => $value) {
+				$qty = 1;
+				$amount = $value[1];
+				$service = $value[0];
+			    $data = [
+					'branch'		=> $newWork['branch'],
+					'service'		=> $service,
+					'price'			=> $amount,
+					'qty'			=> $qty,
+					'client'		=> $newWork['client'],
+					'status'		=> 0,
+					'owner'			=> $owner,
+					'importance'	=> 'NORMAL',
+					'f_date'		=> null,
+					'f_time'		=> null,
+					'created_by'	=> get_user()['id'],
+					'created_at'		=> date('Y-m-d H:i:s')
+				];
+				$this->db->insert('job',$data);
+				$job_id = $this->db->insert_id();
+				$this->db->where('id',$job_id)->update('job',['job_id' => "JOB_".$job_id]);	
+			}
 		}
 
 		$this->session->set_flashdata('msg', 'Followup Added');
@@ -621,7 +618,7 @@ class Followup extends CI_Controller
 			}			
 		}
 
-		if(get_user()['user_type'] == "3"){
+		if(get_user()['user_type'] == "3" || get_user()['user_type'] == "0"){
 			$this->db->where('owner',get_user()['id']);
 			$this->db->where('fstatus',0);
 			$this->db->where('status',0);

@@ -72,8 +72,54 @@
 				$('.service-body').append(textbox);
 				$('.select2').select2();
 				$('.select2-container').addClass('m-t2');
-				textbox = '<input type="text" name="amount[]" class="form-control form-control-sm decimal-num mobile-key-up m-t2" autocomplete="off" placeholder="Amount" >';
+				textbox = '<input type="text" name="amount[]" class="form-control form-control-sm decimal-num m-t2" autocomplete="off" placeholder="Amount" >';
 				$('.amount-body').append(textbox);
+			}
+		});	
+
+		$(document).on('change','.service-change-newwork', function(){
+			if($(this).val() != ""){
+				$('.amount-body-newwork').children().eq(($(this).index() / 2)).val($(this).val().split("-")[1]);
+			}else{
+				$('.amount-body-newwork').children().eq(($(this).index() / 2)).val("");
+			}
+			if($('.service-body-newwork select').last().val() != ""){
+				textbox = '<select class="form-control form-control-sm service-change-newwork m-t2 select2n" name="service[]">';
+					textbox += '<option value="">-- Select Service --</option>';
+					textbox += '<?php foreach ($this->general_model->get_services() as $sekey => $sevalue) { ?>';
+					textbox += '<option value="<?= $sevalue['id'] ?>-<?=$sevalue['price']?>"><?= $sevalue['name'] ?></option>';
+					textbox += '<?php } ?>';	                    					
+				textbox += '</select>';	                    					        				
+				$('.service-body-newwork').append(textbox);
+				$('.select2n').select2({
+				    dropdownParent: $('#addNewFollowupJobModel .modal-content')
+				});
+				$('.select2-container').addClass('m-t2');
+				textbox = '<input type="text" name="price[]" class="form-control form-control-sm decimal-num m-t2" autocomplete="off" placeholder="Amount" >';
+				$('.amount-body-newwork').append(textbox);
+			}
+		});	
+
+		$(document).on('change','.service-change-edtnewwork', function(){
+			if($(this).val() != ""){
+				$('.amount-body-edtnewwork').children().eq(($(this).index() / 2)).val($(this).val().split("-")[1]);
+			}else{
+				$('.amount-body-edtnewwork').children().eq(($(this).index() / 2)).val("");
+			}
+			if($('.service-body-edtnewwork select').last().val() != ""){
+				textbox = '<select class="form-control form-control-sm service-change-edtnewwork m-t2 select2n" name="service[]">';
+					textbox += '<option value="">-- Select Service --</option>';
+					textbox += '<?php foreach ($this->general_model->get_services() as $sekey => $sevalue) { ?>';
+					textbox += '<option value="<?= $sevalue['id'] ?>-<?=$sevalue['price']?>"><?= $sevalue['name'] ?></option>';
+					textbox += '<?php } ?>';	                    					
+				textbox += '</select>';	                    					        				
+				$('.service-body-edtnewwork').append(textbox);
+				$('.select2n').select2({
+				    dropdownParent: $('#editNewFollowupJobModel .modal-content')
+				});
+				$('.select2-container').addClass('m-t2');
+				textbox = '<input type="text" name="price[]" class="form-control form-control-sm decimal-num m-t2" autocomplete="off" placeholder="Amount" >';
+				$('.amount-body-edtnewwork').append(textbox);
 			}
 		});	
 
@@ -95,7 +141,7 @@
 				$('.cus-service-body').append(textbox);
 				$('.cus-service-change').select2();
 				$('.select2-container').addClass('m-t2');
-				textbox = '<input type="text" name="amount[]" class="form-control form-control-sm decimal-num mobile-key-up m-t2" autocomplete="off" placeholder="Amount" >';
+				textbox = '<input type="text" name="amount[]" class="form-control form-control-sm decimal-num m-t2" autocomplete="off" placeholder="Amount" >';
 				$('.cus-amount-body').append(textbox);
 
 				textbox = '<input type="text" name="qty[]" class="form-control form-control-sm numbers m-t2" value="" autocomplete="off" placeholder="Quantity">';
@@ -902,6 +948,7 @@
 			    dropdownParent: $('#editNewFollowupJobModel .modal-content')
 			});
 			$('#editNewFollowupJobModel').modal('show');
+			$('.service-body-edtnewwork .select2-container').addClass('m-t2');  
 		});
 
 		$('#addNewFollowupJob').click(function(event) {

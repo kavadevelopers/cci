@@ -110,7 +110,7 @@
 	                    	<h5>To Do List</h5>
 	                    </div>
 	                    <div class="col-md-6 text-right">
-				            <button class="btn btn-primary btn-sm" type="button" id="addTodo">
+				            <button class="btn btn-primary btn-sm btn-mini" type="button" id="addTodo">
 				                <i class="fa fa-plus"></i> Add
 				            </button>
 				        </div>
@@ -254,6 +254,11 @@
 			                    <div class="col-md-6">
 			                    	<h5>Other Task</h5>
 			                    </div>
+			                    <div class="col-md-6 text-right">
+						            <button class="btn btn-primary btn-sm btn-mini" type="button" id="addTask">
+						                <i class="fa fa-plus"></i> Add
+						            </button>
+						        </div>
 					        </div>
 		                </div>
 		                <div class="card-block dt-responsive table-responsive">

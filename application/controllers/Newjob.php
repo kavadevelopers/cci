@@ -17,6 +17,17 @@ class Newjob extends CI_Controller
 
 	public function save()
 	{
+
+
+		$services = [];
+		foreach ($this->input->post('service') as $key => $value) {
+			if($value != ''){
+				$services[] = [explode('-',$value)[0],$this->input->post('price')[$key]];
+			}
+		}
+
+		$service = json_encode($services);
+
 		if($this->input->post('from') != ""){
 			$from = timeConverter($this->input->post('from'));
 		}else{
@@ -38,8 +49,8 @@ class Newjob extends CI_Controller
 		$data = [
 			'branch'	=> $this->input->post('branch'),
 			'client'	=> $this->input->post('client'),
-			'service'	=> explode('-',$this->input->post('service'))[0],
-			'price'		=> $this->input->post('price'),
+			'service'	=> $service,
+			'price'		=> 0,
 			'owner'		=> get_user()['id'],
 			'fdate'		=> $date,
 			'from'		=> $from,
@@ -88,10 +99,19 @@ class Newjob extends CI_Controller
 
 	public function update()
 	{
+
+		$services = [];
+		foreach ($this->input->post('service') as $key => $value) {
+			if($value != ''){
+				$services[] = [explode('-',$value)[0],$this->input->post('price')[$key]];
+			}
+		}
+
+
 		$data = [
 			'client'	=> $this->input->post('client'),
-			'service'	=> explode('-',$this->input->post('service'))[0],
-			'price'		=> $this->input->post('price'),
+			'service'	=> json_encode($services),
+			'price'		=> 0,
 			'remarks'	=> $this->input->post('remarks')
 		];
 

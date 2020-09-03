@@ -123,7 +123,9 @@
                                 <label class="col-sm-2 col-form-label">Service</label>
                                 <div class="col-sm-10">
                                     <p class="view-p-kava">
-                                        <?= $this->general_model->_get_service($job['service'])['name'] ?> - <?= rs().$job['price'] ?>
+                                         <?php foreach (json_decode($job['service']) as $skey => $svalue) { ?>
+                                            <?= $this->general_model->_get_service($svalue[0])['name'] ?> - <?= rs().$svalue[1] ?><br>
+                                        <?php } ?>
                                     </p>
                                 </div>
                             </div>
@@ -256,18 +258,33 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Select Service <span class="-req">*</span></label> 
-                                <select class="form-control form-control-sm select2n serviceToPrice" name="service" required>
-                                    <option value="">-- Select Service --</option>
-                                    <?php foreach ($this->general_model->get_services() as $sekey => $sevalue) { ?> 
-                                        <option value="<?= $sevalue['id'] ?>-<?= $sevalue['price'] ?>" <?= selected($sevalue['id'],$job['service']) ?>><?= $sevalue['name'] ?></option>
+                                <div class="service-body-edtnewwork">
+                                    <?php foreach (json_decode($job['service']) as $key => $value) { ?>
+                                        <select class="form-control form-control-sm select2n service-change-edtnewwork m-t2" name="service[]" <?= $key == '0'?'required':'' ?>>
+                                            <option value="">-- Select Service --</option>
+                                            <?php foreach ($this->general_model->get_services() as $sekey => $sevalue) { ?> 
+                                                <option value="<?= $sevalue['id'] ?>-<?= $sevalue['price'] ?>" <?= selected($sevalue['id'],$value[0]) ?>><?= $sevalue['name'] ?></option>
+                                            <?php } ?>
+                                        </select>   
                                     <?php } ?>
-                                </select>   
+                                    <select class="form-control form-control-sm select2n service-change-edtnewwork" name="service[]">
+                                        <option value="">-- Select Service --</option>
+                                        <?php foreach ($this->general_model->get_services() as $sekey => $sevalue) { ?> 
+                                            <option value="<?= $sevalue['id'] ?>-<?= $sevalue['price'] ?>"><?= $sevalue['name'] ?></option>
+                                        <?php } ?>
+                                    </select>   
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Price <span class="-req">*</span></label> 
-                                <input type="text" class="form-control form-control-sm decimal-num serviewFromPrice" name="price" autocomplete="off" placeholder="Price" value="<?= $job['price']; ?>" required>   
+                                <div class="amount-body-edtnewwork">
+                                    <?php foreach (json_decode($job['service']) as $key => $value) { ?>
+                                        <input type="text" class="form-control form-control-sm decimal-num m-t2" name="price[]" autocomplete="off" placeholder="Price" value="<?= $value[1] ?>" <?= $key == '0'?'required':'' ?>>   
+                                    <?php } ?>
+                                    <input type="text" class="form-control form-control-sm decimal-num m-t2" name="price[]" autocomplete="off" placeholder="Price">
+                                </div>   
                             </div>
                         </div>
                         <div class="col-md-12">

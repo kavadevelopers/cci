@@ -37,8 +37,16 @@
                         <?php $client = $this->general_model->_get_client($value['client']); ?>
                         <tr>
                             <td class="text-center">#NEW_WORK_<?= $value['id'] ?></td>
-                            <td id="jobService<?= $value['id'] ?>"><?= $this->general_model->_get_service($value['service'])['name'] ?></td>
-                            <td class="text-right" id=""><?= $value['price'] ?></td>
+                            <td>
+                                <?php foreach (json_decode($value['service']) as $skey => $svalue) { ?>
+                                    <?= $this->general_model->_get_service($svalue[0])['name'] ?><br>
+                                <?php } ?>
+                            </td>
+                            <td class="text-right">
+                                <?php foreach (json_decode($value['service']) as $skey => $svalue) { ?>
+                                    <?= $svalue[1] ?><br>
+                                <?php } ?>
+                            </td>
                             <td>
                                 #<?= $client['c_id'] ?> <br><b><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?></b> <?= $client['firm'] != ""?'<br>'.$client['firm'] :'' ?> <br><small><?= $client['mobile'] ?></small>
                             </td>

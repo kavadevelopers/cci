@@ -754,8 +754,7 @@
                                     <label>For <span class="-req">*</span></label> 
                                     <select class="form-control form-control-sm select2n" name="owner" required>
                                         <option value="">-- Select --</option>
-                                        <option value="<?= get_user()['id'] ?>" selected>Me</option>
-                                        <?php foreach ($this->general_model->get_todo_users() as $bkey => $bvalue) { ?>
+                                        <?php foreach ($this->general_model->get_job_owners() as $bkey => $bvalue) { ?>
                                             <option value="<?= $bvalue['id'] ?>"><?= $bvalue['name'] ?> - <?= getRole($bvalue['user_type']) ?> - <?= _user_type($bvalue['id']) ?></option>
                                         <?php } ?>
                                     </select>
@@ -900,18 +899,22 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Select Service <span class="-req">*</span></label> 
-                                <select class="form-control form-control-sm select2n" id="serviceJobFollowupNew" name="service" required>
-                                    <option value="">-- Select Service --</option>
-                                    <?php foreach ($this->general_model->get_services() as $sekey => $sevalue) { ?> 
-                                        <option value="<?= $sevalue['id'] ?>-<?= $sevalue['price'] ?>"><?= $sevalue['name'] ?></option>
-                                    <?php } ?>
-                                </select>   
+                                <div class="service-body-newwork">
+                                    <select class="form-control form-control-sm select2n service-change-newwork" name="service[]" required>
+                                        <option value="">-- Select Service --</option>
+                                        <?php foreach ($this->general_model->get_services() as $sekey => $sevalue) { ?> 
+                                            <option value="<?= $sevalue['id'] ?>-<?= $sevalue['price'] ?>"><?= $sevalue['name'] ?></option>
+                                        <?php } ?>
+                                    </select>   
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Price <span class="-req">*</span></label> 
-                                <input type="text" id="servicePriceJobFollowupNew" class="form-control form-control-sm decimal-num" name="price" autocomplete="off" placeholder="Price" required>   
+                                <div class="amount-body-newwork">
+                                    <input type="text" class="form-control form-control-sm decimal-num" name="price[]" autocomplete="off" placeholder="price" required>   
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-12">

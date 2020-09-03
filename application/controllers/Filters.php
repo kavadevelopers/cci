@@ -74,6 +74,7 @@ class Filters extends CI_Controller
 			$this->db->where('status !=','0');	
 		}else if($this->input->post('type') == "active"){
 			$this->db->where('status','0');	
+			$this->db->where('dump','');	
 		}	
 
 		if($this->input->post('nfdate') != ""){
