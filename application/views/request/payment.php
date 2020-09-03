@@ -21,7 +21,7 @@
                     <tr>
                         <th class="text-center">#</th>
                         <th class="text-center">Date</th>
-                        <th>Customer Name</th>
+                        <th>Client Name</th>
                         <th class="text-right">Amount</th>
                         <th>Remarks</th>
                         <th class="text-center">Approved</th>

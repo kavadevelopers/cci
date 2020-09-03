@@ -380,7 +380,7 @@ class General_model extends CI_Model
 	{
 		$myId = get_user()['id'];
 		$myBranch = get_user()['branch'];
-		if(get_user()['user_type'] == 0){
+		if(get_user()['user_type'] == 0 || get_user()['user_type'] == 3){
 			$this->db->order_by('status','asc');
 			return $this->db->get_where('job',['status <' => 3])->result_array();
 		}else if(get_user()['user_type'] == 1){
@@ -412,7 +412,7 @@ class General_model extends CI_Model
 	{
 		$myId = get_user()['id'];
 		$myBranch = get_user()['branch'];
-		if(get_user()['user_type'] == 0){
+		if(get_user()['user_type'] == 0 || get_user()['user_type'] == 3){
 			$this->db->order_by('status','asc');
 			return $this->db->get_where('job',['status' => 3])->result_array();
 		}else if(get_user()['user_type'] == 1){
@@ -444,7 +444,7 @@ class General_model extends CI_Model
 	{
 		$myId = get_user()['id'];
 		$myBranch = get_user()['branch'];
-		if(get_user()['user_type'] == 0){
+		if(get_user()['user_type'] == 0 || get_user()['user_type'] == 3){
 			$this->db->order_by('status','asc');
 			return $this->db->get_where('job',['status' => 4])->result_array();
 		}else if(get_user()['user_type'] == 1){

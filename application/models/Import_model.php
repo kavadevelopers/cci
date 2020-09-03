@@ -56,7 +56,7 @@ class Import_model extends CI_Model
 
 	public function getNotRequired($str)
 	{
-		if($str){
+		if($str != "" || $str != null || $str){
 			return $str;
 		}else{
 			return "";

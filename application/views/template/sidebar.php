@@ -65,7 +65,7 @@
                         </li>
                     </ul>
                 <?php } ?>
-                <?php if($this->session->userdata('user_type') == "3"){ ?>
+                <?php if($this->session->userdata('user_type') == "3" || $this->session->userdata('user_type') == "0"){ ?>
                     <ul class="pcoded-item pcoded-left-item">
                         <li class="<?= menu(1,["newjob"])[0]; ?>">
                             <a href="<?= base_url('newjob') ?>">
@@ -112,7 +112,8 @@
                     </li>
                 </ul>
 
-                <?php if($this->session->userdata('user_type') != "3"){ ?>
+                <?php if(get_user()['user_type'] == "0" || get_user()['user_type'] == "1" || get_user()['user_type'] == "2" || (get_user()['user_type'] == "3" && get_user()['type'] == "4")){ ?>
+
                     <ul class="pcoded-item pcoded-left-item">
                         <li class="pcoded-hasmenu <?= menu(1,["job"])[2]; ?>">
                             <a href="javascript:void(0)">

@@ -998,8 +998,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12"> 
-                        <input type="hidden" name="lead" id="dump_model_lead_id" value="">    
+                    <div class="col-md-12">    
                         <div class="form-group">
                             <label>Perticulars <span class="-req">*</span></label> 
                             <textarea class="form-control" name="remarks" placeholder="Perticulars" required></textarea>
@@ -1054,7 +1053,6 @@
                         </div>
                     </div>
                     <div class="col-md-12"> 
-                        <input type="hidden" name="lead" id="dump_model_lead_id" value="">    
                         <div class="form-group">
                             <label>Perticulars <span class="-req">*</span></label> 
                             <textarea class="form-control" name="remarks" id="editReimbursRemarks" placeholder="Perticulars" required></textarea>

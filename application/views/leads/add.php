@@ -252,8 +252,8 @@
 		                    </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label>Special Quotation</label> 
-                                    <input name="special_quote" type="text" placeholder="Special Quotation" class="form-control form-control-sm" value="<?= set_value('special_quote'); ?>">
+                                    <label>Special Remarks</label> 
+                                    <input name="special_quote" type="text" placeholder="Special Remarks" class="form-control form-control-sm" value="<?= set_value('special_quote'); ?>">
                                     <?= form_error('special_quote') ?>
                                 </div>
                             </div>

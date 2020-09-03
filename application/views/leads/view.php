@@ -143,7 +143,7 @@
                     <div class="row kava-bottom-border">
                         <div class="col-md-6">
                             <div class="form-group row kava-form-group">
-                                <label class="col-sm-5 col-form-label">Special Quotation</label>
+                                <label class="col-sm-5 col-form-label">Special Remarks</label>
                                 <div class="col-sm-7">
                                     <p class="view-p-kava"><?= $lead['quotation'] ?></p>
                                 </div>
