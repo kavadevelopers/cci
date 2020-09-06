@@ -24,6 +24,11 @@ class Import_model extends CI_Model
 		return $this->db->get_where('client_type',['name' => $str])->row_array();
 	}
 
+	public function getClientByPanCard($str)
+	{
+		return $this->db->get_where('client',['pan' => $str])->num_rows();
+	}
+
 	public function getArea($str)
 	{
 		return $this->db->get_where('areas',['name' => $str])->row_array();

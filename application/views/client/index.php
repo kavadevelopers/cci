@@ -60,12 +60,17 @@
                                 <a href="<?= base_url('client/view/').$value['id'] ?>" class="btn btn-primary btn-mini" title="View">
                                     <i class="fa fa-eye"></i>
                                 </a>
-                                <a href="<?= base_url('client/cancel/').$value['id'] ?>" class="btn btn-danger btn-mini" title="Transfer To Cancel">
-                                    <i class="fa fa-ban"></i>
-                                </a>
-                                <a href="<?= base_url('client/in_activate/').$value['id'] ?>" class="btn btn-warning btn-mini" title="Transfer To In Active">
-                                    <i class="fa fa-toggle-off"></i>
-                                </a>
+                                <?php if(get_user()['user_type'] == 0){ ?>
+                                    <a href="<?= base_url('client/cancel/').$value['id'] ?>" onclick="return confirm('Are you sure you want to tranfer?')" class="btn btn-danger btn-mini" title="Transfer To Cancel">
+                                        <i class="fa fa-ban"></i>
+                                    </a>
+                                    <a href="<?= base_url('client/in_activate/').$value['id'] ?>" onclick="return confirm('Are you sure you want to tranfer?')" class="btn btn-warning btn-mini" title="Transfer To InActive">
+                                        <i class="fa fa-toggle-off"></i>
+                                    </a>
+                                    <a href="<?= base_url('client/delete/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete" title="Delete">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                <?php } ?>
                             </td>
                         </tr>
                     <?php } ?>

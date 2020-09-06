@@ -38,6 +38,8 @@ class Importexport extends CI_Controller
 				unset($sheetData[1]);
 				unset($sheetData[2]);
 				unset($sheetData[3]);
+
+
 				$errorRows = 0; $importedRows = 0; 
 				foreach ($sheetData as $key => $value) {
 
@@ -51,7 +53,7 @@ class Importexport extends CI_Controller
 					if($value[6] == ""){ $error++; $errorString .= "COLUMN-G CLIENT TYPE IS REQUIRED ,";}else{ if(!$this->import_model->getClientType($value[6])){ $error++; $errorString .= "COLUMN-G PLEASE ENTER VALID CLIENT TYPE ,";} }
 
 					if($value[8] == ""){ $error++; $errorString .= "COLUMN-I MOBILE NO. IS REQUIRED ,";}
-					if($value[10] == ""){ $error++; $errorString .= "COLUMN-K PAN NO. IS REQUIRED ,";}else if( strlen($value[10]) != "10" ){ $error++; $errorString .= "COLUMN-K PLEASE ENTER VALID PAN NO. ,"; }
+					if($value[10] == ""){ $error++; $errorString .= "COLUMN-K PAN NO. IS REQUIRED ,";}else if( strlen($value[10]) != "10" ){ $error++; $errorString .= "COLUMN-K PLEASE ENTER VALID PAN NO. ,"; }else if($this->import_model->getClientByPanCard($value[10])){ $error++; $errorString .= "COLUMN-K PAN NO. ALREADY EXISTS.. ,"; }
 					if($value[11] == ""){ $error++; $errorString .= "COLUMN-L DOB IS REQUIRED ,";}
 					if($this->import_model->getClientStatus($value[12]) == "1"){ $error++; $errorString .= "COLUMN-M PLEASE ENTER VALID CLIENT STATUS ,";}
 					if($value[13] == ""){ $error++; $errorString .= "COLUMN-N ADDRESS 1 IS REQUIRED ,";}

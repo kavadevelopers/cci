@@ -3,7 +3,18 @@
         <div class="col-md-6">
             <div class="page-header-title">
                 <div class="d-inline">
-                    <h4>#<?= $client['c_id'] ?> - <?= $client['fname'] .' '.$client['mname'].' '.$client['lname'] ?></h4> 
+                    <h4>
+                        #<?= $client['c_id'] ?> - <?= $client['fname'] .' '.$client['mname'].' '.$client['lname'] ?> 
+                        <?php if($client['status'] == 0){ ?>
+                            <span class="pcoded-badge label label-success">ACTIVE</span>
+                        <?php } ?>
+                        <?php if($client['status'] == 8){ ?>
+                            <span class="pcoded-badge label label-warning">INACTIVE</span>
+                        <?php } ?>
+                        <?php if($client['status'] == 9){ ?>
+                            <span class="pcoded-badge label label-danger">CANCELED</span>
+                        <?php } ?>
+                    </h4> 
                 </div>
             </div>
         </div>
@@ -215,25 +226,28 @@
                                                 <tr>
                                                     <th scope="row">Industry</th>
                                                     <td>
-                                                        <?php foreach (explode(",", $client['industry']) as $inkey => $invalue) { ?>
-                                                            <?= $this->general_model->_get_industry($invalue)['name'] ?><br>
+                                                        <?php $str ="";  foreach (explode(",", $client['industry']) as $inkey => $invalue) { ?>
+                                                            <?php $str.= $this->general_model->_get_industry($invalue)['name'].' ,<br>'; ?>
                                                         <?php } ?>
+                                                        <?= rtrim($str,',<br>'); ?>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <th scope="row">Sub Industry</th>
                                                     <td>
-                                                        <?php foreach (explode(",", $client['sub_industry']) as $inkey => $invalue) { ?>
-                                                            <?= $this->general_model->_get_subindustry($invalue)['name'] ?><br>
+                                                        <?php $str =""; foreach (explode(",", $client['sub_industry']) as $inkey => $invalue) { ?>
+                                                            <?php $str.= $this->general_model->_get_subindustry($invalue)['name'].' ,<br>'; ?>
                                                         <?php } ?>
+                                                        <?= rtrim($str,',<br>'); ?>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <th scope="row">Industry Remarks</th>
                                                     <td>
-                                                        <?php foreach (explode(",", $client['ind_remarks']) as $inkey => $invalue) { ?>
-                                                            <?= nl2br($invalue) ?>    <br>
+                                                        <?php $str =""; foreach (explode(",", $client['ind_remarks']) as $inkey => $invalue) { ?>
+                                                            <?php $str.= nl2br($invalue).' ,<br>'; ?>
                                                         <?php } ?>
+                                                        <?= rtrim($str,',<br>'); ?>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -250,19 +264,19 @@
                                             <tbody>
                                                 <tr>
                                                     <th scope="row">Profile Introduction</th>
-                                                    <td><?= nl2br($client['profile_intro']) ?></td>
+                                                    <td class="td-big"><?= nl2br($client['profile_intro']) ?></td>
                                                 </tr>
                                                 <tr>
                                                     <th scope="row">Actual Turnover & Stock & Other</th>
-                                                    <td><?= nl2br($client['turnover_notes']) ?></td>
+                                                    <td class="td-big"><?= nl2br($client['turnover_notes']) ?></td>
                                                 </tr>
                                                 <tr>
                                                     <th scope="row">Future Specific Goal</th>
-                                                    <td><?= nl2br($client['goal']) ?></td>
+                                                    <td class="td-big"><?= nl2br($client['goal']) ?></td>
                                                 </tr>
                                                 <tr>
                                                     <th scope="row">Special Remarks</th>
-                                                    <td><?= nl2br($client['quotation']) ?></td>
+                                                    <td class="td-big"><?= nl2br($client['quotation']) ?></td>
                                                 </tr>
                                                 <tr>
                                                     <th scope="row">Created At</th>

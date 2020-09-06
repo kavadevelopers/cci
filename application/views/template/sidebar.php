@@ -99,7 +99,7 @@
                             <li class="<?= menu(2,["in_active"])[0]; ?>">
                                 <a href="<?= base_url('client/in_active') ?>">
                                     <span class="pcoded-micon"><i class="fa fa-user"></i></span>
-                                    <span class="pcoded-mtext">In-Active</span>
+                                    <span class="pcoded-mtext">InActive</span>
                                 </a>
                             </li>
                             <li class="<?= menu(2,["canceled"])[0]; ?>">

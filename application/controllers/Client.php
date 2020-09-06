@@ -217,13 +217,28 @@ class Client extends CI_Controller
 		}
 	}
 
+	public function delete($id = false)
+	{
+		if($id){
+			if($this->general_model->_get_client($id)){
+				$this->db->where('id',$id)->delete('client');
+				$this->session->set_flashdata('msg', 'Client Deleted');
+	    		redirect(base_url('client'));
+			}else{
+				redirect(base_url('client'));			
+			}
+		}else{
+			redirect(base_url('client'));
+		}
+	}
+
 	public function cancel($id = false)
 	{
 		if($id){
 			if($this->general_model->_get_client($id)){
 				$this->db->where('id',$id);
 				$this->db->update('client',['status' => 9]);
-				$this->session->set_flashdata('msg', 'Client Cancel Success');
+				$this->session->set_flashdata('msg', 'Client Transfered To Cancel');
 	    		redirect(base_url('client'));
 			}else{
 				redirect(base_url('client'));			
@@ -239,7 +254,7 @@ class Client extends CI_Controller
 			if($this->general_model->_get_client($id)){
 				$this->db->where('id',$id);
 				$this->db->update('client',['status' => 8]);
-				$this->session->set_flashdata('msg', 'Client In Activated');
+				$this->session->set_flashdata('msg', 'Client Transfered To InActive');
 	    		redirect(base_url('client'));
 			}else{
 				redirect(base_url('client'));			

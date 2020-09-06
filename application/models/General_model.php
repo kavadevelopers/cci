@@ -290,6 +290,20 @@ class General_model extends CI_Model
 		return $this->db->get_where('documents',['sub_folder'	=> $folder,'client' => $client])->result_array();
 	}
 
+	public function getUnPaidClient()
+	{
+		$this->db->select('id');
+		$client = $this->db->get_where('client',['status' => '0'])->result_array();
+		$clients = [];
+		foreach ($client as $key => $value) {
+			$outstanding = $this->general_model->getOutStandingClient($value['id'])[0];
+			if(floatval($outstanding) > 0){
+				array_push($clients, $value['id']);
+			}
+		}
+		return $clients;
+	}
+
 	public function get_clients()
 	{
 		if(get_user()['user_type'] == 0){

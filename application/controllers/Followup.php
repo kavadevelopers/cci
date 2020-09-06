@@ -36,23 +36,10 @@ class Followup extends CI_Controller
 
 	public function payment()
 	{
-		$from = "";$to = "";
-		if($this->input->post('from') && $this->input->post('from') != ""){
-			$this->db->where('date >=',dd($this->input->post('from')));
-			$from = $this->input->post('from');
-		}
-
-		if($this->input->post('to') && $this->input->post('to') != ""){
-			$this->db->where('date <=',dd($this->input->post('to')));	
-			$to = $this->input->post('to');
-		}
-		$this->db->where('done','0');
+		pre_print($this->general_model->getUnPaidClient());
 		$data['_title']			= "Payment Followup";
-		$data['invoices'] = $this->db->get('invoice')->result_array();
-		$data['from']		= $from;
-		$data['to']			= $to;
+		$data['client']			= $this->general_model->getUnPaidClient();
 		$this->load->theme('followup/payment',$data);
-
 	}
 
 	public function get()
