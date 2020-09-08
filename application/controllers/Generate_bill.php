@@ -85,7 +85,7 @@ class Generate_bill extends CI_Controller
 			];
 			$this->db->insert('followup',$data);
 
-			$this->db->where('id',$value['id'])->update('job',['f_date' => $date,'f_time'	=> null,'t_time' => null,'status'	=> 4]);
+			$this->db->where('id',$value['id'])->update('job',['f_date' => $date,'f_time'	=> null,'t_time' => null,'status'	=> 4,'updated_date' => date('Y-m-d')]);
 		}
 
 		$this->db->where('id',$inv_id)->update('invoice',['total' => $total]);
@@ -158,7 +158,7 @@ class Generate_bill extends CI_Controller
 		];
 		$this->db->insert('followup',$data);
 
-		$this->db->where('id',$jobs['id'])->update('job',['f_date' => $date,'f_time'	=> null,'t_time' => null,'status'	=> 4]);
+		$this->db->where('id',$jobs['id'])->update('job',['f_date' => $date,'f_time'	=> null,'t_time' => null,'status'	=> 4,'updated_date' => date('Y-m-d')]);
 
 		$this->db->where('id',$inv_id)->update('invoice',['total' => $total]);
 

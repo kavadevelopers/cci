@@ -377,7 +377,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-3" style="display: none;">
                                 <div class="form-group">
                                     <label>Referal Code</label> 
                                     <input name="refered_by" type="text" placeholder="Referal Code" class="form-control form-control-sm" value="<?= set_value('refered_by',$lead['referal_code']); ?>">
@@ -423,7 +423,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-3" style="display: none;">
                                 <div class="form-group">
                                     <label>Amount </label> 
                                     <div class="cus-amount-body">

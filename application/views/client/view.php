@@ -51,12 +51,14 @@
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#addInfoTab" role="tab">Additional Information</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#invoiceTab" role="tab">Invoices</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#paymentsTab" role="tab">Payments</a>
-                        </li>
+                        <?php if(get_user()['user_type'] != "2"){ ?>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#invoiceTab" role="tab">Invoices</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#paymentsTab" role="tab">Payments</a>
+                            </li>
+                        <?php } ?>
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#activeJobTab" role="tab">Active Jobs</a>
                         </li>
@@ -309,7 +311,7 @@
 							                        <?php $nclient = $this->general_model->_get_client($value['client']); ?>
 							                        <tr>
 							                            <td class="text-center"><?= $value['inv'] ?></td>
-							                            <td class="text-center"><?= vd($value['date']) ?></td>
+							                            <td class="text-center" data-sort="<?= _sortdate($value['date']) ?>"><?= vd($value['date']) ?></td>
 							                            <td><?= $nclient['fname'] ?> <?= $nclient['mname'] ?> <?= $nclient['lname'] ?></td>
 							                            <td class="text-right"><?= $value['total'] ?></td>
 							                            <td class="text-center">
@@ -354,7 +356,7 @@
 							                        <?php $nclient = $this->general_model->_get_client($value['client']); ?>
 							                        <tr>
 							                            <td class="text-center"><?= $value['invoice'] ?></td>
-							                            <td class="text-center"><?= vd($value['date']) ?></td>
+							                            <td class="text-center" data-sort="<?= _sortdate($value['date']) ?>"><?= vd($value['date']) ?></td>
 							                            <td><?= $nclient['fname'] ?> <?= $nclient['mname'] ?> <?= $nclient['lname'] ?></td>
 							                            <td class="text-right"><?= $value['amount'] ?></td>
 							                            <td><?= nl2br($value['remarks']) ?></td>
@@ -393,13 +395,16 @@
 	                        			<table class="table table-striped table-bordered table-mini table-dt">
 							                <thead>
 							                    <tr>
-							                        <th class="text-center">#</th>
+                                                    <th class="text-center">#</th>
+							                        <th class="text-center">Date</th>
 							                        <th>Service</th>
-							                        <th class="text-right">Price</th>
+                                                    <?php if(get_user()['user_type'] != 2){ ?>
+							                             <th class="text-right">Price</th>
+                                                    <?php } ?>
 							                        <th>Client</th>
 							                        <th class="text-center">Status</th>
-							                        <th class="text-center">Importance</th>
-                                                    <th class="text-center">Next Followup Date</th>
+							                        <th class="text-center">Imp</th>
+                                                    <th class="text-center">NFD</th>
                                                     <th>Owner</th>
                                                     <?php if(get_user()['user_type'] != 3){ ?>
 							                             <th class="text-center">Action</th>
@@ -411,13 +416,16 @@
 							                    <?php foreach ($jobs as $key => $value) { ?>
 							                        <?php $nclient = $this->general_model->_get_client($value['client']); ?>
 							                        <tr>
-							                            <td class="text-center"><?= $value['job_id'] ?></td>
+                                                        <td class="text-center"><?= $value['job_id'] ?></td>
+							                            <td class="text-center" data-sort="<?= _sortdate($value['created_at']) ?>"><?= vd($value['created_at']) ?></td>
 							                            <td id="jobService<?= $value['id'] ?>"><?= $this->general_model->_get_service($value['service'])['name'] ?></td>
-							                            <td class="text-right" id="jobPrice<?= $value['id'] ?>"><?= $value['price'] ?></td>
+                                                        <?php if(get_user()['user_type'] != 2){ ?>
+							                                 <td class="text-right" id="jobPrice<?= $value['id'] ?>"><?= $value['price'] ?></td>
+                                                        <?php } ?>
 							                            <td><?= $nclient['fname'] ?> <?= $nclient['mname'] ?> <?= $nclient['lname'] ?></td>
 							                            <td class="text-center" id="status-<?= $value['id'] ?>"><?= getjobStatus($value['status']) ?></td>
-							                            <td class="text-center" id="jobImportance<?= $value['id'] ?>"><?= $value['importance'] ?></td>
-                                                        <td class="text-center" id="jobFolllowupDate<?= $value['id'] ?>"><?= $value['f_date'] != null?vd($value['f_date']):'NA'; ?><?= get_from_to($value['f_time'],$value['t_time']) ?></td>
+							                            <td class="text-center" id="jobImportance<?= $value['id'] ?>"><?= $value['importance'][0] ?></td>
+                                                        <td class="text-center" id="jobFolllowupDate<?= $value['id'] ?>" data-sort="<?= _sortdate($value['f_date'] != null?vd($value['f_date']):'') ?>"><?= $value['f_date'] != null?vd($value['f_date']):'NA'; ?><?= get_from_to($value['f_time'],$value['t_time']) ?></td>
                                                         <td><?= $this->general_model->_get_user($value['owner'])['name'] ?></td>
                                                         <?php if(get_user()['user_type'] != 3){ ?>
     							                            <td class="text-center">
@@ -448,11 +456,14 @@
 							                <thead>
 							                    <tr>
 							                        <th class="text-center">#</th>
+							                        <th class="text-center">Completed<br>Date</th>
 							                        <th>Service</th>
-							                        <th class="text-right">Price</th>
+                                                    <?php if(get_user()['user_type'] != 2){ ?>
+							                             <th class="text-right">Price</th>
+                                                    <?php } ?>
 							                        <th>Client</th>
-							                        <th class="text-center">Status</th>
-							                        <th class="text-center">Importance</th>
+                                                    <th class="text-center">Status</th>
+							                        <th class="text-center">Imp</th>
                                                     <th>Owner</th>
                                                     <?php if(get_user()['user_type'] != 3){ ?>
 							                             <th class="text-center">Action</th>  
@@ -465,11 +476,16 @@
 							                        <?php $nclient = $this->general_model->_get_client($value['client']); ?>
 							                        <tr>
 							                            <td class="text-center"><?= $value['job_id'] ?></td>
+                                                        <td class="text-center" data-sort="<?= _sortdate($value['updated_date']) ?>">
+                                                            <?= vd($value['updated_date']) ?>
+                                                        </td>
 							                            <td><?= $this->general_model->_get_service($value['service'])['name'] ?></td>
-							                            <td class="text-right"><?= $value['price'] ?></td>
+                                                        <?php if(get_user()['user_type'] != 2){ ?>
+							                                 <td class="text-right"><?= $value['price'] ?></td>
+                                                        <?php } ?>
 							                            <td><?= $nclient['fname'] ?> <?= $nclient['mname'] ?> <?= $nclient['lname'] ?></td>
 							                            <td class="text-center" id="status-<?= $value['id'] ?>"><?= getjobStatus($value['status']) ?></td>
-							                            <td class="text-center"><?= $value['importance'] ?></td>
+							                            <td class="text-center"><?= $value['importance'][0] ?></td>
                                                         <td><?= $this->general_model->_get_user($value['owner'])['name'] ?></td>
                                                         <?php if(get_user()['user_type'] != 3){ ?>
     							                            <td class="text-center">
@@ -654,31 +670,54 @@
 	                        <div class="row">
 	                        	<div class="col-md-12">
 	                        		<div class="table-responsive">
-                                        <div class="col-md-6">
-                                            <h5>Opening Balance</h5>
-                                            <br>
-                                            <form method="post" action="<?= base_url('client/opening_update') ?>">
-                                            <table class="table table-striped table-bordered table-mini">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Opening </th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>
-                                                            <input type="text" name="opening" class="form-control form-control-sm minus-decimal-num" placeholder="Amount ex:10000 or -10000" value="<?= $client['opening_balance'] ?>"  required>
-                                                        </td>
-                                                        <td class="text-center">
-                                                            <input type="hidden" name="client" value="<?= $client['id'] ?>">
-                                                            <button type="submit" class="btn btn-warning btn-mini">update</button>
-                                                        </td>
-                                                    </tr>
-                                                </tbody> 
-                                            </table>
-                                            </form>
-                                        </div>
+                                        <?php if(get_user()['user_type'] == "0"){ ?>
+                                            <div class="col-md-6">
+                                                <h5>Opening Balance</h5>
+                                                <br>
+                                                <form method="post" action="<?= base_url('client/opening_update') ?>">
+                                                <table class="table table-striped table-bordered table-mini">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Opening </th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <input type="text" name="opening" class="form-control form-control-sm minus-decimal-num" placeholder="Amount ex:10000 or -10000" value="<?= $client['opening_balance'] ?>"  required>
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <input type="hidden" name="client" value="<?= $client['id'] ?>">
+                                                                <button type="submit" class="btn btn-warning btn-mini">update</button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody> 
+                                                </table>
+                                                </form>
+                                            </div>
+                                        
+                                            <div class="col-md-6">
+                                                <h5>Refered By</h5>
+                                                <br>
+                                                <form method="post" action="<?= base_url('client/referal_by') ?>" id="clientReferalForm">
+                                                    <table class="table table-striped table-bordered table-mini">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    <input type="text" name="new" class="form-control form-control-sm" placeholder="Referal Code" value="<?= $client['refered_by'] ?>"  id="newReferalCodeClient">
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    <input type="hidden" name="client" id="referalClientId" value="<?= $client['id'] ?>">
+                                                                    <input type="hidden" name="old_refered" id="oldReferalCode" value="<?= $client['refered_by'] ?>">
+                                                                    <button type="submit" class="btn btn-warning btn-mini" id="submitReferalForm">update</button>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody> 
+                                                    </table>
+                                                </form>
+                                            </div>
+                                        <?php } ?>
                                         <?php $parentGet = $this->db->get_where('grouping',['child' => $client['id']])->row_array() ?>
                                         <?php if($parentGet){ ?>
                                             <div class="col-md-12">
@@ -749,7 +788,9 @@
     								                			<select class="form-control form-control-sm select2" id="addGroupMain" required>
     							                                    <option value="">-- Select Child Client--</option>
     							                                    <?php foreach ($this->general_model->getFilteredClients() as $bkey => $bvalue) { ?>
+                                                                        <?php if($bvalue['id'] != $client['id']){ ?>
     							                                        <option value="<?= $bvalue['id'] ?>"><?= $bvalue['fname'] ?> <?= $bvalue['mname'] ?> <?= $bvalue['lname'] ?> - <?= $bvalue['mobile'] ?></option>
+                                                                        <?php } ?>
     							                                    <?php } ?>
     							                                </select>
     								                		</td>

@@ -17,7 +17,7 @@
                 <thead>
                     <tr>
                         <th class="text-center">Date</th>
-                        <th class="text-center">Followup Date</th>
+                        <th class="text-center">NFD</th>
                         <th>Client Name</th>
                         <th class="text-center">Mobile</th>
                         <th>Email</th>
@@ -27,8 +27,10 @@
                 <tbody>
                     <?php foreach ($leads as $key => $value) { ?>
                         <tr>
-                            <td class="text-center"><?= vd($value['date']) ?></td>
-                            <td class="text-center"><?= vd($value['next_followup_date']) ?></td>
+                            <td class="text-center" data-sort="<?= _sortdate($value['date']) ?>"><?= vd($value['date']) ?></td>
+                            <td class="text-center" data-sort="<?= _sortdate($value['next_followup_date']) ?>">
+                                <?= vd($value['next_followup_date']) ?>        
+                            </td>
                             <td><?= $value['customer'] ?></td>
                             <td class="text-center">
                                 <?php foreach (explode(",", $value['mobile']) as $mkey => $mvalue) { ?>

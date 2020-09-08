@@ -51,7 +51,7 @@
                                 <?=  $this->general_model->_get_area($value['area'])['name'] ?>, <?= $this->general_model->_get_city($value['city'])['name'] ?>, <?= $this->general_model->_get_district($value['district'])['name'] ?>, <?= $this->general_model->_get_state($value['state'])['name'] ?> <?= $value['pin'] != ''?",".$value['pin']:''; ?>
                             </td>
                             <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){ ?>
-                                <td class="text-center">
+                                <td class="text-center" data-sort="<?= _sortdate($value['created_at']) ?>">
                                     <?= $this->general_model->_get_user($value['created_by'])['name'] ?>
                                     <p class="text-center"><?= _vdatetime($value['created_at']) ?></p>
                                 </td>
@@ -64,7 +64,7 @@
                                     <a href="<?= base_url('client/cancel/').$value['id'] ?>" onclick="return confirm('Are you sure you want to tranfer?')" class="btn btn-danger btn-mini" title="Transfer To Cancel">
                                         <i class="fa fa-ban"></i>
                                     </a>
-                                    <a href="<?= base_url('client/in_activate/').$value['id'] ?>" onclick="return confirm('Are you sure you want to tranfer?')" class="btn btn-warning btn-mini" title="Transfer To InActive">
+                                    <a href="<?= base_url('client/in_activate/').$value['id'] ?>" onclick="return confirm('Are you sure you want to tranfer?')" class="btn btn-warning btn-mini" title="Transfer To Inactive">
                                         <i class="fa fa-toggle-off"></i>
                                     </a>
                                     <a href="<?= base_url('client/delete/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete" title="Delete">

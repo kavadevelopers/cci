@@ -1,4 +1,4 @@
-<div class="page-header">
+    <div class="page-header">
     <div class="row align-items-end">
         <div class="col-md-6">
             <div class="page-header-title">
@@ -29,17 +29,20 @@
                                 <label>
                                     <input type="checkbox" value="1" class="checkAll">
                                     <span class="cr"><i class="cr-icon icofont icofont-ui-check txt-primary"></i></span>
-                                    <span class="text-inverse">All</span>
+                                    <span class="text-inverse"></span>
                                 </label>
                             </div>
                         </th>
                         <?php } ?>
                         <th class="text-center">#</th>
+                        <th class="text-center">Billed<br>Date</th>
                         <th>Service</th>
-                        <th class="text-right">Price</th>
+                        <?php if(get_user()['user_type'] != 2){ ?>
+                            <th class="text-right">Price</th>
+                        <?php } ?>
                         <th>Client</th>
                         <th class="text-center">Status</th>
-                        <th class="text-center">Importance</th>
+                        <th class="text-center">Imp</th>
                         <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1 || get_user()['user_type'] == 3){ ?>
                             <th>Owner</th>
                         <?php } ?>
@@ -63,15 +66,24 @@
                             </td>
                             <?php } ?>
                             <td class="text-center"><?= $value['job_id'] ?></td>
+                            <td class="text-center" data-sort="<?= _sortdate($value['updated_date']) ?>">
+                                <?= vd($value['updated_date']) ?>
+                            </td>
                             <td><?= $this->general_model->_get_service($value['service'])['name'] ?></td>
-                            <td class="text-right"><?= $value['price'] ?></td>
+                            <?php if(get_user()['user_type'] != 2){ ?>
+                                <td class="text-right"><?= $value['price'] ?></td>
+                            <?php } ?>
                             <td>
                                 #<?= $client['c_id'] ?> <br><b><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?></b> <?= $client['firm'] != ""?'<br>'.$client['firm'] :'' ?> <br><small><?= $client['mobile'] ?></small>
                             </td>
                             <td class="text-center" id="status-<?= $value['id'] ?>"><?= getjobStatus($value['status']) ?></td>
-                            <td class="text-center"><?= $value['importance'] ?></td>
+                            <td class="text-center"><?= $value['importance'][0] ?></td>
                             <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1 || get_user()['user_type'] == 3){ ?>
-                                <td><?= $this->general_model->_get_user($value['owner'])['name'] ?></td>
+                                <td><?= $this->general_model->_get_user($value['owner'])['name'] ?>
+                                    <?php if($value['pre_owner'] != ""){ ?>
+                                        <br><b>old</b> : <?= $this->general_model->_get_user($value['pre_owner'])['name'] ?>
+                                    <?php } ?>
+                                </td>
                             <?php } ?>
                             <?php if(get_user()['user_type'] != "3"){ ?>
                             <td class="text-center">

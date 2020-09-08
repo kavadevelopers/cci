@@ -24,6 +24,7 @@ class Branch extends CI_Controller
 	{
 		$this->form_validation->set_error_delimiters('<div class="val-error">', '</div>');
 		$this->form_validation->set_rules('name', 'Name','trim|required');
+		$this->form_validation->set_rules('sname', 'Short Name','trim|required');
 		$this->form_validation->set_rules('code', 'Branch Code','trim|required|callback_check_code');
 		$this->form_validation->set_rules('mobile', 'Mobile','trim|required|regex_match[/^[0-9]{10}$/]|min_length[10]|max_length[10]');
 		$this->form_validation->set_rules('email', 'Email','trim|required|valid_email|xss_clean');
@@ -39,6 +40,7 @@ class Branch extends CI_Controller
 			$data = [
 				'code'		=> $this->input->post('code'),
 				'name'		=> $this->input->post('name'),
+				'sname'		=> $this->input->post('sname'),
 				'mobile'	=> $this->input->post('mobile'),
 				'email'		=> $this->input->post('email'),
 				'address'	=> $this->input->post('address')
@@ -69,6 +71,7 @@ class Branch extends CI_Controller
 	{
 		$this->form_validation->set_error_delimiters('<div class="val-error">', '</div>');
 		$this->form_validation->set_rules('name', 'Name','trim|required');
+		$this->form_validation->set_rules('sname', 'Short Name','trim|required');
 		$this->form_validation->set_rules('code', 'Branch Code','trim|required|callback_check_code_edit');
 		$this->form_validation->set_rules('mobile', 'Mobile','trim|required|regex_match[/^[0-9]{10}$/]|min_length[10]|max_length[10]');
 		$this->form_validation->set_rules('email', 'Email','trim|required|valid_email|xss_clean');
@@ -85,6 +88,7 @@ class Branch extends CI_Controller
 			$data = [
 				'code'		=> $this->input->post('code'),
 				'name'		=> $this->input->post('name'),
+				'sname'		=> $this->input->post('sname'),
 				'mobile'	=> $this->input->post('mobile'),
 				'email'		=> $this->input->post('email'),
 				'address'	=> $this->input->post('address')

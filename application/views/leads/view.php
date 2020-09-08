@@ -16,7 +16,7 @@
                 <a href="<?= base_url('leads/dump_leads') ?>" class="btn btn-danger btn-mini"><i class="fa fa-arrow-left"></i> Back</a>
             <?php } ?>
 
-            <?php if($lead['status'] == "0" && $lead['dump'] == ""){ ?>
+            <?php if(($lead['status'] == "0" || $lead['status'] == "1") && $lead['dump'] == ""){ ?>
                 <a href="<?= base_url('leads') ?>" class="btn btn-danger btn-mini"><i class="fa fa-arrow-left"></i> Back</a>
             <?php } ?>
 

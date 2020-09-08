@@ -29,7 +29,7 @@
                 <tbody>
                     <?php foreach ($todo as $key => $value) { ?>
                         <tr>
-                            <td class="text-center">
+                            <td class="text-center" data-sort="<?= _sortdate($value['date']) ?>">
                                 <?= vd($value['date']) ?>
                                 <?= get_from_to($value['ftime'],$value['ttime']) ?>        
                             </td>

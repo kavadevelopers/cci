@@ -18,11 +18,13 @@
                     <tr>
                         <th class="text-center">#</th>
                         <th>Service</th>
-                        <th class="text-right">Price</th>
+                        <?php if(get_user()['user_type'] != 2){ ?>
+                            <th class="text-right">Price</th>   
+                        <?php } ?>
                         <th>Client</th>
                         <th class="text-center">Status</th>
                         <th class="text-center">Importance</th>
-                        <th class="text-center">Next Followup Date</th>
+                        <th class="text-center">NFD</th>
                         <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){ ?>
                             <th>Owner</th>
                         <?php } ?>
@@ -35,13 +37,15 @@
                         <tr>
                             <td class="text-center"><?= $value['job_id'] ?></td>
                             <td id="jobService<?= $value['id'] ?>"><?= $this->general_model->_get_service($value['service'])['name'] ?></td>
-                            <td class="text-right" id="jobPrice<?= $value['id'] ?>"><?= $value['price'] ?></td>
+                            <?php if(get_user()['user_type'] != 2){ ?>
+                                <td class="text-right" id="jobPrice<?= $value['id'] ?>"><?= $value['price'] ?></td>
+                            <?php } ?>
                             <td>
                                 #<?= $client['c_id'] ?> <br><b><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?></b> <?= $client['firm'] != ""?'<br>'.$client['firm'] :'' ?> <br><small><?= $client['mobile'] ?></small>
                             </td>
                             <td class="text-center" id="status-<?= $value['id'] ?>"><?= getjobStatus($value['status']) ?></td>
                             <td class="text-center" id="jobImportance<?= $value['id'] ?>"><?= $value['importance'] ?></td>
-                            <td class="text-center" id="jobFolllowupDate<?= $value['id'] ?>"><?= $value['f_date'] != null?vd($value['f_date']):'NA'; ?><?= get_from_to($value['f_time'],$value['t_time']) ?></td>
+                            <td class="text-center" id="jobFolllowupDate<?= $value['id'] ?>" data-sort="<?= _sortdate($value['f_date'] != null?vd($value['f_date']):'') ?>"><?= $value['f_date'] != null?vd($value['f_date']):'NA'; ?><?= get_from_to($value['f_time'],$value['t_time']) ?></td>
                             <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){ ?>
                                 <td><?= $this->general_model->_get_user($value['owner'])['name'] ?></td>
                             <?php } ?>

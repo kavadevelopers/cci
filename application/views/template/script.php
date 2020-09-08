@@ -387,6 +387,8 @@
 			$('#jobStatus').val(_this.data('status'));
 			if(_this.data('status') >= 3){
 				$('#hideJobFollowupForm').hide();
+			}else{
+				$('#hideJobFollowupForm').show();
 			}
 			$.ajax({
                 type: "POST",
@@ -713,6 +715,34 @@
             });
 		});
 
+		
+		$(document).on('click','.btn-invoice-edit',function(){
+			var _this = $(this);
+			$.ajax({
+                type: "POST",
+                url : "<?= base_url('invoices/editInvoice'); ?>",
+                data : "id="+_this.data('id'),
+                cache : false,
+                dataType : "json",
+                beforeSend: function() {
+                    _this.attr('disabled','true');
+                    _this.html('<i class="fa fa-circle-o-notch fa-spin"></i> Please Wait');
+                },
+                success: function(out)
+                {
+                	$('#editBillDataServices').html(out['list']);
+                	$('#editInvoiceModal').modal('show');
+                	$('#editInvoiceModalTitle').html(out['title']);
+                	$('#editInvoiceClient').html(out['client']);
+                	$('#editInvoiceRemarks').val(out['remarks']);
+                	$('#editInvoiceModalTotal').val(out['total']);
+                	$('#editInvoiceId').val(_this.data('id'));
+                	_this.removeAttr('disabled');
+                    _this.html('<i class="fa fa-pencil"></i>');
+                }
+            });
+		});
+
 		$('.generateBill').click(function(event) {
 			var _this = $(this);
 			$.ajax({
@@ -855,17 +885,47 @@
                 },
                 success: function(out)
                 {
-                	PNOTY("Group Member Added",'success');  
-                	str = "<tr>";
-                	str += '<td class="text-center">'+out['group']+'</td>';
-                	str += '<td>'+out['name']+'</td>';
-                	str += '<td class="text-center">'+out['relation']+'</td>';
-                	str += '<td class="text-center">'+out['client']+'</td>';
-                	str += '<td>'+out['remarks']+'</td>';
-                	str += "</tr>";
-                	$('#addGroupTbody').append(str);
-                	_this.removeAttr('disabled');
-                    _this.html('<i class="fa fa-plus"></i>');
+                	if(out['return'] == "true"){
+	                	PNOTY("Group Member Added",'success');  
+	                	str = "<tr>";
+	                	str += '<td class="text-center">'+out['group']+'</td>';
+	                	str += '<td>'+out['name']+'</td>';
+	                	str += '<td class="text-center">'+out['relation']+'</td>';
+	                	str += '<td class="text-center">'+out['client']+'</td>';
+	                	str += '<td>'+out['remarks']+'</td>';
+	                	str += "</tr>";
+	                	$('#addGroupTbody').append(str);
+	                	_this.removeAttr('disabled');
+	                    _this.html('<i class="fa fa-plus"></i>');
+	                }else{
+	                	PNOTY("This client is alredy joined another group",'error');  
+	                }
+                }
+            });
+		});
+
+		$('#clientReferalForm').submit(function(event) {
+			event.preventDefault();
+			var _this = $('#submitReferalForm');
+			$.ajax({
+                type: "POST",
+                url : "<?= base_url('client/referal_by'); ?>",
+                data : "client_id="+$('#referalClientId').val()+"&old="+$('#oldReferalCode').val()+"&new="+$('#newReferalCodeClient').val(),
+                cache : false,
+                dataType: "JSON",
+                beforeSend: function() {
+                    _this.attr('disabled','true');
+                    _this.html('<i class="fa fa-circle-o-notch fa-spin"></i> Please Wait');
+                },
+                success: function(out)
+                {
+                	if(out['return'] == "true"){
+	                	PNOTY(out['msg'],'success');  
+	                }else{
+	                	PNOTY(out['msg'],'error');     	
+	                }
+	                _this.removeAttr('disabled');
+	                _this.html('update');
                 }
             });
 		});
@@ -1002,6 +1062,22 @@
 		});
 
 		$('#generateBillsTotal').val(maintotal.toFixed(2));
+	}
+
+	function editInvoiceTotal () {
+		maintotal = 0;
+		$(".editInvoiceDetailId").each(function() {
+			_this = $(this).val();
+		    if($('#editInvoiceQty'+_this).val() != "" && $('#editInvoicePrice'+_this).val() != ""){
+				total = parseFloat($('#editInvoiceQty'+_this).val())  * parseFloat($('#editInvoicePrice'+_this).val());
+				maintotal += total;
+				$('#editInvoiceTotal'+_this).val(total.toFixed(2));
+			}else{
+				$('#editInvoiceTotal'+_this).val(0);
+			}
+		});
+
+		$('#editInvoiceModalTotal').val(maintotal.toFixed(2));
 	}
 
 	function generateMultipleBill (client) {

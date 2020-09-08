@@ -55,9 +55,20 @@
 
     <!--forms-wizard css-->
     <link rel="stylesheet" type="text/css" href="<?= base_url() ?>asset/bower_components/jquery.steps/css/jquery.steps.css">
+
+    <!-- 1. AddChat css -->
+    <link href="<?php echo base_url('asset/addchat/css/addchat.min.css') ?>" rel="stylesheet">
 </head>
 
 <body>
+
+    <!-- 2. AddChat widget -->
+    <div id="addchat_app" 
+        data-baseurl="<?php echo base_url() ?>"
+        data-csrfname="<?php echo $this->security->get_csrf_token_name() ?>"
+        data-csrftoken="<?php echo $this->security->get_csrf_hash() ?>"
+    ></div>
+    
     <!-- Pre-loader start -->
     <div class="theme-loader">
         <div class="ball-scale">

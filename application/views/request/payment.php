@@ -36,7 +36,7 @@
                         <?php $client = $this->general_model->_get_client($value['client']); ?>
                         <tr>
                             <td class="text-center"><?= $value['invoice'] ?></td>
-                            <td class="text-center"><?= vd($value['date']) ?></td>
+                            <td class="text-center" data-sort="<?= _sortdate($value['date']) ?>"><?= vd($value['date']) ?></td>
                             <td>#<?= $client['c_id'] ?> <br><b><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?></b> <?= $client['firm'] != ""?'<br>'.$client['firm'] :'' ?> <br><small><?= $client['mobile'] ?></small></td>
                             <td class="text-right"><?= $value['amount'] ?></td>
                             <td><?= nl2br($value['remarks']) ?></td>

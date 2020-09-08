@@ -22,10 +22,11 @@
                 <thead>
                     <tr>
                         <th class="text-center">#</th>
+                        <th class="text-center ">Date</th>
                         <th>Service</th>
                         <th class="text-right">Price</th>
                         <th>Client</th>
-                        <th class="text-center">Next Followup Date</th>
+                        <th class="text-center">NFD</th>
                         <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){ ?>
                             <th>Owner</th>
                         <?php } ?>
@@ -37,6 +38,7 @@
                         <?php $client = $this->general_model->_get_client($value['client']); ?>
                         <tr>
                             <td class="text-center">#NEW_WORK_<?= $value['id'] ?></td>
+                            <td class="text-center" data-sort="<?= _sortdate($value['created_at']) ?>"><?= vd($value['created_at']) ?></td>
                             <td>
                                 <?php foreach (json_decode($value['service']) as $skey => $svalue) { ?>
                                     <?= $this->general_model->_get_service($svalue[0])['name'] ?><br>
@@ -50,7 +52,7 @@
                             <td>
                                 #<?= $client['c_id'] ?> <br><b><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?></b> <?= $client['firm'] != ""?'<br>'.$client['firm'] :'' ?> <br><small><?= $client['mobile'] ?></small>
                             </td>
-                            <td class="text-center" id=""><?= $value['fdate'] != null?vd($value['fdate']):'NA'; ?><?= get_from_to($value['from'],$value['to']) ?></td>
+                            <td class="text-center" id="" data-sort="<?= _sortdate($value['fdate'] != null?vd($value['fdate']):'') ?>"><?= $value['fdate'] != null?vd($value['fdate']):'NA'; ?><?= get_from_to($value['from'],$value['to']) ?></td>
                             <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){ ?>
                                 <td><?= $this->general_model->_get_user($value['owner'])['name'] ?></td>
                             <?php } ?>

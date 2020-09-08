@@ -59,7 +59,7 @@
                             <?php foreach ($list as $key => $value) { ?>
                                 <tr>
                                     <td><?= $value['remarks'] ?></td>
-                                    <td><?= vd($value['date']) ?></td>
+                                    <td data-sort="<?= _sortdate($value['date']) ?>"><?= vd($value['date']) ?></td>
                                     <td><?= date('m-Y',strtotime($value['dt'])) ?></td>
                                     <td class="text-center">
                                         <a href="<?= base_url('due_date/delete/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete">

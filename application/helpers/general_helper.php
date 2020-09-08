@@ -15,6 +15,15 @@ function _vdatetime($datetime)
 	return date('d-m-Y h:i A',strtotime($datetime));
 }
 
+function _sortdate($datetime)
+{
+    if($datetime!=""){
+        return date('Ymd',strtotime($datetime));
+    }else{
+        return "";
+    }
+}
+
 function vd($date)
 {
     return date('d-m-Y',strtotime($date));

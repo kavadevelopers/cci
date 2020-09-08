@@ -51,7 +51,7 @@
                                 <?=  $this->general_model->_get_area($value['area'])['name'] ?>, <?= $this->general_model->_get_city($value['city'])['name'] ?>, <?= $this->general_model->_get_district($value['district'])['name'] ?>, <?= $this->general_model->_get_state($value['state'])['name'] ?> <?= $value['pin'] != ''?",".$value['pin']:''; ?>
                             </td>
                             <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){ ?>
-                                <td class="text-center">
+                                <td class="text-center" data-sort="<?= _sortdate($value['created_at']) ?>">
                                     <?= $this->general_model->_get_user($value['created_by'])['name'] ?>
                                     <p class="text-center"><?= _vdatetime($value['created_at']) ?></p>
                                 </td>

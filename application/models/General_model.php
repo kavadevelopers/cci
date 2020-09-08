@@ -594,7 +594,19 @@ class General_model extends CI_Model
 		$clients = $this->db->get('client')->result_array();
 		$total = 0;
 		foreach ($clients as $key => $value) {
-			if(30 <= $this->general_model->getOutStandingClient($value['id'])[1]){
+			if(30 < $this->general_model->getOutStandingClient($value['id'])[1]){
+				$total += $this->general_model->getOutStandingClient($value['id'])[0];
+			}
+		}
+		return $total;
+	}
+
+	public function pastNiDaysPendingPayment()
+	{
+		$clients = $this->db->get('client')->result_array();
+		$total = 0;
+		foreach ($clients as $key => $value) {
+			if(90 < $this->general_model->getOutStandingClient($value['id'])[1]){
 				$total += $this->general_model->getOutStandingClient($value['id'])[0];
 			}
 		}

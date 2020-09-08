@@ -99,7 +99,7 @@
                             <li class="<?= menu(2,["in_active"])[0]; ?>">
                                 <a href="<?= base_url('client/in_active') ?>">
                                     <span class="pcoded-micon"><i class="fa fa-user"></i></span>
-                                    <span class="pcoded-mtext">InActive</span>
+                                    <span class="pcoded-mtext">Inactive</span>
                                 </a>
                             </li>
                             <li class="<?= menu(2,["canceled"])[0]; ?>">
@@ -152,44 +152,56 @@
                     
                 <?php } ?>
 
-                <ul class="pcoded-item pcoded-left-item">
-                    <li class="pcoded-hasmenu <?= menu(1,["generate_bill","invoices","payment"])[2]; ?>">
-                        <a href="javascript:void(0)">
-                            <span class="pcoded-micon"><i class="fa fa-newspaper-o"></i></span>
-                            <span class="pcoded-mtext">Billing</span>
-                         </a>   
-                        <ul class="pcoded-submenu">
-                            <?php if($this->session->userdata('user_type') != "3"){ ?>
-                                <li class="<?= menu(1,["generate_bill"])[0]; ?>">
-                                    <a href="<?= base_url('generate_bill') ?>">
-                                        <span class="pcoded-micon"><i class="fa fa-address-card"></i></span>
-                                        <span class="pcoded-mtext">Generate Bill</span>
+                <?php if(get_user()['user_type'] == "0" || get_user()['user_type'] == "1" || (get_user()['user_type'] == "3" && get_user()['type'] == "4")){ ?>
+                    <ul class="pcoded-item pcoded-left-item">
+                        <li class="pcoded-hasmenu <?= menu(1,["generate_bill","invoices","payment"])[2]; ?>">
+                            <a href="javascript:void(0)">
+                                <span class="pcoded-micon"><i class="fa fa-newspaper-o"></i></span>
+                                <span class="pcoded-mtext">Billing</span>
+                             </a>   
+                            <ul class="pcoded-submenu">
+                                <?php if(get_user()['type'] != "4"){ ?>
+                                    <li class="<?= menu(1,["generate_bill"])[0]; ?>">
+                                        <a href="<?= base_url('generate_bill') ?>">
+                                            <span class="pcoded-micon"><i class="fa fa-address-card"></i></span>
+                                            <span class="pcoded-mtext">Generate Bill</span>
+                                        </a>
+                                    </li>
+                                <?php } ?>
+                                <li class="<?= menu(1,["invoices"])[0]; ?>">
+                                    <a href="<?= base_url('invoices') ?>">
+                                        <span class="pcoded-micon"><i class="fa fa-newspaper-o"></i></span>
+                                        <span class="pcoded-mtext">Invoices</span>
                                     </a>
                                 </li>
-                            <?php } ?>
-                            <li class="<?= menu(1,["invoices"])[0]; ?>">
-                                <a href="<?= base_url('invoices') ?>">
-                                    <span class="pcoded-micon"><i class="fa fa-newspaper-o"></i></span>
-                                    <span class="pcoded-mtext">Invoices</span>
-                                </a>
-                            </li>
-                            <li class="<?= menu(1,["payment"])[0]; ?>">
-                                <a href="<?= base_url('payment') ?>">
-                                    <span class="pcoded-micon"><i class="fa fa-money"></i></span>
-                                    <span class="pcoded-mtext">Receipt</span>
-                                </a>
-                            </li>
-                            <?php if($this->session->userdata('user_type') != "3"){ ?>
+                                <li class="<?= menu(1,["payment"])[0]; ?>">
+                                    <a href="<?= base_url('payment') ?>">
+                                        <span class="pcoded-micon"><i class="fa fa-money"></i></span>
+                                        <span class="pcoded-mtext">Receipt</span>
+                                    </a>
+                                </li>
                                 <li class="<?= menu(1,["reimburs"])[0]; ?>">
                                     <a href="<?= base_url('reimburs') ?>">
                                         <span class="pcoded-micon"><i class="fa fa-money"></i></span>
                                         <span class="pcoded-mtext">Reimbursement</span>
                                     </a>
                                 </li>
-                            <?php } ?>
-                        </ul>
-                    </li>
-                </ul>
+                            </ul>
+                        </li>
+                    </ul>
+                <?php } ?>
+
+
+                <?php if(get_user()['user_type'] == "2"){ ?>
+                    <ul class="pcoded-item pcoded-left-item">
+                        <li class="<?= menu(1,["reimburs"])[0]; ?>">
+                            <a href="<?= base_url('reimburs') ?>">
+                                <span class="pcoded-micon"><i class="fa fa-money"></i></span>
+                                <span class="pcoded-mtext">Reimbursement</span>
+                            </a>
+                        </li>
+                    </ul>
+                <?php } ?>
 
                 <ul class="pcoded-item pcoded-left-item">
                     <li class="pcoded-hasmenu <?= menu(1,["followup"])[2]; ?>">
@@ -234,7 +246,7 @@
                     </li>
                 </ul>
 
-                <?php if($this->session->userdata('user_type') == "0"){ ?>
+                <?php if(get_user()['user_type'] == "0" || get_user()['user_type'] == "1" || (get_user()['user_type'] == "2" && get_user()['type'] == "1") || (get_user()['user_type'] == "2" && get_user()['type'] == "2")){ ?>
                     <ul class="pcoded-item pcoded-left-item">
                         <li class="<?= menu(1,["due_date"])[0]; ?>">
                             <a href="<?= base_url('due_date') ?>">
@@ -274,61 +286,65 @@
                 <?php } ?>
 
                 
-                
-
-                <ul class="pcoded-item pcoded-left-item">
-                    <li class="pcoded-hasmenu <?= menu(1,["reports"])[2]; ?>">
-                        <a href="javascript:void(0)">
-                            <span class="pcoded-micon"><i class="fa fa-window-restore"></i></span>
-                            <span class="pcoded-mtext">Reports</span>
-                         </a>   
-                        <ul class="pcoded-submenu">
-                            <li class="<?= menu(2,["ledger"])[0]; ?>">
-                                <a href="<?= base_url('reports/ledger') ?>">
-                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
-                                    <span class="pcoded-mtext">Ledger</span>
-                                </a>
-                            </li>
-                            <li class="<?= menu(2,["task"])[0]; ?>">
-                                <a href="<?= base_url('reports/task') ?>">
-                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
-                                    <span class="pcoded-mtext">Task</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-
-                <ul class="pcoded-item pcoded-left-item">
-                    <li class="pcoded-hasmenu <?= menu(1,["filters"])[2]; ?>">
-                        <a href="javascript:void(0)">
-                            <span class="pcoded-micon"><i class="fa fa-filter"></i></span>
-                            <span class="pcoded-mtext">Filters</span>
-                         </a>   
-                        <ul class="pcoded-submenu">
-                            <li class="<?= menu(2,["lead","lead_result"])[0]; ?>">
-                                <a href="<?= base_url('filters/lead') ?>">
-                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
-                                    <span class="pcoded-mtext">Lead</span>
-                                </a>
-                            </li>
-                            <li class="<?= menu(2,["client","client_result"])[0]; ?>">
-                                <a href="<?= base_url('filters/client') ?>">
-                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
-                                    <span class="pcoded-mtext">Client</span>
-                                </a>
-                            </li>
-                            <li class="<?= menu(2,["invoice","invoice_result"])[0]; ?>">
-                                <a href="<?= base_url('filters/invoice') ?>">
-                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
-                                    <span class="pcoded-mtext">Invoice</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-
                 <?php if($this->session->userdata('user_type') == "0"){ ?>
+                    <ul class="pcoded-item pcoded-left-item">
+                        <li class="pcoded-hasmenu <?= menu(1,["reports"])[2]; ?>">
+                            <a href="javascript:void(0)">
+                                <span class="pcoded-micon"><i class="fa fa-window-restore"></i></span>
+                                <span class="pcoded-mtext">Reports</span>
+                             </a>   
+                            <ul class="pcoded-submenu">
+                                <li class="<?= menu(2,["ledger"])[0]; ?>">
+                                    <a href="<?= base_url('reports/ledger') ?>">
+                                        <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                        <span class="pcoded-mtext">Ledger</span>
+                                    </a>
+                                </li>
+                                <li class="<?= menu(2,["task"])[0]; ?>">
+                                    <a href="<?= base_url('reports/task') ?>">
+                                        <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                        <span class="pcoded-mtext">Task</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                <?php } ?>
+
+                <?php if(get_user()['user_type'] == "0" || get_user()['user_type'] == "1" || get_user()['user_type'] == "2" || (get_user()['user_type'] == "3" && get_user()['type'] == "4")){ ?>
+                    <ul class="pcoded-item pcoded-left-item">
+                        <li class="pcoded-hasmenu <?= menu(1,["filters"])[2]; ?>">
+                            <a href="javascript:void(0)">
+                                <span class="pcoded-micon"><i class="fa fa-filter"></i></span>
+                                <span class="pcoded-mtext">Filters</span>
+                             </a>   
+                            <ul class="pcoded-submenu">
+                                <?php if(get_user()['user_type'] == "0" || get_user()['user_type'] == "1" || (get_user()['user_type'] == "3" && get_user()['type'] == "4")){ ?>
+                                    <li class="<?= menu(2,["lead","lead_result"])[0]; ?>">
+                                        <a href="<?= base_url('filters/lead') ?>">
+                                            <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                            <span class="pcoded-mtext">Lead</span>
+                                        </a>
+                                    </li>
+                                    <li class="<?= menu(2,["invoice","invoice_result"])[0]; ?>">
+                                        <a href="<?= base_url('filters/invoice') ?>">
+                                            <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                            <span class="pcoded-mtext">Invoice</span>
+                                        </a>
+                                    </li>
+                                <?php } ?>
+                                <li class="<?= menu(2,["client","client_result"])[0]; ?>">
+                                    <a href="<?= base_url('filters/client') ?>">
+                                        <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                        <span class="pcoded-mtext">Client</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                <?php } ?>
+
+                <?php if($this->session->userdata('user_type') == "0" || (get_user()['user_type'] == "2" && get_user()['type'] == '1')){ ?>
                     <div class="pcoded-navigatio-lavel">Master's Management</div>
                 <?php } ?>
                 <ul class="pcoded-item pcoded-left-item">
@@ -342,22 +358,24 @@
                             </li>
                         </ul>
                     <?php } ?>
-                    <?php if($this->session->userdata('user_type') == "0"){ ?>
 
+                    <?php if(get_user()['user_type'] == "0"){ ?>
                         <li class="<?= menu(1,["branch"])[0]; ?>">
                             <a href="<?= base_url('branch') ?>">
                                 <span class="pcoded-micon"><i class="fa fa-font-awesome"></i></span>
                                 <span class="pcoded-mtext">Branch</span>
                             </a>
                         </li>
-
+                    <?php } ?>
+                    <?php if(get_user()['user_type'] == "0"){ ?>
                         <li class="<?= menu(1,["company"])[0]; ?>">
                             <a href="<?= base_url('company') ?>">
                                 <span class="pcoded-micon"><i class="fa fa-window-restore"></i></span>
                                 <span class="pcoded-mtext">Company</span>
                             </a>
                         </li>
-
+                    <?php } ?>
+                    <?php if(get_user()['user_type'] == "0"){ ?>
                         <li class="pcoded-hasmenu <?= menu(1,["user"])[2]; ?>">
                             <a href="javascript:void(0)">
                                 <span class="pcoded-micon"><i class="fa fa-users"></i></span>
@@ -388,22 +406,22 @@
 
                             </ul>
                         </li>
-                    
-
+                    <?php } ?>
+                    <?php if(get_user()['user_type'] == "0" || (get_user()['user_type'] == "2" && get_user()['type'] == "1")){ ?>
                         <li class="pcoded-hasmenu <?= menu(1,["industry","subindustry"])[2]; ?>">
                             <a href="javascript:void(0)">
                                 <span class="pcoded-micon"><i class="fa fa-industry"></i></span>
                                 <span class="pcoded-mtext">Industry</span>
                              </a>   
                             <ul class="pcoded-submenu">
-                                
-                                <li class="<?= menu(1,["industry"])[0]; ?>">
-                                    <a href="<?= base_url('industry') ?>">
-                                        <span class="pcoded-micon"><i class="fa fa-list"></i></span>
-                                        <span class="pcoded-mtext">Manage Industry</span>
-                                    </a>
-                                </li>
-
+                                <?php if(get_user()['user_type'] == "0"){ ?>    
+                                    <li class="<?= menu(1,["industry"])[0]; ?>">
+                                        <a href="<?= base_url('industry') ?>">
+                                            <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                            <span class="pcoded-mtext">Manage Industry</span>
+                                        </a>
+                                    </li>
+                                <?php } ?>            
                                 <li class="<?= menu(1,["subindustry"])[0]; ?>">
                                     <a href="<?= base_url('subindustry') ?>">
                                         <span class="pcoded-micon"><i class="fa fa-list"></i></span>
@@ -413,7 +431,8 @@
 
                             </ul>
                         </li>
-
+                    <?php } ?>
+                    <?php if(get_user()['user_type'] == "0" || (get_user()['user_type'] == "2" && get_user()['type'] == "1")){ ?>
                         <li class="pcoded-hasmenu <?= menu(1,["area"])[2]; ?>">
                             <a href="javascript:void(0)">
                                 <span class="pcoded-micon"><i class="fa fa-globe"></i></span>
@@ -450,7 +469,8 @@
                                 </li>
                             </ul>
                         </li>
-
+                    <?php } ?>
+                    <?php if(get_user()['user_type'] == "0"){ ?>  
                         <li class="<?= menu(1,["services"])[0]; ?>">
                             <a href="<?= base_url('services') ?>">
                                 <span class="pcoded-micon"><i class="fa fa-cogs"></i></span>
@@ -497,7 +517,6 @@
                             </li>
                         </ul>
                     <?php } ?>
-
                 </ul>
             </div>
         </nav>

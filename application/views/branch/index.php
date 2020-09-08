@@ -24,6 +24,7 @@
                         <th class="text-center">#</th>
                         <th class="text-center">Branch Code</th>
                         <th>Name</th>
+                        <th class="text-center">Short Name</th>
                         <th class="text-center">Mobile</th>
                         <th>Email</th>
                         <th>Address</th>
@@ -36,6 +37,7 @@
                             <td class="text-center"><?= $key + 1 ?></td>
                             <td class="text-center"><?= $value['code'] ?></td>
                             <td><?= $value['name'] ?></td>
+                            <td class="text-center"><?= $value['sname'] ?></td>
                             <td class="text-center"><?= $value['mobile'] ?></td>
                             <td><?= $value['email'] ?></td>
                             <td><?= nl2br($value['address']) ?></td>

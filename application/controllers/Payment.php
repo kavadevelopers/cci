@@ -91,5 +91,18 @@ class Payment extends CI_Controller
 		$this->session->set_flashdata('msg', 'Payment Deleted');
 	    redirect(base_url('payment'));	
 	}
+
+	public function delete_full($id)
+	{
+		$this->db->where('id',$id);
+		$this->db->delete('payment');
+
+		$this->db->where('type',payment());
+		$this->db->where('main',$id);
+		$this->db->delete('transaction');
+
+		$this->session->set_flashdata('msg', 'Payment Deleted');
+	    redirect(base_url('payment'));	
+	}
 }
 ?>

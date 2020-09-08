@@ -139,13 +139,13 @@ class Client extends CI_Controller
 
 			$rClient = $this->db->get_where('client' ,['c_id' => $this->input->post('refered_by')])->row_array();
 
-			$this->db->where('id',$rClient)->update('client',['referal_amount' => ($rClient->referal_amount + $amount)]);
+			$this->db->where('id',$rClient['id'])->update('client',['referal_amount' => ($rClient['referal_amount'] + $amount)]);
 
 			$rClient = $this->db->get_where('client' ,['c_id' => $this->input->post('refered_by')])->row_array();
 
 
 			if($rClient['itr_amount'] != "0.00"){
-				if( ($rClient['referal_amount'] / 3) == $rClient['itr_amount']){
+				if( ($rClient['referal_amount'] / 3) >= $rClient['itr_amount']){
 					$data = [
 						'type'		=> referal(),
 						'client'	=> $rClient['id'],
@@ -154,46 +154,11 @@ class Client extends CI_Controller
 						'credit'	=> $rClient['itr_amount']
 					];
 					$this->db->insert('transaction',$data);
+
+					$this->db->where('id',$rClient['id'])->update('client',['referal_amount' => ($rClient['referal_amount'] - ($rClient['itr_amount'] * 3))]);
 				}
 			}			
 		}
-
-
-
-		// foreach ($this->input->post('services') as $key => $value) {
-		// 	if($value != ''){
-		// 		$service = explode('-',$value)[0];
-		// 		$price = $this->input->post('amount')[$key];
-		// 		if($this->input->post('qty')[$key] != ""){
-		// 			$qty = $this->input->post('qty')[$key];
-		// 		}else{
-		// 			$qty = 1;
-		// 		}
-				
-		// 		$this->db->order_by('rand()');
-		// 	    $this->db->limit(1);
-		// 	    $this->db->where('user_type','2');
-		// 	    $this->db->where('df','');
-		// 	    $user = $this->db->get('user')->row_array();
-		// 		$data = [
-		// 			'branch'		=> $this->input->post('branch'),
-		// 			'service'		=> $service,
-		// 			'price'			=> $price,
-		// 			'qty'			=> $qty,
-		// 			'client'		=> $this->input->post('client_id'),
-		// 			'status'		=> 0,
-		// 			'owner'			=> $user['id'],
-		// 			'importance'	=> 'NORMAL',
-		// 			'f_date'		=> null,
-		// 			'f_time'		=> null,
-		// 			'created_by'	=> get_user()['id'],
-		// 			'created_at'		=> date('Y-m-d H:i:s')
-		// 		];
-		// 		$this->db->insert('job',$data);
-		// 		$job_id = $this->db->insert_id();
-		// 		$this->db->where('id',$job_id)->update('job',['job_id' => "JOB_".$job_id]);			
-		// 	}
-		// }
 
 		$this->db->where('id',$this->input->post('lead'))->update('leads',['status' => 2]);		
 
@@ -285,23 +250,28 @@ class Client extends CI_Controller
 
 	public function in_active()
 	{
-		$data['_title']		= "In-Active Clients";	
+		$data['_title']		= "Inactive Clients";	
 		$data['client']		= $this->general_model->get_inactive_clients();
 		$this->load->theme('client/in_active',$data);
 	}
 
 	public function add_group()
 	{
-		$data = [
-			'main'		=> $this->input->post('main'),
-			'child'		=> $this->input->post('child'),
-			'relation'		=> strtoupper($this->input->post('relation')),
-			'remarks'		=> $this->input->post('remarks')
-		];
-		$this->db->insert('grouping',$data);
-		$main = $this->general_model->_get_client($this->input->post('main'));
-		$child = $this->general_model->_get_client($this->input->post('child'));
-		echo json_encode(['group' => $main['group'],'name' => $child['fname'].' '.$child['mname'].' '.$child['lname'],'relation' => strtoupper($this->input->post('relation')),'remarks' => nl2br($this->input->post('remarks')),'client' => $child['c_id']]);
+		$childCount = $this->db->get_where('grouping',['child' => $this->input->post('child')])->num_rows();
+		if($childCount == 0){
+			$data = [
+				'main'		=> $this->input->post('main'),
+				'child'		=> $this->input->post('child'),
+				'relation'		=> strtoupper($this->input->post('relation')),
+				'remarks'		=> $this->input->post('remarks')
+			];
+			$this->db->insert('grouping',$data);
+			$main = $this->general_model->_get_client($this->input->post('main'));
+			$child = $this->general_model->_get_client($this->input->post('child'));
+			echo json_encode(['return' => 'true','group' => $main['group'],'name' => $child['fname'].' '.$child['mname'].' '.$child['lname'],'relation' => strtoupper($this->input->post('relation')),'remarks' => nl2br($this->input->post('remarks')),'client' => $child['c_id']]);
+		}else{
+			echo json_encode(['return' => 'fasle']);
+		}
 	}
 
 	public function uploadDoc($id)
@@ -406,10 +376,74 @@ class Client extends CI_Controller
 	{
 		$client = $this->db->get_where('client' ,['pan' => $this->input->post('pan')])->row_array();
 		if($client){
-			if($client['status'] == 0){ $type = "Active"; }else if($client['status'] == 9){ $type = "Canceled"; }else if($client['status'] == 8){ $type = "In-Active"; }
+			if($client['status'] == 0){ $type = "Active"; }else if($client['status'] == 9){ $type = "Canceled"; }else if($client['status'] == 8){ $type = "Inactive"; }
 			echo json_encode(['1','This PAN No. is already exists in '.$type.' Clients']);
 		}else{
 			echo json_encode(['0']);
 		}
+	}
+
+	public function referal_by()
+	{
+		$client = $this->db->get_where('client' ,['c_id' => $this->input->post('new')])->row_array();
+
+
+		if($this->input->post('new') != ""){
+			if($client){
+
+				$old = $this->db->get_where('client' ,['c_id' => $this->input->post('old')])->row_array();
+				if($old){
+					$this->removeOldReferal($this->input->post('client_id'));
+				}
+
+				$this->db->where('id',$this->input->post('client_id'))->update('client',['refered_by' => $this->input->post('new')]);
+
+
+				$this->db->where_in('service',[1,2,3]);
+				$jobs = $this->db->get_where('job' ,['client' => $this->input->post('client_id'),'status <' => 3])->result_array();
+				$amount = 0;
+				foreach ($jobs as $key => $value) {
+					$amount += $value['price'];
+				}
+
+				$rClient = $this->db->get_where('client' ,['c_id' => $this->input->post('new')])->row_array();
+
+				$this->db->where('id',$rClient['id'])->update('client',['referal_amount' => ($rClient['referal_amount'] + $amount)]);
+
+				$rClient = $this->db->get_where('client' ,['c_id' => $this->input->post('new')])->row_array();
+
+
+				if($rClient['itr_amount'] != "0.00"){
+					if( ($rClient['referal_amount'] / 3) >= $rClient['itr_amount']){
+						$data = [
+							'type'		=> referal(),
+							'client'	=> $rClient['id'],
+							'date'		=> date('Y-m-d'),
+							'main'		=> $this->input->post('client_id'),
+							'credit'	=> $rClient['itr_amount']
+						];
+						$this->db->insert('transaction',$data);
+
+						$this->db->where('id',$rClient['id'])->update('client',['referal_amount' => ($rClient['referal_amount'] - ($rClient['itr_amount'] * 3))]);
+					}
+				}	
+				echo json_encode(['return' => 'true','msg' => 'Referal Code Applied.']);
+			}else{
+				echo json_encode(['return' => 'false','msg' => 'Please Enter Valid Referal Code.']);
+			}
+		}else{
+			$old = $this->db->get_where('client' ,['c_id' => $this->input->post('old')])->row_array();
+			if($old){
+				$this->removeOldReferal($this->input->post('client_id'));
+			}
+			echo json_encode(['return' => 'true','msg' => 'Referal Code Updated']);
+		}
+	}
+
+	public function removeOldReferal($client_id)
+	{
+		$this->db->where('main',$client_id);
+		$this->db->where('type',referal());
+		$this->db->delete('transaction');
 	}
 }

@@ -31,7 +31,7 @@
                                 <label>
                                     <input type="checkbox" value="1" class="checkAll">
                                     <span class="cr"><i class="cr-icon icofont icofont-ui-check txt-primary"></i></span>
-                                    <span class="text-inverse">All</span>
+                                    <span class="text-inverse"></span>
                                 </label>
                             </div>
                         </th>
@@ -39,10 +39,10 @@
                         <th class="text-center">Date</th>
                         <th>Customer Name</th>
                         <th class="">Area</th>
-                        <th class="">Importance</th>
+                        <th class="">Imp</th>
                         <th class="text-center">Contact</th>
                         <th class="">Services</th>
-                        <th class="text-center">Next Followup Date</th>
+                        <th class="text-center">NFD</th>
                         <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){ ?>
                             <th>User</th>
                         <?php } ?>
@@ -61,7 +61,7 @@
                                 </div>
                             </td>
                             <td class="text-center"><?= $value['lead'] ?></td>
-                            <td class="text-center"><?= vd($value['date']) ?></td>
+                            <td class="text-center" data-sort="<?= _sortdate($value['date']) ?>"><?= vd($value['date']) ?></td>
                             <td>
                                 <?= $value['customer'] ?>
                                 <?= $value['firm'] != ''?'<br>-'.$value['firm']:'' ?>        
@@ -69,7 +69,7 @@
                             <td class="">
                                 <?= $this->general_model->_get_area($value['area'])['name'] ?>,<br> <?= $this->general_model->_get_city($value['city'])['name'] ?>,<br> <?= $this->general_model->_get_district($value['district'])['name'] ?>,<br> <?= $this->general_model->_get_state($value['state'])['name'] ?>
                             </td>
-                            <th class="text-center"><?= $value['importance'] ?></th>
+                            <th class="text-center"><?= $value['importance'][0] ?></th>
                             <td class="text-center">
                                 <?php foreach (explode(",", $value['mobile']) as $mkey => $mvalue) { ?>
                                     <?php if($mkey > 0){ ?><br><?php } ?>
@@ -82,23 +82,29 @@
                                     <?= $this->general_model->_get_service($mvalue[0])['name'] ?>
                                 <?php } ?>
                             </td>
-                            <td class="text-center" id="fdate-<?= $value['id'] ?>">
+                            <td class="text-center" id="fdate-<?= $value['id'] ?>" data-sort="<?= _sortdate($value['next_followup_date']) ?>">
                                 <?= vd($value['next_followup_date']) ?>
                                 <?= get_from_to($value['tfrom'],$value['tto']) ?>
                             </td>
                             <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){ ?>
                                 <td>
+                                    <small>
                                     <?= $this->general_model->_get_user($value['owner'])['name'] ?>
-                                    <br><p><b>Branch</b> : <?= $this->general_model->_get_branch($value['branch'])['name'] ?></p>        
+                                    <?php if($value['old_owner'] != ""){ ?>
+                                        <br><b>old</b> : <?= $this->general_model->_get_user($value['old_owner'])['name'] ?>
+                                    <?php } ?>
+                                    <br><b>Br</b> : <?= $this->general_model->_get_branch($value['branch'])['sname'] ?></small>
                                 </td>
                             <?php } ?>
                             <td class="text-center">
                                 <!-- <a href="<?= base_url('leads/edit/').$value['id'] ?>" class="btn btn-primary btn-mini" title="Edit">
                                     <i class="fa fa-pencil"></i>
                                 </a> -->
-                                <!-- <a href="<?= base_url('leads/delete/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete" title="Delete">
-                                    <i class="fa fa-trash"></i>
-                                </a> -->
+                                <?php if(get_user()['user_type'] == '0'){ ?>
+                                    <a href="<?= base_url('leads/delete/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete" title="Delete">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                <?php } ?>
                                 <a href="<?= base_url('leads/view/').$value['id'] ?>" class="btn btn-success btn-mini" title="View">
                                     <i class="fa fa-eye"></i>
                                 </a>

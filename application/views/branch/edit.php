@@ -34,6 +34,14 @@
 
                     <div class="col-md-3">
                         <div class="form-group">
+                            <label>Short Name <span class="-req">*</span></label>
+                            <input name="sname" type="text" placeholder="Short Name" class="form-control" value="<?= set_value('sname',$branch['sname']); ?>">
+                            <?= form_error('sname') ?>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
                             <label>Mobile <span class="-req">*</span></label>
                             <input name="mobile" type="text" placeholder="Mobile" class="form-control" value="<?= set_value('mobile',$branch['mobile']); ?>">
                             <?= form_error('mobile') ?>

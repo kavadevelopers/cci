@@ -34,69 +34,57 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-            	<div class="card">
-	            	<div class="card-header" style="padding: 10px;">
-	   					<div class="row"> 
-		                    <div class="col-md-6">
-		                    	<h5>Top 5 Services Sold</h5>
-		                    </div>
-				        </div>
-	                </div>
-	                <div class="card-block" style="height: 100px; overflow-y: scroll;">
-
-	                </div>
-            	</div>
-            </div>
+            
 	   	</div>
 	<?php } ?>
 	<?php if(get_user()['user_type'] == '0'){ ?>
 
    		<div class="row">
+
    			<div class="col-md-3">
-				<div class="card text-center text-white bg-c-green">
-					<div class="card-block">
-						<h6 class="m-b-0">Leads in this Month</h6>
-						<h4 class="m-t-10 m-b-10"><?= $this->db->get_where('leads',['df' => '','date >=' => date("Y-m-1"),'date <=' => date("Y-m-t")])->num_rows(); ?></h4>
-						<p class="m-b-0">Total Leads - <?= $this->db->get_where('leads',['df' => ''])->num_rows(); ?></p>
+	   			<a href="<?= base_url('dashboard/get_leads') ?>">
+					<div class="card text-center text-white bg-c-green">
+						<div class="card-block">
+							<h4 class="m-t-10 m-b-10"><?= $this->db->get_where('leads',['df' => '','date' => date("Y-m-d")])->num_rows(); ?></h4>
+							<h6 class="m-b-0">Monthly Leads <?= $this->db->get_where('leads',['df' => '','date >=' => date("Y-m-1"),'date <=' => date("Y-m-t")])->num_rows(); ?></h6>
+							<p class="m-b-0">Total Leads <?= $this->db->get_where('leads',['df' => ''])->num_rows(); ?></p>
+						</div>
 					</div>
-				</div>
+				</a>
+			</div>
+
+			<div class="col-md-3">
+				<a href="<?= base_url('dashboard/get_clients') ?>">
+					<div class="card text-center text-white bg-c-yellow">
+						<div class="card-block">
+							<h4 class="m-t-10 m-b-10"><?= $this->db->get_where('client',['status' => '0','created_at >=' => date("Y-m-d 00:00:00"),'created_at <=' => date("Y-m-d 23:59:59")])->num_rows(); ?></h4>
+							<h6 class="m-b-0">Monthly Client <?= $this->db->get_where('client',['status' => '0','created_at >=' => date("Y-m-1"),'created_at <=' => date("Y-m-t")])->num_rows(); ?></h6>
+							<p class="m-b-0">Total Client <?= $this->db->get_where('client',['status' => '0'])->num_rows(); ?></p>
+						</div>
+					</div>
+				</a>
 			</div>
 			<div class="col-md-3">
-				<div class="card text-center text-white bg-c-yellow">
-					<div class="card-block">
-						<h6 class="m-b-0">New Client</h6>
-						<h4 class="m-t-10 m-b-10"><?= $this->general_model->newClientsNumAmount()[0]; ?></h4>
-						<p class="m-b-0"><?= rs().moneyFormatIndia($this->general_model->newClientsNumAmount()[1]) ?></p>
+				<a href="<?= base_url('dashboard/get_payments') ?>">
+					<div class="card text-center text-white bg-c-lite-green">
+						<div class="card-block">
+							<h4 class="m-t-10 m-b-10"><?= rs().moneyFormatIndia($this->general_model->pastThDaysPendingPayment()); ?></h4>
+							<h6 class="m-b-0">> 90 days <?= rs().moneyFormatIndia($this->general_model->pastNiDaysPendingPayment()); ?></h6>
+							<p class="m-b-0">Total <?= rs().moneyFormatIndia($this->general_model->pastDaysPendingPayment()); ?></p>
+						</div>
 					</div>
-				</div>
+				</a>
 			</div>
 			<div class="col-md-3">
-				<div class="card text-center text-white bg-c-lite-green">
-					<div class="card-block">
-						<h6 class="m-b-0">More than 30 Days Payment</h6>
-						<h4 class="m-t-10 m-b-10"><?= rs().moneyFormatIndia($this->general_model->pastThDaysPendingPayment()); ?></h4>
-						<p class="m-b-0">-</p>
+				<a href="<?= base_url('generate_bill') ?>">
+					<div class="card text-center text-white bg-c-lite-green">
+						<div class="card-block">
+							<h6 class="m-b-0">Generate Bill</h6>
+							<h4 class="m-t-10 m-b-10"><?= $this->general_model->pendingForPaymentClient(); ?> Clients</h4>
+							<p class="m-b-0">-</p>
+						</div>
 					</div>
-				</div>
-			</div>
-			<div class="col-md-3">
-				<div class="card text-center text-white bg-c-lite-green">
-					<div class="card-block">
-						<h6 class="m-b-0">Total Payment Pending</h6>
-						<h4 class="m-t-10 m-b-10"><?= rs().moneyFormatIndia($this->general_model->pastDaysPendingPayment()); ?></h4>
-						<p class="m-b-0">-</p>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-3">
-				<div class="card text-center text-white bg-c-lite-green">
-					<div class="card-block">
-						<h6 class="m-b-0">Pending For Invoice</h6>
-						<h4 class="m-t-10 m-b-10"><?= $this->general_model->pendingForPaymentClient(); ?> Clients</h4>
-						<p class="m-b-0">-</p>
-					</div>
-				</div>
+				</a>
 			</div>
    		</div>
 
@@ -116,8 +104,8 @@
 				        </div>
 			        </div>
                 </div>
-                <div class="card-block" style="max-height: 500px; overflow-y: scroll;">
-                	<table class="table table-striped table-bordered table-mini table-ndt">
+                <div class="card-block">
+                	<table class="table table-striped table-bordered table-mini table-dt">
 		                <thead>
 		                    <tr>
 		                        <th class="text-center">Date</th>
@@ -128,7 +116,7 @@
 		                <tbody>
 		                    <?php foreach ($todo as $key => $value) { ?>
 		                        <tr>
-		                            <td class="text-center">
+		                            <td class="text-center" data-sort="<?= _sortdate($value['date']) ?>">
 		                            	<?= vd($value['date']) ?>
 		                            	<?= get_from_to($value['ftime'],$value['ttime']) ?>        
 		                            </td>
@@ -145,13 +133,38 @@
                 </div>
    			</div>
    		</div>
+   		<?php if(get_user()['user_type'] == '3'){ ?>
+	   		<div class="col-md-6">
+	        	<div class="card">
+	            	<div class="card-header" style="padding: 10px;">
+	   					<div class="row"> 
+		                    <div class="col-md-6">
+		                    	<h5>Top 5 Services Sold In this month</h5>
+		                    </div>
+				        </div>
+	                </div>
+	                <div class="card-block">
+	                	<table class="table table-bordered table-mini table-ndt">
+	                		<tbody>
+	                			<?php foreach ($top_five_services_sold as $key => $value) { ?>
+	                				<tr>
+	                					<td><?= $key + 1 ?></td>
+		                				<td><?= $this->general_model->_get_service($value['service'])['name'] ?></td>
+		                			</tr>
+	                			<?php } ?>
+	                		</tbody>
+	                	</table>
+	                </div>
+	        	</div>
+	        </div>
+	    <?php } ?>
    		<?php if(get_user()['user_type'] == '0'){ ?>
    		<div class="col-md-6">
         	<div class="card">
             	<div class="card-header" style="padding: 10px;">
    					<div class="row"> 
 	                    <div class="col-md-6">
-	                    	<h5>Panding For Approval Receipt</h5>
+	                    	<h5>Pending For Approval Receipt</h5>
 	                    </div>
 			        </div>
                 </div>
@@ -159,32 +172,32 @@
                 	<table class="table table-striped table-bordered table-mini table-dt">
 		                <thead>
 		                    <tr>
-		                    	<th class="text-center">Action</th>
 		                        <th class="text-center">Date</th>
 		                        <th>Client Name</th>
 		                        <th class="text-right">Amount</th>
 		                        <th>Remarks</th>
 		                        <?php if(get_user()['user_type'] == 0){ ?>
-		                            <th>Payment By</th>
+		                            <th>By</th>
 		                        <?php } ?>
+		                    	<th class="text-center">Action</th>
 		                    </tr>
 		                </thead>
 		                <tbody>
 		                    <?php foreach ($receipt_request as $key => $value) { ?>
 		                        <?php $client = $this->general_model->_get_client($value['client']); ?>
 		                        <tr>
-		                        	<td class="text-center">
-		                                <button class="btn btn-success btn-mini approve-payment" data-id="<?= $value['id'] ?>" title="Approve">
-		                                    <i class="fa fa-check"></i>
-		                                </button>
-		                            </td>
-		                            <td class="text-center"><?= vd($value['date']) ?></td>
+		                            <td class="text-center" data-sort="<?= _sortdate($value['date']) ?>"><?= vd($value['date']) ?></td>
 		                            <td><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?></td>
 		                            <td class="text-right"><?= $value['amount'] ?></td>
 		                            <td><?= nl2br($value['remarks']) ?></td>
 		                            <?php if(get_user()['user_type'] == 0){ ?>
 		                                <td><?= $this->general_model->_get_user($value['created_by'])['name'] ?></td>
 		                            <?php } ?>
+		                            <td class="text-center">
+		                                <button class="btn btn-success btn-mini approve-payment" data-id="<?= $value['id'] ?>" title="Approve">
+		                                    <i class="fa fa-check"></i>
+		                                </button>
+		                            </td>
 		                        </tr>
 		                    <?php } ?>
 		                </tbody>
@@ -208,22 +221,17 @@
 		                    <table class="table table-striped table-bordered table-mini table-dt">
 		                        <thead>
 		                            <tr>
-		                                <th class="text-center">Action</th>
 		                                <th class="text-center">Date</th>
-		                                <th class="text-center">New Reply</th>
+		                                <th class="text-center">Reply</th>
 		                                <th>Particulars</th>
 		                                <th>From</th>
+		                                <th class="text-center">Action</th>
 		                            </tr>
 		                        </thead>
 		                        <tbody>
 		                            <?php foreach ($my_task as $key => $value) { ?>
 		                                <tr>
-		                                	<td class="text-center">
-		                                        <a href="<?= base_url('task/view/').$value['id'] ?>" class="btn btn-success btn-mini" data-id="<?= $value['id'] ?>" title="View">
-		                                            <i class="fa fa-eye"></i>
-		                                        </a>
-		                                    </td>
-		                                    <td class="text-center">
+		                                    <td class="text-center" data-sort="<?= _sortdate($value['date']) ?>">
 		                                        <?= vd($value['date']) ?>        
 		                                    </td>
 		                                    <td class="text-center">
@@ -240,6 +248,11 @@
 		                                    </td>
 		                                    <td class="td-big"><?= $value['name'] ?></td>
 		                                    <td><?= $this->general_model->_get_user($value['from'])['name'] ?></td>
+		                                    <td class="text-center">
+		                                        <a href="<?= base_url('task/view/').$value['id'] ?>" class="btn btn-success btn-mini" data-id="<?= $value['id'] ?>" title="View">
+		                                            <i class="fa fa-eye"></i>
+		                                        </a>
+		                                    </td>
 		                                </tr>
 		                            <?php } ?>
 		                        </tbody>
@@ -265,22 +278,17 @@
 		                    <table class="table table-striped table-bordered table-mini table-dt">
 		                        <thead>
 		                            <tr>
-		                                <th class="text-center">Action</th>
 		                                <th class="text-center">Date</th>
-		                                <th class="text-center">New Reply</th>
+		                                <th class="text-center">Reply</th>
 		                                <th>Particulars</th>
 		                                <th>To</th>
+		                                <th class="text-center">Action</th>
 		                            </tr>
 		                        </thead>
 		                        <tbody>
 		                            <?php foreach ($other_task as $key => $value) { ?>
 		                                <tr>
-		                                	<td class="text-center">
-		                                        <a href="<?= base_url('task/view/').$value['id'] ?>" class="btn btn-success btn-mini" data-id="<?= $value['id'] ?>" title="View">
-		                                            <i class="fa fa-eye"></i>
-		                                        </a>
-		                                    </td>
-		                                    <td class="text-center">
+		                                    <td class="text-center" data-sort="<?= _sortdate($value['date']) ?>">
 		                                        <?= vd($value['date']) ?>        
 		                                    </td>
 		                                    <td class="text-center">
@@ -297,6 +305,11 @@
 		                                    </td>
 		                                    <td class="td-big"><?= $value['name'] ?></td>
 		                                    <td><?= $this->general_model->_get_user($value['to'])['name'] ?></td>
+		                                    <td class="text-center">
+		                                        <a href="<?= base_url('task/view/').$value['id'] ?>" class="btn btn-success btn-mini" data-id="<?= $value['id'] ?>" title="View">
+		                                            <i class="fa fa-eye"></i>
+		                                        </a>
+		                                    </td>
 		                                </tr>
 		                            <?php } ?>
 		                        </tbody>
@@ -323,10 +336,10 @@
                 			<tr>
 		                        <th>Name</th>
 		                        <th class="text-center">Today</th>
-		                        <th class="text-center">This Month</th>
-		                        <th class="text-center">Total Active</th>
-		                        <th class="text-center">Total Converted</th>
-		                        <th class="text-center">Total Dump</th>
+		                        <th class="text-center">Monthly</th>
+		                        <th class="text-center">Active</th>
+		                        <th class="text-center">Converted</th>
+		                        <th class="text-center">Dump</th>
 		                        <th class="text-center">Total</th>
 		                    </tr>
                 		</thead>
@@ -362,10 +375,10 @@
                 			<tr>
 		                        <th>Source Name</th>
 		                        <th class="text-center">Today</th>
-		                        <th class="text-center">This Month</th>
-		                        <th class="text-center">Total Active</th>
-		                        <th class="text-center">Total Converted</th>
-		                        <th class="text-center">Total Dump</th>
+		                        <th class="text-center">Monthly</th>
+		                        <th class="text-center">Active</th>
+		                        <th class="text-center">Converted</th>
+		                        <th class="text-center">Dump</th>
 		                        <th class="text-center">Total</th>
 		                    </tr>
                 		</thead>
@@ -388,7 +401,29 @@
 	   	</div>
 	   	
    		
-
+	   	<div class="col-md-6">
+            	<div class="card">
+	            	<div class="card-header" style="padding: 10px;">
+	   					<div class="row"> 
+		                    <div class="col-md-6">
+		                    	<h5>Top 5 Services Sold in this month</h5>
+		                    </div>
+				        </div>
+	                </div>
+	                <div class="card-block">
+	                	<table class="table table-bordered table-mini table-ndt">
+	                		<tbody>
+	                			<?php foreach ($top_five_services_sold as $key => $value) { ?>
+	                				<tr>
+	                					<td><?= $key + 1 ?></td>
+		                				<td><?= $this->general_model->_get_service($value['service'])['name'] ?></td>
+		                			</tr>
+	                			<?php } ?>
+	                		</tbody>
+	                	</table>
+	                </div>
+            	</div>
+            </div>
 	   	<?php } ?>	
    	</div>
 

@@ -32,7 +32,7 @@
                         <?php $client = $this->general_model->_get_client($value['client']); ?>
                         <tr>
                             <td class="text-center"><?= $value['inv'] ?></td>
-                            <td class="text-center"><?= vd($value['date']) ?></td>
+                            <td class="text-center" data-sort="<?= _sortdate($value['date']) ?>"><?= vd($value['date']) ?></td>
                             <td>#<?= $client['c_id'] ?> <br><b><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?></b> <?= $client['firm'] != ""?'<br>'.$client['firm'] :'' ?> <br><small><?= $client['mobile'] ?></small></td>
                             <td class="text-right"><?= $value['total'] ?></td>
                             <td>
@@ -48,6 +48,11 @@
                                 <a href="<?= base_url('pdf/invoiceD/').$value['id'] ?>" target="_blank" class="btn btn-secondary btn-mini" title="Download PDF">
                                     <i class="fa fa-download"></i>
                                 </a>
+                                <?php if(get_user()['user_type'] == 0){ ?>
+                                    <button class="btn btn-primary btn-mini btn-invoice-edit" data-id="<?= $value['id'] ?>" title="Delete">
+                                        <i class="fa fa-pencil"></i>
+                                    </button>
+                                <?php } ?>
                             </td>
                         </tr>
                     <?php } ?>

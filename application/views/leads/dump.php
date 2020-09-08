@@ -37,7 +37,7 @@
                     <?php foreach ($leads as $key => $value) { ?>
                         <tr>
                             <td class="text-center"><?= $value['lead'] ?></td>
-                            <td class="text-center"><?= vd($value['date']) ?></td>
+                            <td class="text-center" data-sort="<?= _sortdate($value['date']) ?>"><?= vd($value['date']) ?></td>
                             <td>
                                 <?= $value['customer'] ?>
                                 <?= $value['firm'] != ''?'<br>-'.$value['firm']:'' ?>        
@@ -53,8 +53,9 @@
                             </td>
                             <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){ ?>
                                 <td>
+                                    <small>
                                     <?= $this->general_model->_get_user($value['owner'])['name'] ?>
-                                    <br><p><b>Branch</b> : <?= $this->general_model->_get_branch($value['branch'])['name'] ?></p>        
+                                    <br><b>Branch</b> : <?= $this->general_model->_get_branch($value['branch'])['name'] ?></small>        
                                 </td>
                             <?php } ?>
                             <td><?= nl2br($value['dump_remarks']) ?></td>

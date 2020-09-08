@@ -26,7 +26,7 @@
                                 <label>
                                     <input type="checkbox" value="1" class="checkAll">
                                     <span class="cr"><i class="cr-icon icofont icofont-ui-check txt-primary"></i></span>
-                                    <span class="text-inverse">All</span>
+                                    <span class="text-inverse"></span>
                                 </label>
                             </div>
                         </th>
@@ -35,7 +35,7 @@
                         <th class="text-right">Price</th>
                         <th>Client</th>
                         <th class="text-center">Status</th>
-                        <th class="text-center">Importance</th>
+                        <th class="text-center">Imp</th>
                         <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){ ?>
                             <th>Owner</th>
                         <?php } ?>
@@ -59,7 +59,7 @@
                             <td class="text-right"><?= $value['price'] ?></td>
                             <td><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?></td>
                             <td class="text-center" id="status-<?= $value['id'] ?>"><?= getjobStatus($value['status']) ?></td>
-                            <td class="text-center"><?= $value['importance'] ?></td>
+                            <td class="text-center"><?= $value['importance'][0] ?></td>
                             <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){ ?>
                                 <td><?= $this->general_model->_get_user($value['owner'])['name'] ?></td>
                             <?php } ?>

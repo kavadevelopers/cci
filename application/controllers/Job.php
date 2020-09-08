@@ -93,6 +93,13 @@ class Job extends CI_Controller
 		$this->load->theme('job/paid',$data);
 	}
 
+	public function delete($id = false)
+	{
+		$this->db->where('id',$id)->delete('job');
+		$this->session->set_flashdata('msg', 'Job Deleted');
+	    redirect(base_url('job'));
+	}
+
 	public function update()
 	{
 		$data = [

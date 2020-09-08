@@ -35,7 +35,7 @@
                         <?php $client = $this->general_model->_get_client($value['client']); ?>
                         <tr>
                             <td class="text-center"><?= $value['id'] ?></td>
-                            <td class="text-center"><?= vd($value['date']) ?></td>
+                            <td class="text-center" data-sort="<?= _sortdate($value['date']) ?>"><?= vd($value['date']) ?></td>
                             <td>#<?= $client['c_id'] ?> <br><b><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?></b> <?= $client['firm'] != ""?'<br>'.$client['firm'] :'' ?> <br><small><?= $client['mobile'] ?></small></td>
                             <td class="text-left"><?= $value['particular'] ?></td>
                             <td class="text-right"><?= $value['amount'] ?></td>
@@ -43,12 +43,14 @@
                                 <td><?= $this->general_model->_get_user($value['created_by'])['name'] ?></td>
                             <?php } ?>
                             <td class="text-center">
-                                <button class="btn btn-primary btn-mini edit-reimburs-btn" data-id="<?= $value['id'] ?>" data-client="<?= $value['client'] ?>" data-date="<?= vd($value['date']) ?>" data-amount="<?= $value['amount'] ?>" data-remarks="<?= $value['particular'] ?>" title="Edit">
-                                    <i class="fa fa-pencil"></i>
-                                </button>
-                                <a href="<?= base_url('reimburs/delete/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete" title="Delete">
-                                    <i class="fa fa-trash"></i>
-                                </a>
+                                <?php if(get_user()['user_type'] == 0){ ?>
+                                    <button class="btn btn-primary btn-mini edit-reimburs-btn" data-id="<?= $value['id'] ?>" data-client="<?= $value['client'] ?>" data-date="<?= vd($value['date']) ?>" data-amount="<?= $value['amount'] ?>" data-remarks="<?= $value['particular'] ?>" title="Edit">
+                                        <i class="fa fa-pencil"></i>
+                                    </button>
+                                    <a href="<?= base_url('reimburs/delete/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete" title="Delete">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                <?php } ?>
                                 <a href="<?= base_url('pdf/reimburs/').$value['id'] ?>" target="_blank" class="btn btn-primary btn-mini" title="PDF">
                                     <i class="fa fa-file-pdf-o"></i>
                                 </a>

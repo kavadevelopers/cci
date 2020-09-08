@@ -24,7 +24,7 @@
                         <th class="">Area</th>
                         <th class="text-center">Contact</th>
                         <th class="">Services</th>
-                        <th class="text-center">Next Followup Date</th>
+                        <th class="text-center">Converted</th>
                         <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){ ?>
                             <th>User</th>
                         <?php } ?>
@@ -35,7 +35,7 @@
                     <?php foreach ($leads as $key => $value) { ?>
                         <tr id="tr-lead-<?= $value['id'] ?>">
                             <td class="text-center"><?= $value['lead'] ?></td>
-                            <td class="text-center"><?= vd($value['date']) ?></td>
+                            <td class="text-center" data-sort="<?= _sortdate($value['date']) ?>"><?= vd($value['date']) ?></td>
                             <td>
                                 <?= $value['customer'] ?>
                                 <?= $value['firm'] != ''?'<br>-'.$value['firm']:'' ?>        
@@ -55,11 +55,9 @@
                                     <?= $this->general_model->_get_service($mvalue[0])['name'] ?>
                                 <?php } ?>
                             </td>
-                            <td class="text-center" id="fdate-<?= $value['id'] ?>">
-                                <?= vd($value['next_followup_date']) ?>
-                                <?php if($value['tfrom'] != ""){ ?>
-                                    <br><?= vt($value['tfrom']) ?> - <?= vt($value['tto']) ?>
-                                <?php } ?>
+                                <?php $foolow = $this->db->get_where('followup',['type' => 'lead','main_id' => $value['id'],'customer' => '1'])->row_array(); ?>
+                            <td class="text-center" id="fdate-<?= $value['id'] ?>" data-sort="<?= _sortdate($foolow?vd($foolow['date']):"") ?>">
+                                <?= $foolow?vd($foolow['date']):"" ?>
                             </td>
                             <?php if(get_user()['user_type'] == 0 || get_user()['user_type'] == 1){ ?>
                                 <td>

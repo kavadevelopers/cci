@@ -723,6 +723,53 @@
         </div>
     </form>
 </div>
+
+<div class="modal fade" id="editInvoiceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <form method="post" action="<?= base_url('invoices/update') ?>">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editInvoiceModalTitle">Edit Invoice</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12" id="editInvoiceClient">
+                            
+                        </div>
+                    </div>
+                    <div class="row" id="editBillDataServices">
+                           
+                    </div>
+                    <div class="row">
+                        <div class="col-md-9"></div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Invoice Total</label>
+                                <input name="" type="text" placeholder="Invoice Total" class="form-control form-control-sm" id="editInvoiceModalTotal" value="" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Remarks</label> 
+                                <textarea class="form-control" name="remarks" placeholder="Remarks" id="editInvoiceRemarks"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="invoice" id="editInvoiceId">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
     
 
 <div class="modal fade" id="add_job_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

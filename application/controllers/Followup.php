@@ -164,14 +164,23 @@ class Followup extends CI_Controller
 					'status'		=> 0,
 					'owner'			=> $user['id'],
 					'importance'	=> 'NORMAL',
-					'f_date'		=> null,
-					'f_time'		=> null,
+					'f_date'		=> date('Y-m-d'),
+					'f_time'		=> date('H:i:s'),
 					'created_by'	=> get_user()['id'],
 					'created_at'		=> date('Y-m-d H:i:s')
 				];
 				$this->db->insert('job',$data);
 				$job_id = $this->db->insert_id();
 				$this->db->where('id',$job_id)->update('job',['job_id' => "JOB_".$job_id]);	
+
+
+				$data = [
+					'client'		=> $clientId,
+					'service'		=> $service,
+					'user'			=> get_user()['id'],
+					'created_at'	=> date('Y-m-d H:i:s')
+				];
+				$this->db->insert('sold_services',$data);
 			}
 		}
 	}
@@ -259,14 +268,22 @@ class Followup extends CI_Controller
 					'status'		=> 0,
 					'owner'			=> $user['id'],
 					'importance'	=> 'NORMAL',
-					'f_date'		=> null,
-					'f_time'		=> null,
+					'f_date'		=> date('Y-m-d'),
+					'f_time'		=> date('H:i:s'),
 					'created_by'	=> get_user()['id'],
 					'created_at'		=> date('Y-m-d H:i:s')
 				];
 				$this->db->insert('job',$data);
 				$job_id = $this->db->insert_id();
 				$this->db->where('id',$job_id)->update('job',['job_id' => "JOB_".$job_id]);	
+
+				$data = [
+					'client'		=> $clientId,
+					'service'		=> $service,
+					'user'			=> get_user()['id'],
+					'created_at'	=> date('Y-m-d H:i:s')
+				];
+				$this->db->insert('sold_services',$data);
 			}
 		}
 
@@ -375,6 +392,7 @@ class Followup extends CI_Controller
 		}else{
 			$ndate = null;
 		}
+		$workDone = $this->input->post('status') == 3?date('Y-m-d'):null;
 		$data = [
 			'remarks'		=> $this->input->post('remarks'),
 			'next_f'		=> $ndate,
@@ -395,7 +413,7 @@ class Followup extends CI_Controller
 		if($ndate != null){
 			$fstatus = 0;
 		}
-		$this->db->where('id',$this->input->post('id'))->update('job',['f_date' => $ndate,'f_time'	=> $ftime,'t_time' => $ttime,'status'	=> $status,'fstatus'	=> $fstatus]);
+		$this->db->where('id',$this->input->post('id'))->update('job',['f_date' => $ndate,'f_time'	=> $ftime,'t_time' => $ttime,'status'	=> $status,'fstatus'	=> $fstatus,'updated_date' => $workDone]);
 
 
 		$followup = $this->db->get_where('followup',['id' => $fId])->row_array();
