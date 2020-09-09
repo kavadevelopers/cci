@@ -61,6 +61,15 @@ function getFileExtension($filename){
     return pathinfo($filename, PATHINFO_EXTENSION);
 }
 
+function get_sort_name($str,$length)
+{
+    if($str != "" && $str != null){
+        return $str[$length - 1];
+    }else{
+        return "";
+    }
+}
+
 function timeConverter($str){
     $arr = explode(":", $str);
     $new = "";

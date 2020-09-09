@@ -9,6 +9,8 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
       <![endif]-->
     <!-- Meta -->
+    <!-- 1. AddChat css -->
+    <link href="<?php echo base_url('asset/addchat/css/addchat.min.css') ?>" rel="stylesheet">
     <title><?php if(isset($_title)){ echo $_title.' | '; } ?><?= get_setting()['name']; ?></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
@@ -56,8 +58,7 @@
     <!--forms-wizard css-->
     <link rel="stylesheet" type="text/css" href="<?= base_url() ?>asset/bower_components/jquery.steps/css/jquery.steps.css">
 
-    <!-- 1. AddChat css -->
-    <link href="<?php echo base_url('asset/addchat/css/addchat.min.css') ?>" rel="stylesheet">
+    
 </head>
 
 <body>

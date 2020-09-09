@@ -69,7 +69,7 @@
                             <td class="">
                                 <?= $this->general_model->_get_area($value['area'])['name'] ?>,<br> <?= $this->general_model->_get_city($value['city'])['name'] ?>,<br> <?= $this->general_model->_get_district($value['district'])['name'] ?>,<br> <?= $this->general_model->_get_state($value['state'])['name'] ?>
                             </td>
-                            <th class="text-center"><?= $value['importance'][0] ?></th>
+                            <th class="text-center"><?= get_sort_name($value['importance'],1); ?></th>
                             <td class="text-center">
                                 <?php foreach (explode(",", $value['mobile']) as $mkey => $mvalue) { ?>
                                     <?php if($mkey > 0){ ?><br><?php } ?>
