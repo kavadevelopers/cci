@@ -16,7 +16,18 @@ class Dashboard extends CI_Controller
 		$data['my_task']		= $this->db->order_by('id','desc')->limit(5)->get_where('task',['to' => get_user()['id'],'done' => 0])->result_array();
 		$data['receipt_request']	= $this->db->limit(5)->order_by('date','asc')->get_where('payment',['status' => '0'])->result_array();
 		$data['top_five_services_sold']	= $this->getTopFiveServicesSoldInThisMonth();
-		$this->load->theme('dashboard',$data);
+
+		if(get_user()['user_type'] == "0"){
+			$this->load->theme('dashboard/superadmin',$data);
+		}
+
+		if(get_user()['user_type'] == "3"){
+			$this->load->theme('dashboard/sales',$data);
+		}
+
+		if(get_user()['user_type'] == "2"){
+			$this->load->theme('dashboard/backoffice',$data);
+		}
 	}
 
 	public function get_leads()

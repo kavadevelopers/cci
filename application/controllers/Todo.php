@@ -10,7 +10,7 @@ class Todo extends CI_Controller
 	public function index()
 	{
 		$data['_title']		= "To-Do";
-		$data['todo']		= $this->general_model->getToDo();
+		$data['todo']		= $this->general_model->getToDoAll();
 		$this->load->theme('todo/index',$data);		
 	}
 

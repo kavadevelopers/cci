@@ -525,6 +525,17 @@ class General_model extends CI_Model
 		return $this->db->get('todo')->result_array();
 	}
 
+	public function getToDoAll()
+	{
+		$myId = get_user()['id'];
+		$this->db->order_by('date','asc');
+		$this->db->group_start();
+			$this->db->where('to',$myId);
+			$this->db->or_where('from',$myId);
+		$this->db->group_end();
+		return $this->db->get('todo')->result_array();
+	}
+
 	public function getDashbordTask()
 	{
 		$myId = get_user()['id'];

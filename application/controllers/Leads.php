@@ -17,7 +17,7 @@ class Leads extends CI_Controller
 			$data['leads']		= $this->db->get_where('leads',['status' => '0','df' => '','dump' => '','owner' => get_user()['id']])->result_array();
 		}
 		else if(get_user()['user_type'] == '3'){
-			if(get_user()['type'] == '4'){
+			if(get_user()['type'] == '5'){
 				$data['leads']		= $this->db->get_where('leads',['status' => '0','df' => '','dump' => ''])->result_array();
 			}else{
 				$data['leads']		= $this->db->get_where('leads',['status' => '0','df' => '','dump' => '','owner' => get_user()['id']])->result_array();
@@ -387,7 +387,7 @@ class Leads extends CI_Controller
 			$data['leads']		= $this->db->get_where('leads',['df' => '','dump' => 'yes','owner' => get_user()['id']])->result_array();
 		}
 		else if(get_user()['user_type'] == '3'){
-			if(get_user()['type'] == '4'){
+			if(get_user()['type'] == '5'){
 				$data['leads']		= $this->db->get_where('leads',['df' => '','dump' => 'yes'])->result_array();
 			}else{
 				$data['leads']		= $this->db->get_where('leads',['df' => '','dump' => 'yes','owner' => get_user()['id']])->result_array();
@@ -409,7 +409,7 @@ class Leads extends CI_Controller
 			$data['leads']		= $this->db->get_where('leads',['df' => '','status !=' => '0','owner' => get_user()['id']])->result_array();
 		}
 		else if(get_user()['user_type'] == '3'){
-			if(get_user()['type'] == '4'){
+			if(get_user()['type'] == '5'){
 				$data['leads']		= $this->db->get_where('leads',['df' => '','status !=' => '0'])->result_array();
 			}else{
 				$data['leads']		= $this->db->get_where('leads',['df' => '','status !=' => '0','owner' => get_user()['id']])->result_array();
