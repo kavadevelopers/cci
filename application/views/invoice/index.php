@@ -49,7 +49,7 @@
                                     <i class="fa fa-download"></i>
                                 </a>
                                 <?php if(get_user()['user_type'] == 0){ ?>
-                                    <button class="btn btn-primary btn-mini btn-invoice-edit" data-id="<?= $value['id'] ?>" title="Delete">
+                                    <button class="btn btn-primary btn-mini btn-invoice-edit" data-id="<?= $value['id'] ?>" title="Edit">
                                         <i class="fa fa-pencil"></i>
                                     </button>
                                 <?php } ?>

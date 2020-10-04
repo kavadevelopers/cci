@@ -77,6 +77,11 @@ class General_model extends CI_Model
 		return $this->db->get_where('user',['id'	=> $id])->row_array();
 	}
 
+	public function _get_user_detail($id)
+	{
+		return $this->db->get_where('user_details',['user'	=> $id])->row_array();
+	}
+
 	public function get_users()
 	{
 		return $this->db->get_where('user',['df' => '','user_type !=' => '0'])->result_array();
@@ -95,6 +100,19 @@ class General_model extends CI_Model
 			$this->db->group_end();
 			return $this->db->get_where('user',['df' => ''])->result_array();
 		}
+	}
+
+	public function get_pettycash_users()
+	{
+		$this->db->where('df','');
+		$this->db->where('user_type','3');
+		$this->db->where('type','4');
+		$sale = $this->db->get('user')->result_array();
+		$this->db->where('df','');
+		$this->db->where('user_type','2');
+		$this->db->where('type','1');
+		$back = $this->db->get('user')->result_array();
+		return array_merge($sale,$back);
 	}
 
 	public function get_todo_users()
@@ -290,14 +308,14 @@ class General_model extends CI_Model
 		return $this->db->get_where('documents',['sub_folder'	=> $folder,'client' => $client])->result_array();
 	}
 
-	public function getUnPaidClient()
+	public function getUnPaidClient($out)
 	{
 		$this->db->select('id');
 		$client = $this->db->get_where('client',['status' => '0'])->result_array();
 		$clients = [];
 		foreach ($client as $key => $value) {
-			$outstanding = $this->general_model->getOutStandingClient($value['id'])[0];
-			if(floatval($outstanding) > 0){
+			$outstanding = $this->general_model->getOutStandingClient($value['id'])[1];
+			if(floatval($outstanding) > $out){
 				array_push($clients, $value['id']);
 			}
 		}
@@ -368,6 +386,16 @@ class General_model extends CI_Model
 	public function _get_client($id)
 	{
 		return $this->db->get_where('client',['id' => $id])->row_array();
+	}
+
+	public function get_cupboards()
+	{
+		return $this->db->get_where('cupboards',['df' => ""])->result_array();
+	}
+
+	public function get_recks()
+	{
+		return $this->db->get_where('cupboards_racks',['df' => ""])->result_array();
 	}
 
 	public function _get_invoice($id)
@@ -513,6 +541,17 @@ class General_model extends CI_Model
 		}
 	}
 
+	public function getPettyCash()
+	{
+		if(get_user()['user_type'] != '0'){
+			$this->db->where('user',get_user()['id']);
+			$this->db->where('credit',0.00);
+		}
+		$this->db->where('date >',date('Y-m-d',strtotime('-15 days')));
+		$this->db->order_by('date','desc');
+		return $this->db->get('transaction_petty_cash')->result_array();
+	}
+
 	public function getToDo()
 	{
 		$myId = get_user()['id'];
@@ -570,6 +609,18 @@ class General_model extends CI_Model
 			return [0,0];
 		}
 	}
+
+
+	public function getLastPayment($client)
+	{
+		$query = $this->db->where('client',$client)->where('type',payment())->order_by('id','desc')->limit(1)->get('transaction')->row_array();
+		if($query){
+			return [$query['credit'],vd($query['date'])];
+		}else{
+			return [0,''];
+		}
+	}
+	
 
 
 	public function getSubFolders($id)
@@ -639,6 +690,43 @@ class General_model extends CI_Model
 		$this->db->where('status','3');
 		$this->db->group_by('client');
     	return $this->db->get('job')->num_rows();
+	}
+
+	public function getPettyCashBalanceByUser($id)
+	{
+		$query = $this->db->select_sum('credit')
+					->from('transaction_petty_cash')
+					->where('user', $id)->get();
+		$ocredit = $query->row()->credit;
+
+		$query = $this->db->select_sum('debit')
+					->from('transaction_petty_cash')
+					->where('user', $id)->get();
+		$odebit = $query->row()->debit;
+
+		return number_format(($ocredit - $odebit),2);
+	}
+
+	public function pettyCashOpeningBalance($user,$date)
+	{
+		$query = $this->db->select_sum('credit')
+					->from('transaction_petty_cash')
+					->where('date <', $date)
+					->where('user', $user)->get();
+		$credit = $query->row()->credit;
+
+		$query = $this->db->select_sum('debit')
+					->from('transaction_petty_cash')
+					->where('date <', $date)
+					->where('user', $user)->get();
+		$debit = $query->row()->debit;
+
+		if($credit > $debit){
+			return ['c',$credit - $debit];
+		}
+		else{
+			return ['d',$debit - $credit];
+		}
 	}
 
 	public function opening_balance($client_id,$date)

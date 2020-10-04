@@ -48,7 +48,7 @@
                             <th>Date</th>
                             <th>Remarks</th>
                         </tr>
-                        <?php $dueDates = $this->db->get_where('due_dates',['date >=' => '2020-08-01','date <=' => '2020-08-31'])->result_array(); ?>
+                        <?php $dueDates = $this->db->get_where('due_dates',['date >=' => date('Y-m-01'),'date <=' => date('Y-m-t')])->result_array(); ?>
                         <?php foreach ($dueDates as $dueDateskey => $dueDatesvalue) { ?>
                             <tr>
                                 <td><?= vd($dueDatesvalue['date']) ?></td>
@@ -363,7 +363,7 @@
                                     <input name="date" type="text" placeholder="Next Followup Date" class="form-control form-control-sm datepicker-new" autocomplete="off" value="" id="payment_followup_date">
                                 </div>
                             </div>
-                            <div class="checkbox-fade fade-in-primary d-">
+                            <div class="checkbox-fade fade-in-primary d-" style="display: none;">
                                 <label>
                                     <input type="checkbox" value="1" name="" id="payment_done">
                                     <span class="cr"><i class="cr-icon icofont icofont-ui-check txt-primary"></i></span>
@@ -889,6 +889,37 @@
     </form>
 </div>
 
+<div class="modal fade" id="transactionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <form method="post" action="">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Transactions</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered table-ndt">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Date</th>
+                                <th>Particulars</th>
+                                <th class="text-center">Inv/Receipt No.</th>
+                                <th class="text-right">Debit</th>
+                                <th class="text-right">Credit</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-transactionModal">
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
 
 <div class="modal fade" id="addNewFollowupJobModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <form method="post" action="<?= base_url('newjob/save') ?>">
@@ -1010,6 +1041,135 @@
     </form>
 </div>
 
+
+<div class="modal fade" id="add_vendor_modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <form method="post" action="<?= base_url('vendor_list/save') ?>">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Vendor</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Name <span class="-req">*</span></label> 
+                                    <input name="name" type="text" placeholder="Name" class="form-control form-control-sm" value="" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Category <span class="-req">*</span></label> 
+                                    <input type="text" class="form-control form-control-sm" name="category" placeholder="Category" required>   
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Mobile <span class="-req">*</span></label> 
+                                    <input name="mobile" type="text" placeholder="Mobile" class="form-control form-control-sm" value="" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Address <span class="-req">*</span></label> 
+                                    <textarea type="text" class="form-control form-control-sm" name="address" placeholder="Address" required></textarea>   
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Remarks</label> 
+                            <textarea type="text" class="form-control form-control-sm" name="remarks" placeholder="Remarks"></textarea>   
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal fade" id="add_pettycash_modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <form method="post" action="<?= base_url('petty_cash/save') ?>">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Petty Cash</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <?php if(get_user()['user_type'] == 0){ ?>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>User/Owner <span class="-req">*</span></label> 
+                                        <select class="form-control form-control-sm select2n" name="user" required>
+                                            <option value="">-- Select --</option>
+                                            <?php foreach ($this->general_model->get_pettycash_users() as $bkey => $bvalue) { ?>
+                                                <option value="<?= $bvalue['id'] ?>"><?= $bvalue['name'] ?> - <?= _user_type($bvalue['id']) ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Type <span class="-req">*</span></label> 
+                                        <select class="form-control form-control-sm" name="type" required>
+                                            <option value="credit">Credit</option>
+                                            <option value="debit">Debit</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>                        
+                        </div>
+                    <?php } ?>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Date <span class="-req">*</span></label> 
+                                    <input name="date" type="text" placeholder="Date" class="form-control form-control-sm datepicker" value="<?= date('d-m-Y') ?>" autocomplete="off" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Amount <span class="-req">*</span></label> 
+                                    <input type="text" class="form-control form-control-sm decimal-num" name="amount" autocomplete="off" placeholder="Amount" required>    
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Perticulars</label> 
+                            <textarea type="text" class="form-control form-control-sm" name="remarks" placeholder="Perticulars"></textarea>   
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
 <div class="modal fade" id="add_reimburs_modal" tabindex="-1" role="dialog" aria-hidden="true">
     <form method="post" action="<?= base_url('reimburs/save') ?>">
         <div class="modal-dialog" role="document">
@@ -1119,3 +1279,198 @@
     </form>
 </div>
 
+<div class="modal fade" id="add_document" tabindex="-1" role="dialog" aria-hidden="true">
+    <form method="post" action="<?= base_url('documents/save') ?>">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Document</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Select Client<span class="-req">*</span></label> 
+                                    <select class="form-control form-control-sm select2n" name="client" required>
+                                        <option value="">-- Select --</option>
+                                        <?php foreach ($this->general_model->getFilteredClients() as $bkey => $bvalue) { ?>
+                                            <option value="<?= $bvalue['id'] ?>"><?= $bvalue['c_id'] ?> - <?= $bvalue['fname'] ?> <?= $bvalue['mname'] ?> <?= $bvalue['lname'] ?> - <?= $bvalue['mobile'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Responsible Person<span class="-req">*</span></label> 
+                                    <input type="text" class="form-control form-control-sm" name="res_person" placeholder="Responsible Person" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Cupboard<span class="-req">*</span></label> 
+                                    <select class="form-control form-control-sm" name="cupboard" required>
+                                        <option value="">-- Select --</option>
+                                        <?php foreach ($this->general_model->get_cupboards() as $bkey => $bvalue) { ?>
+                                            <option value="<?= $bvalue['name'] ?>"><?= $bvalue['name'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Reck<span class="-req">*</span></label> 
+                                    <select class="form-control form-control-sm" name="reck" required>
+                                        <option value="">-- Select --</option>
+                                        <?php foreach ($this->general_model->get_recks() as $bkey => $bvalue) { ?>
+                                            <option value="<?= $bvalue['name'] ?>"><?= $bvalue['name'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Get Person(Remarks)<span class="-req">*</span></label> 
+                                    <textarea class="form-control form-control-sm" name="get_person" placeholder="Get Person(Remarks)" required></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Sent Person(Remarks)</label> 
+                                    <textarea class="form-control form-control-sm" name="sent_person" placeholder="Sent Person(Remarks)"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <label>Get Date<span class="-req">*</span></label> 
+                                <input name="get_date" type="text" placeholder="Get Date" class="form-control form-control-sm datepicker" value="<?= date('d-m-Y'); ?>" required>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <label>Sent Date</label> 
+                                <input name="sent_date" type="text" placeholder="Sent Date" class="form-control form-control-sm datepicker" value=""/>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Remarks</label> 
+                                    <textarea class="form-control form-control-sm" name="remarks" placeholder="Remarks"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="checkbox-fade fade-in-primary d- col-md-12">
+                        <label>
+                            <input type="checkbox" value="1" name="verified">
+                            <span class="cr"><i class="cr-icon icofont icofont-ui-check txt-primary"></i></span>
+                            <span class="text-inverse">Verified ?</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<div class="modal fade" id="edit_document" tabindex="-1" role="dialog" aria-hidden="true">
+    <form method="post" action="<?= base_url('documents/save') ?>" id="edit_document_form">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Document</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Select Client<span class="-req">*</span></label> 
+                                    <select class="form-control form-control-sm select2n" name="client" id="edit_document_client" required>
+                                        <option value="">-- Select --</option>
+                                        <?php foreach ($this->general_model->getFilteredClients() as $bkey => $bvalue) { ?>
+                                            <option value="<?= $bvalue['id'] ?>"><?= $bvalue['c_id'] ?> - <?= $bvalue['fname'] ?> <?= $bvalue['mname'] ?> <?= $bvalue['lname'] ?> - <?= $bvalue['mobile'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Responsible Person<span class="-req">*</span></label> 
+                                    <input type="text" class="form-control form-control-sm" name="res_person" placeholder="Responsible Person" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Cupboard<span class="-req">*</span></label> 
+                                    <select class="form-control form-control-sm" name="cupboard" id="edit_document_cupboard" required>
+                                        <option value="">-- Select --</option>
+                                        <?php foreach ($this->general_model->get_cupboards() as $bkey => $bvalue) { ?>
+                                            <option value="<?= $bvalue['name'] ?>"><?= $bvalue['name'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Reck<span class="-req">*</span></label> 
+                                    <select class="form-control form-control-sm" name="reck" id="edit_document_reck" required>
+                                        <option value="">-- Select --</option>
+                                        <?php foreach ($this->general_model->get_recks() as $bkey => $bvalue) { ?>
+                                            <option value="<?= $bvalue['name'] ?>"><?= $bvalue['name'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Get Person(Remarks)<span class="-req">*</span></label> 
+                                    <textarea class="form-control form-control-sm" name="get_person" id="edit_document_get_person" placeholder="Get Person(Remarks)" required></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Sent Person(Remarks)</label> 
+                                    <textarea class="form-control form-control-sm" name="sent_person" id="edit_document_sent_person" placeholder="Sent Person(Remarks)"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <label>Get Date<span class="-req">*</span></label> 
+                                <input name="get_date" type="text" placeholder="Get Date" class="form-control form-control-sm datepicker" value="<?= date('d-m-Y'); ?>" required>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <label>Sent Date</label> 
+                                <input name="sent_date" type="text" placeholder="Sent Date" class="form-control form-control-sm datepicker" value=""/>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Remarks</label> 
+                                    <textarea class="form-control form-control-sm" id="edit_document_remarks" name="remarks" placeholder="Remarks"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="checkbox-fade fade-in-primary d- col-md-12">
+                        <label>
+                            <input type="checkbox" value="1" name="verified" id="edit_document_done">
+                            <span class="cr"><i class="cr-icon icofont icofont-ui-check txt-primary"></i></span>
+                            <span class="text-inverse">Verified ?</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="id" id="edit_document_id">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="edit_document_save">Save</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

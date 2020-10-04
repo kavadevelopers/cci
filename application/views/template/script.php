@@ -1,7 +1,13 @@
 <script type="text/javascript">
+	$(document).ready(function(){
+		$("*").dblclick(function(e){
+		    e.preventDefault();
+		    return false;
+		});
+    });
 	$(document).ready(function() {
 		if (!Notification) {
-		  	alert('Desktop notifications not available in your browser. Try Chromium.');
+		  	alert('Desktop notifications not available in your browser. Try Chrome.');
 		 	return;
 		}
 		if (Notification.permission !== 'granted'){
@@ -462,7 +468,6 @@
 
 		$(document).on('click', '.add-payment-followup', function(event) {
 			_this = $(this);
-			_this.html('<i class="fa fa-circle-o-notch fa-spin"></i> Please Wait');
 			$("#id_paymentModel").val(_this.data('id'));
 			$.ajax({
                 type: "POST",
@@ -471,7 +476,7 @@
                 dataType: "JSON",
                 cache : false,
                 beforeSend: function() {
-                    
+                    _this.html('<i class="fa fa-circle-o-notch fa-spin"></i> Please Wait');
                 },
                 success: function(out)
                 {
@@ -771,10 +776,43 @@
             });
 		});
 
+		$(document).on('click', '.payment-followup-transaction', function(event) {
+			var _this = $(this);
+			$.ajax({
+                type: "POST",
+                url : "<?= base_url('followup/getTransaction'); ?>",
+                data : "client="+_this.data('client'),
+                cache : false,
+                dataType : "json",
+                beforeSend: function() {
+                    _this.attr('disabled','true');
+                    _this.html('<i class="fa fa-circle-o-notch fa-spin"></i>');
+                },
+                success: function(out)
+                {
+                	$('#tbody-transactionModal').html(out['str']);
+                	$('#transactionModal').modal('show');
+                	_this.removeAttr('disabled');
+                    _this.html('<i class="fa fa-eye"></i>');
+                }
+            });
+		});
+
 		$(document).on('click','.add-payment',function(){
 			$('#add_payment_model').modal('show');
 			$('.addPaymentClient').select2({
 			    dropdownParent: $('#add_payment_model .modal-content')
+			});
+		});
+
+		$(document).on('click', '.add-new-vendor', function(event) {
+			$('#add_vendor_modal').modal('show');
+		});
+
+		$(document).on('click', '.add-petty-cash', function(event) {
+			$('#add_pettycash_modal').modal('show');
+			$('.select2n').select2({
+			    dropdownParent: $('#add_pettycash_modal .modal-content')
 			});
 		});
 
@@ -783,6 +821,90 @@
 			$('.select2n').select2({
 			    dropdownParent: $('#add_reimburs_modal .modal-content')
 			});
+		});
+
+		$(document).on('click', '.add-document-locker', function(event) {
+			$('#add_document').modal('show');
+			$('.select2n').select2({
+			    dropdownParent: $('#add_document .modal-content')
+			});
+		});
+
+		$(document).on('click', '.btn-document-edit', function(event) {
+			var _this = $(this);
+			$('#edit_document').modal('show');
+			
+			var modal = $('#edit_document');
+			$('#edit_document_client').val(_this.data('client'));
+			modal.find('input[name="res_person"]').val(_this.data('res_person'));
+			$('#edit_document_cupboard').val(_this.data('cupboard'));
+			$('#edit_document_reck').val(_this.data('reck'));
+			$('#edit_document_get_person').val(_this.data('get_remarks'));
+			$('#edit_document_sent_person').val(_this.data('sent_remarks'));
+			modal.find('input[name="get_date"]').val(_this.data('get_date'));
+			modal.find('input[name="sent_date"]').val(_this.data('sent_date'));
+			$('#edit_document_remarks').val(_this.data('remarks'));
+			if(_this.data('done') == 1){
+				$('#edit_document_done').prop('checked', true);
+			}else{
+				$('#edit_document_done').prop('checked', false);
+			}
+			$('#edit_document_id').val(_this.data('id'));
+			$('.select2n').select2({
+			    dropdownParent: $('#edit_document .modal-content')
+			});
+		});		
+
+		$('#edit_document_form').submit(function(e) {
+			e.preventDefault();
+			$.ajax({
+                type: "POST",
+                url : "<?= base_url('documents/update'); ?>",
+                data : $('#edit_document_form').serialize(),
+                cache : false,
+                dataType: "JSON",
+                beforeSend: function() {
+                    $('#edit_document_save').attr('disabled','true');
+                    $('#edit_document_save').html('<i class="fa fa-circle-o-notch fa-spin"></i> Please Wait');
+                },
+                success: function(out)
+                {
+                	PNOTY("Document Updated",'success');  
+                	$('#edit_document_save').removeAttr('disabled');
+                    $('#edit_document_save').html('Save');
+                	$('#edit_document').modal('hide');
+
+                	var id = $('#edit_document_id').val();
+                	$('#doc_client'+id).html(out['client']);
+                	$('#doc_responsible'+id).html(out['responsible']);
+                	$('#doc_cupboard'+id).html(out['cupboard']);
+                	$('#doc_get_remarks'+id).html(out['get_remarks']);
+                	$('#doc_send_remarks'+id).html(out['sent_remarks']);
+                	$('#doc_remarks'+id).html(out['doc_remarks']);
+                	$('#doc_done'+id).html(out['done']);
+                }
+            });
+		});
+
+		$(document).on('click','.btn-document-delete',function(){
+			var _this = $(this);
+			if(confirm("Are you sure want to delete this?")){
+				$.ajax({
+	                type: "POST",
+	                url : "<?= base_url('documents/delete'); ?>",
+	                data : "id="+_this.data('id'),
+	                cache : false,
+	                beforeSend: function() {
+	                    _this.attr('disabled','true');
+	                    _this.html('<i class="fa fa-circle-o-notch fa-spin"></i> Please Wait');
+	                },
+	                success: function(out)
+	                {
+	                	PNOTY("Document Deleted",'success');  
+	                	_this.closest('tr').remove();
+	                }
+	            });
+			}
 		});
 
 		$(document).on('click','.edit-reimburs-btn',function(){

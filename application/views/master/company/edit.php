@@ -50,9 +50,17 @@
 
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>Payment Prefix <span class="-req">*</span></label>
+                            <label>Receipt Prefix <span class="-req">*</span></label>
                             <input name="payment_prefix" type="text" placeholder="Prefix" class="form-control" value="<?= set_value('payment_prefix',$company['receipt_prefix']); ?>">
                             <?= form_error('payment_prefix') ?>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Reimbursement Prefix <span class="-req">*</span></label>
+                            <input name="reimbur_prefix" type="text" placeholder="Prefix" class="form-control" value="<?= set_value('reimbur_prefix',$company['reimbur_prefix']); ?>">
+                            <?= form_error('reimbur_prefix') ?>
                         </div>
                     </div>
 

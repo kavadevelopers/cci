@@ -20,9 +20,9 @@
                 </td>
                 <td align="right">
                     <table  style="width:100%">
-                        <!-- <tr>
-                            <td align="right"><b>Invoice</b> : #<?= $invoice['invoice'] ?> </td>
-                        </tr> -->
+                        <tr>
+                            <td align="right"><b>Reimbursment</b> : #<?= $invoice['invoice'] ?> </td>
+                        </tr>
                         <tr>
                             <td align="right"><b>Client</b> : #<?= $this->general_model->_get_client($invoice['client'])['c_id'] ?> </td>
                         </tr>

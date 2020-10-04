@@ -58,7 +58,7 @@ class Company extends CI_Controller
 	{
 		if($id){
 			if($this->general_model->get_company($id)){
-				$data['_title']	= 'Edit Branch';
+				$data['_title']	= 'Edit Company';
 				$data['company']	= $this->general_model->get_company($id);
 				$this->load->theme('master/company/edit',$data);
 			}else{
@@ -77,6 +77,7 @@ class Company extends CI_Controller
 		$this->form_validation->set_rules('pan', 'PAN','trim');
 		$this->form_validation->set_rules('prefix', 'Invoice Prefix','trim|required');
 		$this->form_validation->set_rules('payment_prefix', 'Payment Prefix','trim|required');
+		$this->form_validation->set_rules('reimbur_prefix', 'Reimbursement Prefix','trim|required');
 		$this->form_validation->set_rules('add1', 'Address Line-1','trim|required');
 		$this->form_validation->set_rules('add2', 'Address Line-2','trim');
 		$this->form_validation->set_rules('bank', 'Bank Name','trim|required');
@@ -99,6 +100,7 @@ class Company extends CI_Controller
 				'pan'		=> strtoupper($this->input->post('pan')),
 				'prefix'			=> strtoupper($this->input->post('prefix')),
 				'receipt_prefix'	=> strtoupper($this->input->post('payment_prefix')),
+				'reimbur_prefix'	=> strtoupper($this->input->post('reimbur_prefix')),
 				'add1'				=> strtoupper($this->input->post('add1')),
 				'add2'				=> strtoupper($this->input->post('add2')),
 				'bank'				=> strtoupper($this->input->post('bank')),

@@ -257,9 +257,48 @@
                     </ul>
                 <?php } ?>
                 
-
-                    
                 
+                <ul class="pcoded-item pcoded-left-item">
+                    <li class="<?= menu(1,["vendor_list"])[0]; ?>">
+                        <a href="<?= base_url('vendor_list') ?>">
+                            <span class="pcoded-micon"><i class="fa fa-wrench"></i></span>
+                            <span class="pcoded-mtext">Vendor List</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <?php if(get_user()['user_type'] == "0" || get_user()['user_type'] == "1" || (get_user()['user_type'] == "2" && get_user()['type'] == "1") || (get_user()['user_type'] == "3" && get_user()['type'] == "4")){ ?>
+                    <ul class="pcoded-item pcoded-left-item">
+                        <li class="<?= menu(1,["petty_cash"])[0]; ?>">
+                            <a href="<?= base_url('petty_cash') ?>">
+                                <span class="pcoded-micon"><i class="fa fa-money"></i></span>
+                                <span class="pcoded-mtext">Petty Cash</span>
+                            </a>
+                        </li>
+                    </ul>
+                <?php } ?>
+                
+                <?php if(get_user()['user_type'] == "0"){ ?>
+                    <ul class="pcoded-item pcoded-left-item">
+                        <li class="<?= menu(1,["expenses"])[0]; ?>">
+                            <a href="<?= base_url('expenses') ?>">
+                                <span class="pcoded-micon"><i class="fa fa-flask"></i></span>
+                                <span class="pcoded-mtext">Expenses</span>
+                            </a>
+                        </li>
+                    </ul>
+                <?php } ?>
+                    
+                <?php if(get_user()['user_type'] == "0" || get_user()['user_type'] == "1" || get_user()['user_type'] == "2" || (get_user()['user_type'] == "3" && get_user()['type'] == "4")){ ?>
+                    <ul class="pcoded-item pcoded-left-item">
+                        <li class="<?= menu(1,["documents"])[0]; ?>">
+                            <a href="<?= base_url('documents') ?>">
+                                <span class="pcoded-micon"><i class="fa fa-book"></i></span>
+                                <span class="pcoded-mtext">Documents</span>
+                            </a>
+                        </li>
+                    </ul>
+                <?php } ?>
 
                 
 
@@ -300,10 +339,22 @@
                                         <span class="pcoded-mtext">Ledger</span>
                                     </a>
                                 </li>
+                                <li class="<?= menu(2,["petty_cash"])[0]; ?>">
+                                    <a href="<?= base_url('reports/petty_cash') ?>">
+                                        <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                        <span class="pcoded-mtext">Petty Cash</span>
+                                    </a>
+                                </li>
                                 <li class="<?= menu(2,["task"])[0]; ?>">
                                     <a href="<?= base_url('reports/task') ?>">
                                         <span class="pcoded-micon"><i class="fa fa-list"></i></span>
                                         <span class="pcoded-mtext">Task</span>
+                                    </a>
+                                </li>
+                                <li class="<?= menu(2,["expense"])[0]; ?>">
+                                    <a href="<?= base_url('reports/expense') ?>">
+                                        <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                        <span class="pcoded-mtext">Expense</span>
                                     </a>
                                 </li>
                             </ul>
@@ -502,6 +553,30 @@
                                     <a href="<?= base_url('document/sub_folder') ?>">
                                         <span class="pcoded-micon"><i class="fa fa-list"></i></span>
                                         <span class="pcoded-mtext">Sub</span>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+
+                        <li class="pcoded-hasmenu <?= menu(1,["cupboard"])[2]; ?>">
+                            <a href="javascript:void(0)">
+                                <span class="pcoded-micon"><i class="fa fa-folder-open-o"></i></span>
+                                <span class="pcoded-mtext">Locker Cupboards</span>
+                             </a>   
+                            <ul class="pcoded-submenu">
+
+                                <li class="<?= menu(2,["main"])[0]; ?>">
+                                    <a href="<?= base_url('cupboard/main') ?>">
+                                        <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                        <span class="pcoded-mtext">Cupboards</span>
+                                    </a>
+                                </li>
+
+                                <li class="<?= menu(2,["sub"])[0]; ?>">
+                                    <a href="<?= base_url('cupboard/sub') ?>">
+                                        <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                        <span class="pcoded-mtext">Reck</span>
                                     </a>
                                 </li>
 

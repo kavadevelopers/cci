@@ -18,9 +18,11 @@ class Reimburs extends CI_Controller
 	public function save()
 	{
 		$client = $this->general_model->_get_client($this->input->post('client'));
+		$company = $this->general_model->_get_company($client['company']);
+		$r_count = $this->db->get_where('reimbursement',['company' => $client['company']])->num_rows();
 		$data = [
 			'date'				=> dd($this->input->post('date')),
-			'invoice'			=> '',
+			'invoice'			=> $company['reimbur_prefix'].'_'.($r_count + 1),
 			'client'			=> $this->input->post('client'),
 			'company'			=> $client['company'],
 			'branch'			=> $client['branch'],	
@@ -51,7 +53,6 @@ class Reimburs extends CI_Controller
 		$client = $this->general_model->_get_client($this->input->post('client'));
 		$data = [
 			'date'				=> dd($this->input->post('date')),
-			'invoice'			=> '',
 			'client'			=> $this->input->post('client'),
 			'company'			=> $client['company'],
 			'branch'			=> $client['branch'],	

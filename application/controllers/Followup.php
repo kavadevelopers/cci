@@ -36,10 +36,51 @@ class Followup extends CI_Controller
 
 	public function payment()
 	{
-		pre_print($this->general_model->getUnPaidClient());
 		$data['_title']			= "Payment Followup";
-		$data['client']			= $this->general_model->getUnPaidClient();
+		if($this->input->post('out')){
+			$data['out']			= $this->input->post('out');
+			$out = $this->input->post('out');
+		}else{
+			$data['out']			= "";
+			$out = 0;
+		}
+		$data['client']			= $this->general_model->getUnPaidClient($out);
 		$this->load->theme('followup/payment',$data);
+	}
+
+	public function getTransaction()
+	{
+		$this->db->where('client', $this->input->post('client'));
+		$this->db->group_start();
+		    $this->db->where('type',invoice());
+            $this->db->or_where('type',payment());
+            $this->db->or_where('type',reimbursement());
+            $this->db->or_where('type',referal());
+		$this->db->group_end();
+		$this->db->order_by('date','desc');
+		$this->db->limit(20);
+		$transactions = $this->db->get('transaction')->result_array();
+		$str = "";
+		foreach ($transactions as $key => $value) {
+			$str .= "<tr>";
+				$str .= '<td class="text-center">';
+					$str .= vd($value['date']);
+				$str .= '</td>';
+				$str .= '<th class="text-left">';
+					$str .= typestring($value['type']);
+				$str .= '</th>';
+				$str .= '<td class="text-center">';
+					$str .= vch_no($value['type'],$value['main']);
+				$str .= '</td>';
+				$str .= '<td class="text-right">';
+					$str .= ledamtc($value['debit'],$value['credit']);
+				$str .= '</td>';
+				$str .= '<td class="text-right">';
+					$str .= ledamtd($value['debit'],$value['credit']);
+				$str .= '</td>';
+			$str .= "</tr>";
+		}
+		echo json_encode(['str' => $str]);
 	}
 
 	public function get()
@@ -511,7 +552,7 @@ class Followup extends CI_Controller
 		}else{
 			$done = 0;
 		}
-		$this->db->where('id',$this->input->post('id'))->update('invoice',['fdate' => $ndate,'done'	=> $done]);
+		$this->db->where('id',$this->input->post('id'))->update('client',['fdate' => $ndate]);
 
 
 		$followup = $this->db->get_where('followup',['id' => $fId])->row_array();
@@ -527,7 +568,7 @@ class Followup extends CI_Controller
 
 
 		
-		echo json_encode([$str]);
+		echo json_encode([$str,$this->input->post('date')]);
 	}
 
 	public function getNotifications()

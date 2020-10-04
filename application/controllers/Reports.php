@@ -17,6 +17,23 @@ class Reports extends CI_Controller
 		$this->load->theme('reports/ledger',$data);
 	}
 
+	public function expense()
+	{
+		$data['_title']		= "Expense";
+		$data['fdate']		= "";
+		$data['tdate']		= "";
+		$this->load->theme('reports/expense',$data);
+	}
+
+	public function petty_cash()
+	{
+		$data['_title']		= "Petty Cash Ledger";
+		$data['user']		= "";
+		$data['fdate']		= "";
+		$data['tdate']		= "";
+		$this->load->theme('reports/petty_cash',$data);
+	}
+
 	public function task()
 	{
 		$data['_title']		= "Task Reports";
@@ -53,6 +70,25 @@ class Reports extends CI_Controller
 		$this->load->theme('reports/ledger',$data);	
 	}
 
+	public function petty_cash_result()
+	{
+		$data['_title']		= "Petty Cash Ledger";
+		$data['user']		= $this->input->post('user');
+		$data['fdate']		= $this->input->post('fdate');
+		$data['tdate']		= $this->input->post('tdate');
+		$data['opening']    = $this->general_model->pettyCashOpeningBalance($this->input->post('user'),dd($this->input->post('fdate')));
+		$this->db->where('user', $this->input->post('user'));
+		if($this->input->post('fdate') != ""){
+			$this->db->where('date >=',dd($this->input->post('fdate')));	
+		}		
+		if($this->input->post('tdate') != ""){
+			$this->db->where('date <=',dd($this->input->post('tdate')));	
+		}	
+		$this->db->order_by('date','asc');
+		$data['list']		= $this->db->get('transaction_petty_cash')->result_array();
+		$this->load->theme('reports/petty_cash',$data);
+	}
+
 	public function task_result()
 	{
 		$data['_title']		= "Task Results";
@@ -80,6 +116,22 @@ class Reports extends CI_Controller
 		$this->db->order_by('id','desc');
 		$data['task'] = $this->db->get('task')->result_array();
 		$this->load->theme('reports/task',$data);
+	}
+
+	public function expense_result()
+	{
+		$data['_title']		= "Expense Results";
+		$data['fdate']		= $this->input->post('fdate');
+		$data['tdate']		= $this->input->post('tdate');
+		if($this->input->post('fdate') != ""){
+			$this->db->where('date >=',dd($this->input->post('fdate')));	
+		}		
+		if($this->input->post('tdate') != ""){
+			$this->db->where('date <=',dd($this->input->post('tdate')));	
+		}	
+		$this->db->order_by('date','asc');
+		$data['list']		= $this->db->get('expenses')->result_array();
+		$this->load->theme('reports/expense',$data);
 	}
 }
 ?>

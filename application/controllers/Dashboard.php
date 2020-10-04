@@ -21,6 +21,10 @@ class Dashboard extends CI_Controller
 			$this->load->theme('dashboard/superadmin',$data);
 		}
 
+		if(get_user()['user_type'] == "1"){
+			$this->load->theme('dashboard/admin',$data);
+		}
+
 		if(get_user()['user_type'] == "3"){
 			$this->load->theme('dashboard/sales',$data);
 		}

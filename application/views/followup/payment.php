@@ -22,15 +22,8 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label>From Date</label> 
-                                    <input name="from" type="text" placeholder="From Date" autocomplete="off" class="form-control form-control-sm datepicker" value="<?= $from ?>">
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>To Date</label> 
-                                    <input name="to" type="text" placeholder="To Date" autocomplete="off" class="form-control form-control-sm datepicker" value="<?= $to ?>">
+                                    <label>Outstanding Days</label> 
+                                    <input name="out" type="text" placeholder="Outstanding Days" autocomplete="off" class="form-control form-control-sm numbers" value="<?= $out ?>">
                                 </div>
                             </div>
                         </div>
@@ -53,39 +46,35 @@
                 <thead>
                     <tr>
                         <th class="text-center">#</th>
-                        <th class="text-center">Date</th>
+                        <th class="text-center">Days</th>
                         <th>Customer Name</th>
                         <th class="text-right">Amount</th>
-                        <th class="text-center">Next Followup Date</th>
-                        <th>Created By</th>
+                        <th class="text-center">NFD</th>
+                        <th class="text-right">Last Payment</th>
                         <th class="text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($invoices as $key => $value) { ?>
-                        <?php $client = $this->general_model->_get_client($value['client']); ?>
-                        <tr id="tr_payment-<?= $value['id'] ?>">
-                            <td class="text-center"><?= $value['inv'] ?></td>
-                            <td class="text-center"><?= vd($value['date']) ?></td>
+                    <?php foreach ($client as $key => $value) { ?>
+                        <?php $client = $this->general_model->_get_client($value); ?>
+                        <?php $lastPay = $this->general_model->getLastPayment($value); ?>
+                        <tr id="tr_payment-<?= $value ?>">
+                            <td class="text-center"><?= $client['c_id'] ?></td>
+                            <td class="text-center"><?= $this->general_model->getOutStandingClient($value)[1] ?></td>
                             <td>#<?= $client['c_id'] ?> <br><b><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?></b> <?= $client['firm'] != ""?'<br>'.$client['firm'] :'' ?> <br><small><?= $client['mobile'] ?></small></td>
-                            <td class="text-right"><?= $value['total'] ?></td>
-                            <td id="tr_payment-date<?= $value['id'] ?>" class="text-center">
-                                <?= $value['fdate'] != null?vd($value['fdate']):'NA'; ?>
+                            <td class="text-right"><?= $this->general_model->getOutStandingClient($value)[0] ?></td>
+                            <td id="tr_payment-date<?= $value ?>" class="text-center">
+                                <?= $client['fdate'] != null?vd($client['fdate']):'NA'; ?>
                             </td>
-                            <td>
-                                <?= $this->general_model->_get_user($value['created_by'])['name'] ?>
-                                <?php if(get_user()['user_type'] == 0 && $value['created_by'] != 1){ ?>
-                                    <br><p><b>Branch</b> : <?= $this->general_model->_get_branch($value['branch'])['name'] ?></p>  
-                                <?php } ?>
+                            <td class="text-right">
+                                <?= $lastPay[0] ?><br>
+                                <?= $lastPay[1] ?>
                             </td>
                             <td class="text-center">
-                                <a href="<?= base_url('pdf/invoice/').$value['id'] ?>" target="_blank" class="btn btn-primary btn-mini" title="PDF">
-                                    <i class="fa fa-file-pdf-o"></i>
-                                </a>
-                                <a href="<?= base_url('pdf/invoiceD/').$value['id'] ?>" target="_blank" class="btn btn-secondary btn-mini" title="Download PDF">
-                                    <i class="fa fa-download"></i>
-                                </a>
-                                <button type="button" class="btn btn-success btn-mini add-payment-followup" data-id="<?= $value['id'] ?>" data-type="jobpayment" title="Check Followup">
+                                <button class="btn btn-primary btn-mini payment-followup-transaction" title="Transaction History" data-client="<?= $value ?>">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                                <button type="button" class="btn btn-success btn-mini add-payment-followup" data-id="<?= $value ?>" data-type="jobpayment" title="Check Followup">
                                     <i class="fa fa-question"></i>
                                 </button>
                             </td>
