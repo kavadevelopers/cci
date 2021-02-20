@@ -199,14 +199,14 @@ class Importexport extends CI_Controller
 				if($totalRows == $importedRows){
 					
 					
-					if(file_exists(FCPATH.'backup/clients-backup.xlsx')){
+					if(@file_exists(FCPATH.'backup/clients-backup.xlsx')){
 				    	@unlink(FCPATH.'backup/clients-backup.xlsx');
 				    }
 				    $this->session->set_flashdata('msg', 'All Data has been imported.');
 	        		redirect(base_url('importexport/client'));	
 				}else{
 					
-				    if(file_exists(FCPATH.'backup/clients-backup.xlsx')){
+				    if(@file_exists(FCPATH.'backup/clients-backup.xlsx')){
 				    	@unlink(FCPATH.'backup/clients-backup.xlsx');
 				    }
 				    $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
