@@ -598,11 +598,13 @@ class General_model extends CI_Model
 
 
 		if($odebit > $ocredit){
-			$tra = $this->db->order_by('id','desc')->get_where('transaction',['client' => $client_id,'type' => invoice()])->row_array();
+			//,'type' => invoice()
+			$tra = $this->db->order_by('id','desc')->get_where('transaction',['client' => $client_id])->row_array();
 			$days = daysBeetweenDates($tra['date']);
 			return [($odebit - $ocredit),$days];
 		}else if($odebit < $ocredit){
-			$tra = $this->db->order_by('id','desc')->get_where('transaction',['client' => $client_id,'type' => payment()])->row_array();
+			//,'type' => payment()
+			$tra = $this->db->order_by('id','desc')->get_where('transaction',['client' => $client_id])->row_array();
 			$days = daysBeetweenDates($tra['date']);
 			return [($odebit - $ocredit ),$days];
 		}else{
