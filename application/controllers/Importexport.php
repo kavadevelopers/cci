@@ -63,9 +63,9 @@ class Importexport extends CI_Controller
 					if($value[18] == ""){ $error++; $errorString .= "COLUMN-S STATE IS REQUIRED ,";}else{ if(!$this->import_model->getState($value[18])){ $error++; $errorString .= "COLUMN-S PLEASE ENTER VALID STATE ,";} }
 					if($value[20] == ""){ $error++; $errorString .= "COLUMN-U OCCUPATION IS REQUIRED ,"; }else{ if(!in_array($value[20], ['BUSINESS','JOB','OTHER','BOTH'])){ $error++; $errorString .= "COLUMN-U PLEASE ENTER VALID OCCUPATION ,"; } }
 					if($value[21] == ""){ $error++; $errorString .= "COLUMN-V LANGUAGE IS REQUIRED ,";}
-					if($value[23] == ""){ $error++; $errorString .= "COLUMN-X HELTH INSURANCE IS REQUIRED ,"; }else{ if(!in_array($value[23], ['YES','NO'])){ $error++; $errorString .= "COLUMN-X PLEASE ENTER VALID HELTH INSURANCE ,"; } }
+					if($value[23] == ""){ $error++; $errorString .= "COLUMN-X HELTH INSURANCE IS REQUIRED ,"; }else{ if(!in_array($value[23], ['YES','NO','NOT KNOWN'])){ $error++; $errorString .= "COLUMN-X PLEASE ENTER VALID HELTH INSURANCE ,"; } }
 
-					if($value[24] == ""){ $error++; $errorString .= "COLUMN-Y LIFE INSURANCE IS REQUIRED ,"; }else{ if(!in_array($value[24], ['YES','NO'])){ $error++; $errorString .= "COLUMN-Y PLEASE ENTER VALID LIFE INSURANCE ,"; } }
+					if($value[24] == ""){ $error++; $errorString .= "COLUMN-Y LIFE INSURANCE IS REQUIRED ,"; }else{ if(!in_array($value[24], ['YES','NO','NOT KNOWN'])){ $error++; $errorString .= "COLUMN-Y PLEASE ENTER VALID LIFE INSURANCE ,"; } }
 
 					if($value[25] == ""){ $error++; $errorString .= "COLUMN-Z ITR CLIEN IS REQUIRED ,"; }else{ if(!in_array($value[25], ['YES','NO'])){ $error++; $errorString .= "COLUMN-Z PLEASE ENTER VALID ITR CLIENT ,"; } }
 

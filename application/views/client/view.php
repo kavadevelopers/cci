@@ -670,7 +670,16 @@
 	                        <div class="row">
 	                        	<div class="col-md-12">
 	                        		<div class="table-responsive">
-                                        <?php if(get_user()['user_type'] == "0"){ ?>
+                                        <?php if(get_user()['user_type'] == "0"){
+                                            $this->db->where('main',0);
+                                            $this->db->where('client',$client['id']);
+                                            $this->db->where('type',opening());
+                                            $openingBalance = $this->db->get('transaction')->row_array();
+                                            $openingBalanceDt = "";
+                                            if($openingBalance){
+                                                $openingBalanceDt = vd($openingBalance['date']);
+                                            }
+                                        ?>
                                             <div class="col-md-6">
                                                 <h5>Opening Balance</h5>
                                                 <br>
@@ -689,7 +698,7 @@
                                                                 <input type="text" name="opening" class="form-control form-control-sm minus-decimal-num" placeholder="Amount ex:10000 or -10000" value="<?= $client['opening_balance'] ?>"  required>
                                                             </td>
                                                             <td>
-                                                                <input name="date" type="text" placeholder="Next Followup Date" class="form-control form-control-sm datepicker" value="" autocomplete="off">
+                                                                <input name="date" type="text" placeholder="Date" class="form-control form-control-sm datepicker" value="<?= $openingBalanceDt ?>" autocomplete="off">
                                                             </td>
                                                             <td class="text-center">
                                                                 <input type="hidden" name="client" value="<?= $client['id'] ?>">
