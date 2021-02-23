@@ -679,6 +679,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th>Opening </th>
+                                                            <th>Date </th>
                                                             <th></th>
                                                         </tr>
                                                     </thead>
@@ -686,6 +687,9 @@
                                                         <tr>
                                                             <td>
                                                                 <input type="text" name="opening" class="form-control form-control-sm minus-decimal-num" placeholder="Amount ex:10000 or -10000" value="<?= $client['opening_balance'] ?>"  required>
+                                                            </td>
+                                                            <td>
+                                                                <input name="date" type="text" placeholder="Next Followup Date" class="form-control form-control-sm datepicker" value="" autocomplete="off">
                                                             </td>
                                                             <td class="text-center">
                                                                 <input type="hidden" name="client" value="<?= $client['id'] ?>">
@@ -801,7 +805,7 @@
     								                			<textarea class="form-control" id="addGroupRemarks" placeholder="remarks"></textarea>
     								                		</td>
     								                		<td>
-    								                			<button class="btn btn-mini btn-success" type="submit" id="addGroupSubmitBtn"><i class="fa fa-plus"></i></button>
+    								                			<button class="btn btn-mini btn-success" type="submit" id="addGroupSubmitBtn">Save</button>
     								                		</td>
     								                	</tr>
     								                </tfoot>
@@ -852,7 +856,7 @@
                                                             <input type="hidden" name="client" value="<?= $client['id'] ?>">
                                                         </td>
                                                         <td>
-                                                            <button class="btn btn-mini btn-success" type="submit"><i class="fa fa-plus"></i></button>
+                                                            <button class="btn btn-mini btn-success" type="submit">Save</button>
                                                         </td>
                                                     </tr>
                                                 </tbody>

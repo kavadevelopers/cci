@@ -341,9 +341,9 @@ class Client extends CI_Controller
             $data = [
                 'client'    => $this->input->post('client'),
                 'type'      => opening(),
-                'debit'    => $this->input->post('opening'),
-                'main'    => 0,
-                'date'      => date('Y-m-d')
+                'debit'    	=> $this->input->post('opening'),
+                'main'    	=> 0,
+                'date'      => dd($this->input->post('date'))
             ];
             $this->db->insert('transaction',$data);
         }
@@ -352,8 +352,8 @@ class Client extends CI_Controller
                 'client'    => $this->input->post('client'),
                 'type'      => opening(),
                 'credit'    => abs($this->input->post('opening')),
-                'main'    => 0,
-                'date'      => date('Y-m-d')
+                'main'    	=> 0,
+                'date'      => dd($this->input->post('date'))
             ];
             $this->db->insert('transaction',$data);
         } 

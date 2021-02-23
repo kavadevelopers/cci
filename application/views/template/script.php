@@ -1018,7 +1018,7 @@
 	                	str += "</tr>";
 	                	$('#addGroupTbody').append(str);
 	                	_this.removeAttr('disabled');
-	                    _this.html('<i class="fa fa-plus"></i>');
+	                    _this.html('Save');
 	                }else{
 	                	PNOTY("This client is alredy joined another group",'error');  
 	                }
