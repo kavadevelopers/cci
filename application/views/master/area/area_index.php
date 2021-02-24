@@ -31,18 +31,6 @@
                                     <input name="pincode" type="text" class="form-control" value="<?= set_value('pincode'); ?>" placeholder="Pincode">
                                     <?= form_error('pincode') ?>
                                 </div>
-                            </div>    
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>City <span class="-req">*</span></label>
-                                    <select class="form-control select2" name="city">
-                                        <option value="">-- Select City --</option>
-                                        <?php foreach ($this->general_model->list_city() as $key => $value) { ?>
-                                            <option value="<?= $value['id'] ?>" <?= set_value('city') == $value['id']?'selected':'' ?>><?= $value['name'] ?></option>
-                                        <?php } ?>
-                                    </select>
-                                    <?= form_error('city') ?>
-                                </div>
                             </div>                 
                         </div>
                         <div class="card-footer text-right">
@@ -71,19 +59,7 @@
                                     <input name="pincode" type="text" class="form-control" value="<?= set_value('pincode',$ind['pincode']); ?>" placeholder="Pincode">
                                     <?= form_error('pincode') ?>
                                 </div>
-                            </div>    
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>City <span class="-req">*</span></label>
-                                    <select class="form-control select2" name="city">
-                                        <option value="">-- Select City --</option>
-                                        <?php foreach ($this->general_model->list_city() as $key => $value) { ?>
-                                            <option value="<?= $value['id'] ?>" <?= set_value('city',$ind['city']) == $value['id']?'selected':'' ?>><?= $value['name'] ?></option>
-                                        <?php } ?>
-                                    </select>
-                                    <?= form_error('city') ?>
-                                </div>
-                            </div>    
+                            </div>   
                         </div>
                         <div class="card-footer text-right">
                             <a href="<?= base_url('area/areas') ?>" class="btn btn-danger">
@@ -109,7 +85,6 @@
                                 <th class="text-center">#</th>
                                 <th>Name</th>
                                 <th class="text-center">Pincode</th>
-                                <th>City</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -119,7 +94,6 @@
                                     <td class="text-center"><?= $key + 1 ?></td>
                                     <td><?= $value['name'] ?></td>
                                     <td class="text-center"><?= $value['pincode'] ?></td>
-                                    <td><?= $this->general_model->_get_city($value['city'])['name'] ?></td>
                                     <td class="text-center">
                                         <?php if($value['id'] != '3244'){ ?>
                                             <a href="<?= base_url('area/edit_area/').$value['id'] ?>" class="btn btn-primary btn-mini">

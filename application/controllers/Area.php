@@ -201,7 +201,6 @@ class Area extends CI_Controller
 	{
 		$this->form_validation->set_error_delimiters('<div class="val-error">', '</div>');
 		$this->form_validation->set_rules('name', 'Name','trim|required|callback_unique_city');
-		$this->form_validation->set_rules('state', 'State','trim|required');
 
 		if ($this->form_validation->run() == FALSE)
 		{
@@ -213,8 +212,7 @@ class Area extends CI_Controller
 		else
 		{ 
 			$data = [
-				'name'		=> $this->input->post('name'),
-				'state'		=> $this->input->post('state')
+				'name'		=> $this->input->post('name')
 			];
 			$this->db->insert('area_city',$data);
 			$this->session->set_flashdata('msg', 'City Added');
@@ -244,7 +242,6 @@ class Area extends CI_Controller
 	{
 		$this->form_validation->set_error_delimiters('<div class="val-error">', '</div>');
 		$this->form_validation->set_rules('name', 'Name','trim|required|callback_e_unique_city');
-		$this->form_validation->set_rules('state', 'State','trim|required');
 
 		if ($this->form_validation->run() == FALSE)
 		{
@@ -257,8 +254,7 @@ class Area extends CI_Controller
 		else
 		{ 
 			$data = [
-				'name'		=> $this->input->post('name'),
-				'state'		=> $this->input->post('state')
+				'name'		=> $this->input->post('name')
 			];
 			$this->db->where('id',$this->input->post('id'))->update('area_city',$data);
 
@@ -297,7 +293,6 @@ class Area extends CI_Controller
 	{
 		$this->form_validation->set_error_delimiters('<div class="val-error">', '</div>');
 		$this->form_validation->set_rules('name', 'Name','trim|required|callback_unique_area');
-		$this->form_validation->set_rules('city', 'City','trim|required');
 		$this->form_validation->set_rules('pincode', 'Pincode','trim|required|numeric|max_length[6]|min_length[6]');
 
 		if ($this->form_validation->run() == FALSE)
@@ -311,7 +306,6 @@ class Area extends CI_Controller
 		{ 
 			$data = [
 				'name'		=> $this->input->post('name'),
-				'city'		=> $this->input->post('city'),
 				'pincode'	=> $this->input->post('pincode')
 			];
 			$this->db->insert('areas',$data);
@@ -341,7 +335,6 @@ class Area extends CI_Controller
 	{
 		$this->form_validation->set_error_delimiters('<div class="val-error">', '</div>');
 		$this->form_validation->set_rules('name', 'Name','trim|required|callback_e_unique_area');
-		$this->form_validation->set_rules('city', 'City','trim|required');
 		$this->form_validation->set_rules('pincode', 'Pincode','trim|required|numeric|max_length[6]|min_length[6]');
 
 		if ($this->form_validation->run() == FALSE)
@@ -356,7 +349,6 @@ class Area extends CI_Controller
 		{ 
 			$data = [
 				'name'		=> $this->input->post('name'),
-				'city'		=> $this->input->post('city'),
 				'pincode'	=> $this->input->post('pincode')
 			];
 			$this->db->where('id',$this->input->post('id'))->update('areas',$data);

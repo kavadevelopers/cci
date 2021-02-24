@@ -24,19 +24,7 @@
                                     <input name="name" type="text" class="form-control" value="<?= set_value('name'); ?>" placeholder="Name">
                                     <?= form_error('name') ?>
                                 </div>
-                            </div>    
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>State <span class="-req">*</span></label>
-                                    <select class="form-control" name="state">
-                                        <option value="">-- Select State --</option>
-                                        <?php foreach ($this->general_model->list_state() as $key => $value) { ?>
-                                            <option value="<?= $value['id'] ?>" <?= set_value('state') == $value['id']?'selected':'' ?>><?= $value['name'] ?></option>
-                                        <?php } ?>
-                                    </select>
-                                    <?= form_error('state') ?>
-                                </div>
-                            </div>                 
+                            </div>                
                         </div>
                         <div class="card-footer text-right">
                             <button class="btn btn-success">
@@ -57,19 +45,7 @@
                                     <input name="name" type="text" class="form-control" value="<?= set_value('name',$ind['name']); ?>" placeholder="Name">
                                     <?= form_error('name') ?>
                                 </div>
-                            </div>                    
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>State <span class="-req">*</span></label>
-                                    <select class="form-control" name="state">
-                                        <option value="">-- Select State --</option>
-                                        <?php foreach ($this->general_model->list_state() as $key => $value) { ?>
-                                            <option value="<?= $value['id'] ?>" <?= set_value('state',$ind['state']) == $value['id']?'selected':'' ?>><?= $value['name'] ?></option>
-                                        <?php } ?>
-                                    </select>
-                                    <?= form_error('state') ?>
-                                </div>
-                            </div>   
+                            </div>      
                         </div>
                         <div class="card-footer text-right">
                             <a href="<?= base_url('area/city') ?>" class="btn btn-danger">
@@ -94,7 +70,6 @@
                             <tr>
                                 <th class="text-center">#</th>
                                 <th>Name</th>
-                                <th>State</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -103,7 +78,6 @@
                                 <tr>
                                     <td class="text-center"><?= $key + 1 ?></td>
                                     <td><?= $value['name'] ?></td>
-                                    <td><?= $this->general_model->_get_state($value['state'])['name'] ?></td>
                                     <td class="text-center">
                                         <a href="<?= base_url('area/edit_city/').$value['id'] ?>" class="btn btn-primary btn-mini">
                                             <i class="fa fa-pencil"></i>
