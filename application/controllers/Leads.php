@@ -140,7 +140,7 @@ class Leads extends CI_Controller
 		$this->db->insert('leads',$data);
 		$id = $this->db->insert_id();
 		$count_lead = $this->db->get_where('leads',['branch' => $this->input->post('branch')])->num_rows();
-		$lead_id = substr($this->general_model->_get_branch($this->input->post('branch'))['name'],0,2).'_'.($count_lead);
+		$lead_id = $this->general_model->_get_branch($this->input->post('branch'))['sname'].'_'.($count_lead);
 		$this->db->where('id',$id)->update('leads',['lead' => $lead_id]);
 
 
