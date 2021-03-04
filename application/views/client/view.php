@@ -776,7 +776,6 @@
                                                             <th>Child Name</th>
                                                             <th class="text-center">Relation</th>
                                                             <th>Remarks</th>
-                                                            <th></th>
     								                    </tr>
     								                </thead>
     								                <tbody id="addGroupTbody">
@@ -788,9 +787,8 @@
     									                		<td class="text-center">
                                                                     <?= $parentclient['c_id'] ?> - <?= $parentclient['fname'].' '.$parentclient['lname'] ?>
                                                                 </td>
-    									                		<td><?= $nclient['fname'].' '.$nclient['mname'].' '.$nclient['lname'] ?></td>
+    									                		<td><?= $nclient['c_id'] ?> - <?= $nclient['fname'].' '.$nclient['mname'].' '.$nclient['lname'] ?></td>
     									                		<td class="text-center"><?= $value['relation'] ?></td>
-    									                		<td class="text-center"><?= $nclient['c_id'] ?></td>
     									                		<td><?= nl2br($value['remarks']) ?></td>
     									                	</tr>
     								                	<?php } ?>
