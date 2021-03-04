@@ -67,9 +67,9 @@
                                     <a href="<?= base_url('client/in_activate/').$value['id'] ?>" onclick="return confirm('Are you sure you want to tranfer?')" class="btn btn-warning btn-mini" title="Transfer To Inactive">
                                         <i class="fa fa-toggle-off"></i>
                                     </a>
-                                    <a href="<?= base_url('client/delete/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete" title="Delete">
+                                    <!-- <a href="<?= base_url('client/delete/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete" title="Delete">
                                         <i class="fa fa-trash"></i>
-                                    </a>
+                                    </a> -->
                                 <?php } ?>
                             </td>
                         </tr>

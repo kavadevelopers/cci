@@ -751,8 +751,9 @@
                                                         <?php $group = $this->db->get_where('grouping',['main' => $parentGet['main']])->result_array(); ?>
                                                         <?php foreach ($group as $key => $value) { ?>
                                                             <?php $nclient = $this->general_model->_get_client($value['child']); ?>
+                                                            <?php $parentclient = $this->general_model->_get_client($value['main']); ?>
                                                             <tr>
-                                                                <td class="text-center"><?= $client['group'] ?></td>
+                                                                <td class="text-center"><?= $parentclient['c_id'] ?><?= $parentclient['fname'].' '.$parentclient['lname'] ?></td>
                                                                 <td><?= $nclient['fname'].' '.$nclient['mname'].' '.$nclient['lname'] ?></td>
                                                                 <td class="text-center"><?= $value['relation'] ?></td>
                                                                 <td class="text-center"><?= $nclient['c_id'] ?></td>
