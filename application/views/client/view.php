@@ -743,7 +743,6 @@
                                                             <th class="text-center">Parent Client</th>
                                                             <th>Child Name</th>
                                                             <th class="text-center">Relation</th>
-                                                            <th class="text-center">Child Id</th>
                                                             <th>Remarks</th>
                                                         </tr>
                                                     </thead>
@@ -753,10 +752,11 @@
                                                             <?php $nclient = $this->general_model->_get_client($value['child']); ?>
                                                             <?php $parentclient = $this->general_model->_get_client($value['main']); ?>
                                                             <tr>
-                                                                <td class="text-center"><?= $parentclient['c_id'] ?><?= $parentclient['fname'].' '.$parentclient['lname'] ?></td>
-                                                                <td><?= $nclient['fname'].' '.$nclient['mname'].' '.$nclient['lname'] ?></td>
+                                                                <td class="text-center">
+                                                                    <?= $parentclient['c_id'] ?> - <?= $parentclient['fname'].' '.$parentclient['lname'] ?>        
+                                                                </td>
+                                                                <td><?= $nclient['c_id'] ?> - <?= $nclient['fname'].' '.$nclient['mname'].' '.$nclient['lname'] ?></td>
                                                                 <td class="text-center"><?= $value['relation'] ?></td>
-                                                                <td class="text-center"><?= $nclient['c_id'] ?></td>
                                                                 <td><?= nl2br($value['remarks']) ?></td>
                                                             </tr>
                                                         <?php } ?>
@@ -775,16 +775,19 @@
     								                        <th class="text-center">Parent Client</th>
                                                             <th>Child Name</th>
                                                             <th class="text-center">Relation</th>
-                                                            <th class="text-center">Child Id</th>
                                                             <th>Remarks</th>
+                                                            <th></th>
     								                    </tr>
     								                </thead>
     								                <tbody id="addGroupTbody">
     								                	<?php $group = $this->db->get_where('grouping',['main' => $client['id']])->result_array(); ?>
     								                    <?php foreach ($group as $key => $value) { ?>
     								                    	<?php $nclient = $this->general_model->_get_client($value['child']); ?>
+                                                            <?php $parentclient = $this->general_model->_get_client($value['main']); ?>
     									                	<tr>
-    									                		<td class="text-center"><?= $client['group'] ?></td>
+    									                		<td class="text-center">
+                                                                    <?= $parentclient['c_id'] ?> - <?= $parentclient['fname'].' '.$parentclient['lname'] ?>
+                                                                </td>
     									                		<td><?= $nclient['fname'].' '.$nclient['mname'].' '.$nclient['lname'] ?></td>
     									                		<td class="text-center"><?= $value['relation'] ?></td>
     									                		<td class="text-center"><?= $nclient['c_id'] ?></td>
