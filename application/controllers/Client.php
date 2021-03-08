@@ -197,6 +197,17 @@ class Client extends CI_Controller
 		}
 	}
 
+	public function delete_child($id = false,$client)
+	{
+		if($id){
+			$this->db->where('id',$id)->delete('grouping');
+			$this->session->set_flashdata('msg', 'Child Deleted');
+    		redirect(base_url('client/view/'.$client));
+		}else{
+			redirect(base_url('client'));
+		}
+	}
+
 	public function cancel($id = false)
 	{
 		if($id){

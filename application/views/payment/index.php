@@ -61,17 +61,18 @@
                                     <i class="fa fa-download"></i>
                                 </a>
                                 <?php if($value['status'] != 1){ ?>
+                                    
+                                    <!-- <a href="<?= base_url('payment/delete/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete" title="Delete">
+                                        <i class="fa fa-trash"></i>
+                                    </a> -->
+                                <?php } ?>
+                                <?php if(get_user()['user_type'] == 0 && $value['status'] == 1){ ?>
                                     <button class="btn btn-primary btn-mini edit-payment" data-id="<?= $value['id'] ?>" data-client="<?= $value['client'] ?>" data-date="<?= vd($value['date']) ?>" data-amount="<?= $value['amount'] ?>" data-remarks="<?= $value['remarks'] ?>" data-pay_type="<?= $value['pay_type'] ?>" data-pay_remarks="<?= $value['pay_remarks'] ?>" title="Edit">
                                         <i class="fa fa-pencil"></i>
                                     </button>
-                                    <a href="<?= base_url('payment/delete/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete" title="Delete">
+                                    <!-- <a href="<?= base_url('payment/delete_full/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete" title="Delete">
                                         <i class="fa fa-trash"></i>
-                                    </a>
-                                <?php } ?>
-                                <?php if(get_user()['user_type'] == 0 && $value['status'] == 1){ ?>
-                                    <a href="<?= base_url('payment/delete_full/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete" title="Delete">
-                                        <i class="fa fa-trash"></i>
-                                    </a>
+                                    </a> -->
                                 <?php } ?>
                             </td>
                         </tr>

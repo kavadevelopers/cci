@@ -73,12 +73,17 @@ class Payment extends CI_Controller
 			'branch'		=> $client['branch'],
 			'company'		=> $client['company'],
 			'pay_type'		=> $this->input->post('payment_type'),
-			'pay_remarks'		=> $this->input->post('pay_remarks'),
+			'pay_remarks'	=> $this->input->post('pay_remarks'),
 			'amount'		=> $this->input->post('amount'),
 			'remarks'		=> $this->input->post('remarks')
 		];
-
 		$this->db->where('id',$this->input->post('id'))->update('payment',$data);
+		$data = [
+			'client'	=> $this->input->post('client'),
+			'date'		=> $date,
+			'credit'	=> $this->input->post('amount')
+		];
+		$this->db->where('type',payment())->where('main',$this->input->post('id'))->update('transaction',$data);
 
 		$this->session->set_flashdata('msg', 'Payment Updated');
 	    redirect(base_url('payment'));

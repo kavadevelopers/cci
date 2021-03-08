@@ -776,6 +776,7 @@
                                                             <th>Child Name</th>
                                                             <th class="text-center">Relation</th>
                                                             <th>Remarks</th>
+                                                            <th class="text-center">Action</th>
     								                    </tr>
     								                </thead>
     								                <tbody id="addGroupTbody">
@@ -790,6 +791,11 @@
     									                		<td><?= $nclient['c_id'] ?> - <?= $nclient['fname'].' '.$nclient['mname'].' '.$nclient['lname'] ?></td>
     									                		<td class="text-center"><?= $value['relation'] ?></td>
     									                		<td><?= nl2br($value['remarks']) ?></td>
+                                                                <td class="text-center">
+                                                                    <a href="<?= base_url('client/delete_child/').$value['id'].'/'.$client['id'] ?>" class="btn btn-danger btn-mini btn-delete" title="Delete">
+                                                                        <i class="fa fa-trash"></i>
+                                                                    </a>
+                                                                </td>
     									                	</tr>
     								                	<?php } ?>
     								                </tbody>
