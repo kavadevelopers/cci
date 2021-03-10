@@ -14,6 +14,12 @@ class Client extends CI_Controller
 		$this->load->theme('client/index',$data);
 	}
 
+	public function add()
+	{
+		$data['_title']		= "Add Client";	
+		$this->load->theme('client/add',$data);
+	}
+
 	public function new_clients()
 	{
 		$data['_title']		= "New Clients";
@@ -46,7 +52,7 @@ class Client extends CI_Controller
 		}
 
 		$language = '';
-		foreach ($this->input->post('language') as $key => $value) {
+		foreach ($this->input->post('prefered_language') as $key => $value) {
 			if($value != ''){
 				$language .= $value.',';
 			}
@@ -119,8 +125,7 @@ class Client extends CI_Controller
 			'ind_remarks'		=> strtoupper($this->input->post('ind_remaarks')),
 			'profile_intro'		=> strtoupper($this->input->post('profile_intro')),
 			'turnover_notes'	=> strtoupper($this->input->post('turnover_notes')),
-			'turnover_notes'	=> strtoupper($this->input->post('turnover_notes')),
-			'turnover_notes'	=> strtoupper($this->input->post('goal')),
+			'goal'				=> strtoupper($this->input->post('goal')),
 			'quotation'			=> strtoupper($this->input->post('quotation')),
 			'contact_persons'	=> json_encode($contact_persons),
 			'status'			=> 0,
@@ -164,6 +169,128 @@ class Client extends CI_Controller
 
 		$this->session->set_flashdata('msg', 'Client Saved');
 	    redirect(base_url('client/new_clients'));
+	}
+
+	public function save_client()
+	{
+		$mobiles = '';
+		foreach ($this->input->post('mobile') as $key => $value) {
+			if($value != ''){
+				$mobiles .= $value.',';
+			}
+		}
+
+		$emails = '';
+		foreach ($this->input->post('email') as $key => $value) {
+			if($value != ''){
+				$emails .= strtoupper($value).',';
+			}
+		}
+
+		$language = '';
+		foreach ($this->input->post('prefered_language') as $key => $value) {
+			if($value != ''){
+				$language .= $value.',';
+			}
+		}
+
+		$time_to_call = '';
+		foreach ($this->input->post('time_to_call') as $key => $value) {
+			if($value != ''){
+				$time_to_call .= strtoupper($value).',';
+			}
+		}
+
+		$referal_code = "";
+		$referal_get = $this->db->get_where('client' ,['c_id' => $this->input->post('refered_by')])->row_array();
+		if($referal_get){
+			$referal_code = $referal_get['c_id'];
+		}
+
+		
+		$client_count = $this->db->get_where('client',['branch' => $this->input->post('branch')])->num_rows();
+		$branch = $this->general_model->_get_branch($this->input->post('branch'));
+		$source = $this->general_model->_get_source($this->input->post('source'));
+		$data = [
+			'c_id'			=> $branch['code'].getClientId($client_count + 1),
+			'branch'		=> $this->input->post('branch'),
+			'company'		=> $source['company'],
+			'client_type'	=> $this->input->post('client_type'),
+			'source'		=> $this->input->post('source'),
+			'fname'			=> strtoupper($this->input->post('fname')),
+			'mname'			=> strtoupper($this->input->post('mname')),
+			'lname'			=> strtoupper($this->input->post('lname')),
+			'firm'			=> strtoupper($this->input->post('firm')),
+			'mobile'		=> rtrim($mobiles,','),
+			'email'			=> rtrim($emails,','),
+			'pan'			=> strtoupper($this->input->post('pan')),
+			'dob'			=> dd($this->input->post('dob')),
+			'gender'		=> $this->input->post('gender'),
+			'add1'			=> strtoupper($this->input->post('add1')),
+			'add2'			=> strtoupper($this->input->post('add2')),
+			'area'			=> $this->input->post('area'),
+			'city'			=> $this->input->post('city'),
+			'district'		=> strtoupper($this->input->post('district')),
+			'state'			=> $this->input->post('state'),
+			'pin'			=> $this->input->post('pin'),
+			'occupation'		=> $this->input->post('occupation'),
+			'language'		=> rtrim($language,','),	
+			'time_to_call'	=> rtrim($time_to_call,','),	
+			'health_in'		=> $this->input->post('health_insurance'),
+			'life_in'		=> $this->input->post('life_insurance'),
+			'itr_client'		=> $this->input->post('itr_client'),
+			'gst_client'		=> $this->input->post('gst_client'),
+			'gst_type'			=> $this->input->post('gst_type'),
+			'month_quater'		=> $this->input->post('month_quater'),
+			'industry'			=> $this->input->post('industry'),
+			'sub_industry'		=> $this->input->post('sub_industry'),
+			'ind_remarks'		=> strtoupper($this->input->post('ind_remaarks')),
+			'profile_intro'		=> strtoupper($this->input->post('profile_intro')),
+			'turnover_notes'	=> strtoupper($this->input->post('turnover_notes')),
+			'goal'				=> strtoupper($this->input->post('goal')),
+			'quotation'			=> strtoupper($this->input->post('quotation')),
+			'status'			=> 0,
+			'refered_by'		=> $referal_code,
+			'created_by'		=> get_user()['id'],
+			'created_at'		=> date('Y-m-d H:i:s')
+		];
+		$this->db->insert('client',$data);
+		$clientId = $this->db->insert_id();
+
+		if($referal_code != ""){
+			$this->db->where_in('service',[1,2,3]);
+			$jobs = $this->db->get_where('job' ,['client' => $clientId,'status <' => 3])->result_array();
+			$amount = 0;
+			foreach ($jobs as $key => $value) {
+				$amount += $value['price'];
+			}
+
+			$rClient = $this->db->get_where('client' ,['c_id' => $this->input->post('refered_by')])->row_array();
+
+			$this->db->where('id',$rClient['id'])->update('client',['referal_amount' => ($rClient['referal_amount'] + $amount)]);
+
+			$rClient = $this->db->get_where('client' ,['c_id' => $this->input->post('refered_by')])->row_array();
+
+
+			if($rClient['itr_amount'] != "0.00"){
+				if( ($rClient['referal_amount'] / 3) >= $rClient['itr_amount']){
+					$data = [
+						'type'		=> referal(),
+						'client'	=> $rClient['id'],
+						'date'		=> date('Y-m-d'),
+						'main'		=> "",
+						'credit'	=> $rClient['itr_amount']
+					];
+					$this->db->insert('transaction',$data);
+
+					$this->db->where('id',$rClient['id'])->update('client',['referal_amount' => ($rClient['referal_amount'] - ($rClient['itr_amount'] * 3))]);
+				}
+			}			
+		}
+
+
+		$this->session->set_flashdata('msg', 'Client Added');
+	    redirect(base_url('client'));
 	}
 
 

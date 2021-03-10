@@ -7,6 +7,13 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-6 text-right">
+            <?php if(get_user()['user_type'] == "0"){ ?>
+                <a class="btn btn-primary btn-sm" href="<?= base_url('client/add') ?>">
+                    <i class="fa fa-plus"></i> Add Client
+                </a>
+            <?php } ?>
+        </div>
     </div>
 </div>
 

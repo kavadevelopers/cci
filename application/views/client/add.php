@@ -12,19 +12,48 @@
 
 <div class="page-body">
     <div class="card">
-        <form method="post" action="<?= base_url('client/save') ?>" enctype="multipart/form-data" id="new_client_form">
+        <form method="post" action="<?= base_url('client/save_client') ?>" enctype="multipart/form-data" id="new_client_form">
             <div class="card-block">
                 <div class="row">
 
-                	<div class="col-md-3">
+                    <?php if(get_user()['user_type'] == "0"){ ?>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Branch <span class="-req">*</span></label> 
+                                <select class="form-control form-control-sm select2" name="branch" required>
+                                    <option value="">-- Select Branch --</option>
+                                    <?php foreach ($this->general_model->get_branches() as $bkey => $bvalue) { ?>
+                                        <option value="<?= $bvalue['id'] ?>"><?= $bvalue['name'] ?></option>
+                                    <?php } ?>
+                                </select>
+                                <?= form_error('branch') ?>
+                            </div>
+                        </div>
+                    <?php }else{ ?>
+                        <input type="hidden" name="branch" value="<?= get_user()['branch'] ?>">
+                    <?php } ?>
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>Source <span class="-req">*</span></label> 
+                            <select class="form-control form-control-sm" name="source" required>
+                                <option value="">-- Select Source --</option>
+                                <?php foreach ($this->general_model->get_sources() as $sekey => $sevalue) { ?> 
+                                    <option value="<?= $sevalue['id'] ?>" ><?= $sevalue['name'] ?></option>
+                                <?php } ?>
+                            </select>   
+                        </div>
+                    </div>
+
+                	<div class="col-md-2">
                         <div class="form-group">
                             <label>First Name<span class="-req">*</span></label> 
-                            <input name="fname" type="text" placeholder="First Name" class="form-control form-control-sm" value="<?= set_value('fname',$lead['customer']); ?>" required>
+                            <input name="fname" type="text" placeholder="First Name" class="form-control form-control-sm" value="<?= set_value('fname'); ?>" required>
                             <?= form_error('fname') ?>
                         </div>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="form-group">
                             <label>Middle Name</label> 
                             <input name="mname" type="text" placeholder="Middle Name" class="form-control form-control-sm" value="<?= set_value('mname'); ?>">
@@ -32,7 +61,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="form-group">
                             <label>Last Name<span class="-req">*</span></label> 
                             <input name="lname" type="text" placeholder="Last Name" class="form-control form-control-sm" value="<?= set_value('lname'); ?>" required>
@@ -40,10 +69,10 @@
                         </div>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="form-group">
                             <label>Firm Name</label> 
-                            <input name="firm" type="text" placeholder="Firm Name" class="form-control form-control-sm" value="<?= set_value('firm',$lead['firm']); ?>" >
+                            <input name="firm" type="text" placeholder="Firm Name" class="form-control form-control-sm" value="<?= set_value('firm'); ?>" >
                             <?= form_error('firm') ?>
                         </div>
                     </div>
@@ -55,9 +84,6 @@
                                 <div class="form-group">
                                     <label>Mobile <span class="-req">*</span></label> 
                                     <div class="mobile-body">
-                                        <?php foreach (explode(',', $lead['mobile']) as $key => $value) { ?>
-                                            <input type="text" name="mobile[]" class="form-control form-control-sm numbers mobile-key-up m-t2" minlength="10" autocomplete="off" maxlength="10" placeholder="Mobile" value="<?= $value ?>" <?= $key == '0'?'required':'' ?>>        
-                                        <?php } ?>
                                         <input type="text" name="mobile[]" class="form-control form-control-sm numbers mobile-key-up m-t2" minlength="10" autocomplete="off" maxlength="10" placeholder="Mobile" >   
                                     </div>
                                 </div>
@@ -67,9 +93,6 @@
                                 <div class="form-group">
                                     <label>Email</label> 
                                     <div class="email-body">
-                                        <?php if($lead['email'] != ""){ foreach (explode(',', $lead['email']) as $key => $value) { ?>
-                                            <input type="email" name="email[]" class="form-control form-control-sm email-key-up m-t2" placeholder="Email" value="<?= $value ?>" autocomplete="off">    
-                                        <?php } } ?>
                                         <input type="email" name="email[]" class="form-control form-control-sm email-key-up m-t2" placeholder="Email" autocomplete="off">
                                     </div>
                                 </div>
@@ -128,7 +151,7 @@
                             <select class="form-control form-control-sm select2" name="area" required>
                             	<option value="">-- Select Area/Village --</option>
                             	<?php foreach ($this->general_model->get_areas() as $akey => $avalue) { ?>
-                            		<option value="<?= $avalue['id'] ?>" <?= selected($lead['area'],$avalue['id']) ?>><?= $avalue['name'] ?></option>
+                            		<option value="<?= $avalue['id'] ?>" ><?= $avalue['name'] ?></option>
                             	<?php } ?>
                             </select>
                             <?= form_error('area') ?>
@@ -141,7 +164,7 @@
                             <select class="form-control form-control-sm select2" name="city" required>
                             	<option value="">-- Select City/Taluka --</option>
                             	<?php foreach ($this->general_model->get_cities() as $ckey => $cvalue) { ?>
-                            		<option value="<?= $cvalue['id'] ?>" <?= selected($cvalue['id'],$lead['city'],1) ?>><?= $cvalue['name'] ?></option>
+                            		<option value="<?= $cvalue['id'] ?>" ><?= $cvalue['name'] ?></option>
                             	<?php } ?>
                             </select>
                             <?= form_error('city') ?>
@@ -154,7 +177,7 @@
                             <select class="form-control form-control-sm select2" name="district" required>
                                 <option value="">-- Select District --</option>
                                 <?php foreach ($this->general_model->get_districts() as $ckey => $cvalue) { ?>
-                                    <option value="<?= $cvalue['id'] ?>" <?= selected($cvalue['id'],$lead['district'],1) ?>><?= $cvalue['name'] ?></option>
+                                    <option value="<?= $cvalue['id'] ?>" ><?= $cvalue['name'] ?></option>
                                 <?php } ?>
                             </select>
                             <?= form_error('district') ?>
@@ -167,7 +190,7 @@
                             <select class="form-control form-control-sm select2" name="state" required>
                             	<option value="">-- Select State --</option>
                             	<?php foreach ($this->general_model->get_states() as $skey => $svalue) { ?>
-                            		<option value="<?= $svalue['id'] ?>" <?= selected($svalue['id'],$lead['state'],1) ?>><?= $svalue['name'] ?></option>
+                            		<option value="<?= $svalue['id'] ?>" ><?= $svalue['name'] ?></option>
                             	<?php } ?>
                             </select>
                             <?= form_error('state') ?>
@@ -284,10 +307,10 @@
 		                            <label>Occupation<span class="-req">*</span></label> 
 		                            <select class="form-control form-control-sm occupation-onchange" name="occupation" required>
 		                                <option value="">-- Select Occupation --</option>
-		                                <option value="BUSINESS" <?= selected($lead['occupation'],"BUSINESS") ?>>BUSINESS</option>
-		                                <option value="JOB" <?= selected($lead['occupation'],"JOB") ?>>JOB</option>
-		                                <option value="OTHER" <?= selected($lead['occupation'],"OTHER") ?>>OTHER</option>
-		                                <option value="BOTH" <?= selected($lead['occupation'],"BOTH") ?>>BOTH</option>
+		                                <option value="BUSINESS">BUSINESS</option>
+		                                <option value="JOB">JOB</option>
+		                                <option value="OTHER">OTHER</option>
+		                                <option value="BOTH">BOTH</option>
 		                            </select>   
 		                        </div>
 		                    </div>
@@ -322,20 +345,6 @@
 		                            <textarea name="ind_remaarks" type="text" placeholder="Industry Remarks" class="form-control form-control-sm" value="" ></textarea>
 		                        </div>
 		                    </div>
-
-		                    
-
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Source <span class="-req">*</span></label> 
-                                    <select class="form-control form-control-sm select2" name="source" required>
-                                        <option value="">-- Select Source --</option>
-                                        <?php foreach ($this->general_model->get_sources() as $sekey => $sevalue) { ?> 
-                                            <option value="<?= $sevalue['id'] ?>" <?= selected($lead['source'], $sevalue['id']) ?>><?= $sevalue['name'] ?></option>
-                                        <?php } ?>
-                                    </select>   
-                                </div>
-                            </div>
 
                             <div class="col-md-3">
                                 <div class="form-group">
@@ -377,117 +386,20 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-3" style="display: none;">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Referal Code</label> 
-                                    <input name="refered_by" type="text" placeholder="Referal Code" class="form-control form-control-sm" value="<?= set_value('refered_by',$lead['referal_code']); ?>">
+                                    <input name="refered_by" type="text" placeholder="Referal Code" class="form-control form-control-sm" value="<?= set_value('refered_by'); ?>">
                                     <?= form_error('refered_by') ?>
                                 </div>
                             </div>
-
-		                    <div class="col-md-12">
-		                    	<h4>Services</h4>
-		                    </div>
-
-		                    <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Services <span class="-req">*</span></label> 
-                                    <div class="cus-service-body">
-                                        <?php foreach (json_decode($lead['services']) as $key => $value) { ?>
-                                            <select class="form-control form-control-sm cus-service-change m-t2 select2" name="services[]" <?= $key == '0'?'required':'' ?>>
-                                                <option value="">-- Select Service --</option>
-                                                <?php foreach ($this->general_model->get_services() as $sekey => $sevalue) { ?> 
-                                                    <option value="<?= $sevalue['id'] ?>-<?=$sevalue['price']?>" <?= selected($sevalue['id'],$value[0]) ?>><?= $sevalue['name'] ?></option>
-                                                <?php } ?>
-                                            </select>       
-                                        <?php } ?>
-                                        <select class="form-control form-control-sm cus-service-change m-t2 select2" name="services[]">
-                                            <option value="">-- Select Service --</option>
-                                            <?php foreach ($this->general_model->get_services() as $sekey => $sevalue) { ?> 
-                                                <option value="<?= $sevalue['id'] ?>-<?=$sevalue['price']?>"><?= $sevalue['name'] ?></option>
-                                            <?php } ?>
-                                        </select>   
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>Quantity </label> 
-                                    <div class="cus-qty-body">
-                                        <?php foreach (json_decode($lead['services']) as $key => $value) { ?>
-                                            <input type="text" name="qty[]" class="form-control form-control-sm numbers m-t2" value="1" autocomplete="off" placeholder="Quantity">      
-                                        <?php } ?>
-                                        <input type="text" name="qty[]" class="form-control form-control-sm numbers m-t2" autocomplete="off" placeholder="Quantity">   
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-3" style="display: none;">
-                                <div class="form-group">
-                                    <label>Amount </label> 
-                                    <div class="cus-amount-body">
-                                        <?php foreach (json_decode($lead['services']) as $key => $value) { ?>
-                                            <input type="text" name="amount[]" class="form-control form-control-sm decimal-num m-t2" value="<?= $value[1] ?>" autocomplete="off" placeholder="Amount">      
-                                        <?php } ?>
-                                        <input type="text" name="amount[]" class="form-control form-control-sm decimal-num m-t2" autocomplete="off" placeholder="Amount">   
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-12">
-                                <h4>Contact Persons</h4>
-                            </div>
-                            <div class="col-md-12">
-                                <table class="table table-bordered table-mini">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Mobile</th>
-                                            <th>Address</th>
-                                            <th>Birth Date</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="contact_person_row">
-                                        <tr>
-                                            <td>
-                                                <input type="text" name="con_name[]" class="form-control form-control-sm" placeholder="Name">
-                                            </td>
-                                            <td>
-                                                <input type="text" name="con_mobile[]" class="form-control form-control-sm numbers" placeholder="Mobile" minlength="10" maxlength="10" >
-                                            </td>
-                                            <td>
-                                                <textarea class="form-control" placeholder="Address" name="con_address[]"></textarea>
-                                            </td>
-                                            <td>
-                                                <input type="text" name="con_birth[]" class="form-control form-control-sm birth-date" value="" placeholder="Birth Date" readonly>
-                                            </td>
-                                            <td>
-                                                
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td colspan="5" class="text-right">
-                                                <button class="btn btn-info btn-mini add_contact_personRow" type="button"><i class="fa fa-plus"></i> Add Row</button>
-                                            </td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                            <input type="hidden" name="lead" value="<?= $lead['id'] ?>">
-                            <input type="hidden" name="branch" value="<?= $lead['branch'] ?>">
-                            <input type="hidden" name="owner" value="<?= $lead['owner'] ?>">
-		                    <input type="hidden" name="client_id" value="<?= $client['id'] ?>">
 	                    </div>
 	                </div>
 
                 </div>
             </div>
             <div class="card-footer text-right">
-                <a href="<?= base_url('client/new_clients') ?>" class="btn btn-danger"><i class="fa fa-arrow-left"></i> Back</a>
+                <a href="<?= base_url('client') ?>" class="btn btn-danger"><i class="fa fa-arrow-left"></i> Back</a>
                 <button class="btn btn-success" type="submit">
                     <i class="fa fa-save"></i> Save
                 </button>
