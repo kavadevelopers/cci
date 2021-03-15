@@ -303,7 +303,7 @@
 		                        </div>
 		                    </div>
 
-		                    <div class="col-md-3 month_quater_div" <?php if($_client['gst_type'] == 'COMPOSITION'){ ?>style="display: none;" <?php } ?>>
+		                    <div class="col-md-3 month_quater_div" <?php if($_client['gst_client'] == 'NO' || $_client['gst_type'] == 'COMPOSITION'){ ?>style="display: none;" <?php } ?>>
 		                        <div class="form-group">
 		                            <label>Monthly/Quarterly<span class="-req">*</span></label> 
 		                            <select class="form-control form-control-sm month_quater" name="month_quater">
