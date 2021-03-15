@@ -20,6 +20,21 @@ class Client extends CI_Controller
 		$this->load->theme('client/add',$data);
 	}
 
+	public function edit($id = false)
+	{
+		if($id && get_user()['user_type'] == 0){
+			if($this->general_model->_get_client($id)){
+				$data['_title']		= "Edit Client";	
+				$data['_client']	= $this->general_model->_get_client($id);
+				$this->load->theme('client/edit',$data);
+			}else{
+				redirect(base_url('client'));			
+			}
+		}else{
+			redirect(base_url('client'));
+		}
+	}
+
 	public function new_clients()
 	{
 		$data['_title']		= "New Clients";
@@ -293,6 +308,82 @@ class Client extends CI_Controller
 	    redirect(base_url('client'));
 	}
 
+	public function update()
+	{
+		$mobiles = '';
+		foreach ($this->input->post('mobile') as $key => $value) {
+			if($value != ''){
+				$mobiles .= $value.',';
+			}
+		}
+
+		$emails = '';
+		foreach ($this->input->post('email') as $key => $value) {
+			if($value != ''){
+				$emails .= strtoupper($value).',';
+			}
+		}
+
+		$language = '';
+		foreach ($this->input->post('prefered_language') as $key => $value) {
+			if($value != ''){
+				$language .= $value.',';
+			}
+		}
+
+		$time_to_call = '';
+		foreach ($this->input->post('time_to_call') as $key => $value) {
+			if($value != ''){
+				$time_to_call .= strtoupper($value).',';
+			}
+		}
+
+		$branch = $this->general_model->_get_branch($this->input->post('branch'));
+		$source = $this->general_model->_get_source($this->input->post('source'));
+		$data = [
+			'branch'		=> $this->input->post('branch'),
+			'company'		=> $source['company'],
+			'client_type'	=> $this->input->post('client_type'),
+			'source'		=> $this->input->post('source'),
+			'fname'			=> strtoupper($this->input->post('fname')),
+			'mname'			=> strtoupper($this->input->post('mname')),
+			'lname'			=> strtoupper($this->input->post('lname')),
+			'firm'			=> strtoupper($this->input->post('firm')),
+			'mobile'		=> rtrim($mobiles,','),
+			'email'			=> rtrim($emails,','),
+			'pan'			=> strtoupper($this->input->post('pan')),
+			'dob'			=> dd($this->input->post('dob')),
+			'gender'		=> $this->input->post('gender'),
+			'add1'			=> strtoupper($this->input->post('add1')),
+			'add2'			=> strtoupper($this->input->post('add2')),
+			'area'			=> $this->input->post('area'),
+			'city'			=> $this->input->post('city'),
+			'district'		=> strtoupper($this->input->post('district')),
+			'state'			=> $this->input->post('state'),
+			'pin'			=> $this->input->post('pin'),
+			'occupation'		=> $this->input->post('occupation'),
+			'language'		=> rtrim($language,','),	
+			'time_to_call'	=> rtrim($time_to_call,','),	
+			'health_in'		=> $this->input->post('health_insurance'),
+			'life_in'		=> $this->input->post('life_insurance'),
+			'itr_client'		=> $this->input->post('itr_client'),
+			'gst_client'		=> $this->input->post('gst_client'),
+			'gst_type'			=> $this->input->post('gst_type'),
+			'month_quater'		=> $this->input->post('month_quater'),
+			'industry'			=> $this->input->post('industry'),
+			'sub_industry'		=> $this->input->post('sub_industry'),
+			'ind_remarks'		=> strtoupper($this->input->post('ind_remaarks')),
+			'profile_intro'		=> strtoupper($this->input->post('profile_intro')),
+			'turnover_notes'	=> strtoupper($this->input->post('turnover_notes')),
+			'goal'				=> strtoupper($this->input->post('goal')),
+			'quotation'			=> strtoupper($this->input->post('quotation'))
+		];
+		$this->db->where('id',$this->input->post('clientid'))->update('client',$data);
+
+		$this->session->set_flashdata('msg', 'Client Updated');
+	    redirect(base_url('client'));
+	}
+
 
 	public function view($id = false)
 	{
@@ -513,6 +604,17 @@ class Client extends CI_Controller
 	public function panCheck()
 	{
 		$client = $this->db->get_where('client' ,['pan' => $this->input->post('pan')])->row_array();
+		if($client){
+			if($client['status'] == 0){ $type = "Active"; }else if($client['status'] == 9){ $type = "Canceled"; }else if($client['status'] == 8){ $type = "Inactive"; }
+			echo json_encode(['1','This PAN No. is already exists in '.$type.' Clients']);
+		}else{
+			echo json_encode(['0']);
+		}
+	}
+
+	public function panCheckUpdate()
+	{
+		$client = $this->db->get_where('client' ,['pan' => $this->input->post('pan'),'id !=' => $this->input->post('client')])->row_array();
 		if($client){
 			if($client['status'] == 0){ $type = "Active"; }else if($client['status'] == 9){ $type = "Canceled"; }else if($client['status'] == 8){ $type = "Inactive"; }
 			echo json_encode(['1','This PAN No. is already exists in '.$type.' Clients']);

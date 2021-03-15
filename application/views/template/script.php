@@ -1125,6 +1125,31 @@
             return false;
 		});
 
+		$('#update_client_form').submit(function(event) {
+			var pan = $('#panNo').val();
+			$.ajax({
+                type: "POST",
+                url : "<?= base_url('client/panCheckUpdate'); ?>",
+                data : "pan="+pan+"&client="+$('#clientId').val(),
+                cache : false,
+                dataType: "JSON",
+                context: this,
+                beforeSend: function() {
+                    $('#ajaxLoader').fadeIn('fast');
+                },
+                success: function(out){
+                	if(out[0] == '0'){
+                		this.submit();
+                	}else{
+                		PNOTY(out[1],'error');  
+                		$('#panNo').focus();
+                	}
+                	$('#ajaxLoader').fadeOut('slow');
+                }
+            });
+            return false;
+		});
+
 		$('#editNewWorkBtn').click(function() {
 			$('.select2n').select2({
 			    dropdownParent: $('#editNewFollowupJobModel .modal-content')

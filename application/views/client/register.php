@@ -191,9 +191,9 @@
 		                            <div class="language-body">
 			                            <select class="form-control form-control-sm language-change" name="prefered_language[]" required>
 			                                <option value="">-- Select Language --</option>
-			                                <option value="Gujarati" >Gujarati</option>
-			                                <option value="Hindi">Hindi</option>
-			                                <option value="English">English</option>
+			                                <option value="GUJARATI">GUJARATI</option>
+                                            <option value="HINDI">HINDI</option>
+                                            <option value="ENGLISH">ENGLISH</option>
 			                            </select>   
 			                        </div>
 		                        </div>

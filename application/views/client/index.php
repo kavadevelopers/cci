@@ -64,10 +64,13 @@
                                 </td>
                             <?php } ?>
                             <td class="text-center">
-                                <a href="<?= base_url('client/view/').$value['id'] ?>" class="btn btn-primary btn-mini" title="View">
+                                <a href="<?= base_url('client/view/').$value['id'] ?>" class="btn btn-success btn-mini" title="View">
                                     <i class="fa fa-eye"></i>
                                 </a>
                                 <?php if(get_user()['user_type'] == 0){ ?>
+                                    <a href="<?= base_url('client/edit/').$value['id'] ?>" class="btn btn-primary btn-mini" title="Edit">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
                                     <a href="<?= base_url('client/cancel/').$value['id'] ?>" onclick="return confirm('Are you sure you want to tranfer?')" class="btn btn-danger btn-mini" title="Transfer To Cancel">
                                         <i class="fa fa-ban"></i>
                                     </a>
