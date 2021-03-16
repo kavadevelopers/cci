@@ -65,7 +65,7 @@
                         </li>
                     </ul>
                 <?php } ?>
-                <?php if($this->session->userdata('user_type') == "3" || $this->session->userdata('user_type') == "0"){ ?>
+                <?php if($this->session->userdata('user_type') == "3" || $this->session->userdata('user_type') == "2" || $this->session->userdata('user_type') == "0"){ ?>
                     <ul class="pcoded-item pcoded-left-item">
                         <li class="<?= menu(1,["newjob"])[0]; ?>">
                             <a href="<?= base_url('newjob') ?>">
