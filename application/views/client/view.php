@@ -808,7 +808,7 @@
     								                		<td>
     								                			<select class="form-control form-control-sm select2" id="addGroupMain" required>
     							                                    <option value="">-- Select Child Client--</option>
-    							                                    <?php foreach ($this->general_model->getFilteredClients() as $bkey => $bvalue) { ?>
+    							                                    <?php foreach ($this->general_model->get_allclients() as $bkey => $bvalue) { ?>
                                                                         <?php if($bvalue['id'] != $client['id']){ ?>
     							                                        <option value="<?= $bvalue['id'] ?>"><?= $bvalue['fname'] ?> <?= $bvalue['mname'] ?> <?= $bvalue['lname'] ?> - <?= $bvalue['mobile'] ?></option>
                                                                         <?php } ?>

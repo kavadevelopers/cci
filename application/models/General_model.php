@@ -104,15 +104,19 @@ class General_model extends CI_Model
 
 	public function get_pettycash_users()
 	{
+		// $this->db->where('df','');
+		// $this->db->where('user_type','3');
+		// $this->db->where('type','4');
+		// $sale = $this->db->get('user')->result_array();
+		// $this->db->where('df','');
+		// $this->db->where('user_type','2');
+		// $this->db->where('type','1');
+		// $back = $this->db->get('user')->result_array();
+		// return array_merge($sale,$back);
+
+
 		$this->db->where('df','');
-		$this->db->where('user_type','3');
-		$this->db->where('type','4');
-		$sale = $this->db->get('user')->result_array();
-		$this->db->where('df','');
-		$this->db->where('user_type','2');
-		$this->db->where('type','1');
-		$back = $this->db->get('user')->result_array();
-		return array_merge($sale,$back);
+		return $this->db->get('user')->result_array();
 	}
 
 	public function get_todo_users()
@@ -320,6 +324,11 @@ class General_model extends CI_Model
 			}
 		}
 		return $clients;
+	}
+
+	public function get_allclients()
+	{
+		return $this->db->get_where('client')->result_array();
 	}
 
 	public function get_clients()

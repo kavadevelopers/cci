@@ -180,7 +180,49 @@ class Client extends CI_Controller
 			}			
 		}
 
-		$this->db->where('id',$this->input->post('lead'))->update('leads',['status' => 2]);		
+		$this->db->where('id',$this->input->post('lead'))->update('leads',['status' => 2]);	
+
+		foreach ($this->input->post('services') as $key => $value) {
+			if($value != ""){
+				$qty = $this->input->post('qty')[$key];
+				$amount = explode('-', $value)[1];
+				$service = explode('-', $value)[0];
+				$oldChk = $this->db->get_where('job',['client' => $this->input->post('client_id'),'service' => $service,'status' => '0'])->row_array();
+				if(!$oldChk){
+					$this->db->limit(1);
+				    $this->db->where('user_type','2');
+				    $this->db->where('type !=','3');
+				    $this->db->where('df','');
+					$this->db->order_by('rand()');
+				    $user = $this->db->get('user')->row_array();
+
+					$data = [
+						'branch'		=> $lead['branch'],
+						'service'		=> $service,
+						'price'			=> $amount,
+						'qty'			=> $qty,
+						'client'		=> $this->input->post('client_id'),
+						'status'		=> 0,
+						'owner'			=> $user['id'],
+						'importance'	=> 'NORMAL',
+						'f_date'		=> date('Y-m-d'),
+						'f_time'		=> date('H:i:s'),
+						'created_by'	=> get_user()['id'],
+						'created_at'	=> date('Y-m-d H:i:s')
+					];
+					$this->db->insert('job',$data);
+					$job_id = $this->db->insert_id();
+					$this->db->where('id',$job_id)->update('job',['job_id' => "JOB_".$job_id]);	
+					$data = [
+						'client'		=> $this->input->post('client_id'),
+						'service'		=> $service,
+						'user'			=> get_user()['id'],
+						'created_at'	=> date('Y-m-d H:i:s')
+					];
+					$this->db->insert('sold_services',$data);
+				}
+			}
+		}
 
 		$this->session->set_flashdata('msg', 'Client Saved');
 	    redirect(base_url('client/new_clients'));

@@ -816,6 +816,31 @@
 			});
 		});
 
+		$(document).on('click', '.btn-edit-pattycash', function(event) {
+			$('#edit_pettycash_modal').modal('show');
+			$('#edit_pettycash_user').val($(this).data('user'));
+			$('#edit_pettycash_per').val($(this).data('remarks'));
+			$('#edit_pettycash_id').val($(this).data('id'));
+			$('#edit_pettycash_date').val($(this).data('date'));
+			$('#edit_pettycash_date').datepicker({
+		        format: 'dd-mm-yyyy',
+		        todayHighlight:'TRUE',
+		        autoclose: true
+		    }).keydown(function(e) {
+		        return false;
+		    });
+		    if($(this).data('debit') != "0.00"){
+		    	$('#edit_pettycash_type').val('debit');
+		    	$('#edit_pettycash_amount').val($(this).data('debit'));
+		    }else{
+		    	$('#edit_pettycash_type').val('credit');
+		    	$('#edit_pettycash_amount').val($(this).data('credit'));
+		    }
+			$('.select2n').select2({
+			    dropdownParent: $('#edit_pettycash_modal .modal-content')
+			});
+		});
+
 		$(document).on('click','.add-reimburs',function(){
 			$('#add_reimburs_modal').modal('show');
 			$('.select2n').select2({

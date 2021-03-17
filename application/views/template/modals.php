@@ -1170,6 +1170,79 @@
     </form>
 </div>
 
+<div class="modal fade" id="edit_pettycash_modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <form method="post" action="<?= base_url('petty_cash/update') ?>">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Petty Cash</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <?php if(get_user()['user_type'] == 0){ ?>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>User/Owner <span class="-req">*</span></label> 
+                                        <select class="form-control form-control-sm select2n" name="user" id="edit_pettycash_user" required>
+                                            <option value="">-- Select --</option>
+                                            <?php foreach ($this->general_model->get_pettycash_users() as $bkey => $bvalue) { ?>
+                                                <option value="<?= $bvalue['id'] ?>"><?= $bvalue['name'] ?> - <?= _user_type($bvalue['id']) ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Type <span class="-req">*</span></label> 
+                                        <select class="form-control form-control-sm" id="edit_pettycash_type" name="type" required>
+                                            <option value="credit">Credit</option>
+                                            <option value="debit">Debit</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>                        
+                        </div>
+                    <?php }else{ ?>
+                        <input type="hidden" name="user" id="edit_pettycash_user">
+                        <input type="hidden" name="type" id="edit_pettycash_type">
+                    <?php } ?>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Date <span class="-req">*</span></label> 
+                                    <input name="date" type="text" placeholder="Date" class="form-control form-control-sm" id="edit_pettycash_date" value="<?= date('d-m-Y') ?>" autocomplete="off" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Amount <span class="-req">*</span></label> 
+                                    <input type="text" class="form-control form-control-sm decimal-num" name="amount" autocomplete="off" id="edit_pettycash_amount" placeholder="Amount" required>    
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Perticulars</label> 
+                            <textarea type="text" class="form-control form-control-sm" name="remarks" placeholder="Perticulars" id="edit_pettycash_per"></textarea>   
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="id" id="edit_pettycash_id">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
 <div class="modal fade" id="add_reimburs_modal" tabindex="-1" role="dialog" aria-hidden="true">
     <form method="post" action="<?= base_url('reimburs/save') ?>">
         <div class="modal-dialog" role="document">

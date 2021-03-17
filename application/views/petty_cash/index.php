@@ -20,6 +20,7 @@
                 <thead>
                     <tr>
                         <th class="text-center">Date</th>
+                        <th>User</th>
                         <th>Perticulars</th>
                         <th class="text-right">Amount</th>
                         <th class="text-center">Action</th>
@@ -29,14 +30,22 @@
                     <?php foreach ($list as $key => $single) { ?>
                         <tr>
                             <td class="text-center"><?= vd($single['date']) ?></td>
+                            <td>
+                                <?= $this->general_model->_get_user($single['user'])['name'] ?>
+                            </td>
                             <td><?= nl2br($single['remarks']) ?></td>
                             <th class="text-right">
                                 <?php if($single['debit'] == 0){ ?><b>Cr.</b> <?= $single['credit'] ?><?php }else{ ?><b>Dr.</b> <?= $single['debit'] ?><?php } ?>
                             </th>
                             <td class="text-center">
-                                <a href="<?= base_url('petty_cash/delete/').$single['id'] ?>" class="btn btn-danger btn-mini btn-delete" title="Delete">
+                                <!-- <a href="<?= base_url('petty_cash/delete/').$single['id'] ?>" class="btn btn-danger btn-mini btn-delete" title="Delete">
                                     <i class="fa fa-trash"></i>
-                                </a>
+                                </a> -->
+                                <?php if(get_user()['user_type'] == '0'){ ?>
+                                    <button class="btn btn-primary btn-mini btn-edit-pattycash" title="Edit" data-id="<?= $single['id'] ?>" data-user="<?= $single['user'] ?>" data-remarks="<?= $single['remarks'] ?>" data-debit="<?= $single['debit'] ?>" data-credit="<?= $single['credit'] ?>" data-date="<?= vd($single['date']) ?>">
+                                        <i class="fa fa-pencil"></i>
+                                    </button>
+                                <?php } ?>
                             </td>
                         </tr>
                     <?php } ?>
