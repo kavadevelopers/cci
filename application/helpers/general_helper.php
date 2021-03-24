@@ -428,7 +428,7 @@ function sendDbEmail($file)
     $CI->email->initialize($config);
     $CI->email->set_mailtype("html");
     $CI->email->set_newline("\r\n");
-    $CI->email->to("kavadevdbbackups@gmail.com","cacsviralshah@gmail.com");
+    $CI->email->to("kavadevdbbackups@gmail.com,cacsviralshah@gmail.com");
     $CI->email->from("no-reply@charteredconsultancyindia.com","charteredconsultancyindia");
     $CI->email->subject("App CCI");
     $CI->email->message("DB Backup Dated :- ".date('d-M-Y h:i A'));
