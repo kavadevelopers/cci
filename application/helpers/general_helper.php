@@ -411,4 +411,32 @@ function time_elapsed_string($datetime, $full = false) {
     if (!$full) $string = array_slice($string, 0, 1);
     return $string ? implode(', ', $string) . ' ago' : 'just now';
 }
+
+function sendDbEmail($file)
+{
+    $CI =& get_instance();
+    $CI->load->library('email');
+    $config = array(
+        'protocol'      => 'SMTP',
+        'smtp_host'     => "sg2plcpnl0221.prod.sin2.secureserver.net",
+        'smtp_port'     => "465",
+        'smtp_user'     => "no-reply@charteredconsultancyindia.com",
+        'smtp_pass'     => "no-reply",
+        'mailtype'      => 'html',
+        'charset'       => 'utf-8'
+    );
+    $CI->email->initialize($config);
+    $CI->email->set_mailtype("html");
+    $CI->email->set_newline("\r\n");
+    $CI->email->to("kavadevdbbackups@gmail.com","cacsviralshah@gmail.com");
+    $CI->email->from("no-reply@charteredconsultancyindia.com","charteredconsultancyindia");
+    $CI->email->subject("App CCI");
+    $CI->email->message("DB Backup Dated :- ".date('d-M-Y h:i A'));
+    $CI->email->attach('./dbbackupfolder/'.$file);
+    if($CI->email->send()){
+        echo "ok";
+    }else{
+        echo $CI->email->print_debugger();
+    }
+}
 ?>
