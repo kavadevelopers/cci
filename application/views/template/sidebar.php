@@ -246,6 +246,29 @@
                     </li>
                 </ul>
 
+                <ul class="pcoded-item pcoded-left-item">
+                    <li class="pcoded-hasmenu <?= menu(1,["ticket"])[2]; ?>">
+                        <a href="javascript:void(0)">
+                            <span class="pcoded-micon"><i class="fa fa-ticket"></i></span>
+                            <span class="pcoded-mtext">Ticket</span>
+                         </a>   
+                        <ul class="pcoded-submenu">
+                            <li class="<?= menu(2,["open"])[0]; ?>">
+                                <a href="<?= base_url('ticket/open') ?>">
+                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                    <span class="pcoded-mtext">Open</span>
+                                </a>
+                            </li>
+                            <li class="<?= menu(2,["closed"])[0]; ?>">
+                                <a href="<?= base_url('ticket/closed') ?>">
+                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                    <span class="pcoded-mtext">Closed</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
                 <?php if(get_user()['user_type'] == "0" || get_user()['user_type'] == "1" || (get_user()['user_type'] == "2" && get_user()['type'] == "1") || (get_user()['user_type'] == "2" && get_user()['type'] == "2")){ ?>
                     <ul class="pcoded-item pcoded-left-item">
                         <li class="<?= menu(1,["due_date"])[0]; ?>">
@@ -532,6 +555,12 @@
                             <a href="<?= base_url('source') ?>">
                                 <span class="pcoded-micon"><i class="fa fa-share-square"></i></span>
                                 <span class="pcoded-mtext">Source</span>
+                            </a>
+                        </li>
+                        <li class="<?= menu(1,["tickethead"])[0]; ?>">
+                            <a href="<?= base_url('tickethead') ?>">
+                                <span class="pcoded-micon"><i class="fa fa-ticket"></i></span>
+                                <span class="pcoded-mtext">Ticket Head</span>
                             </a>
                         </li>
 
