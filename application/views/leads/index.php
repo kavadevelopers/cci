@@ -67,7 +67,11 @@
                                 <?= $value['firm'] != ''?'<br>-'.$value['firm']:'' ?>        
                             </td>
                             <td class="">
-                                <?= $this->general_model->_get_area($value['area'])['name'] ?>,<br> <?= $this->general_model->_get_city($value['city'])['name'] ?>,<br> <?= $this->general_model->_get_district($value['district'])['name'] ?>,<br> <?= $this->general_model->_get_state($value['state'])['name'] ?>
+                                <?php $areaR = $this->general_model->_get_area($value['area']); ?>
+                                <?php $cityR = $this->general_model->_get_city($value['city']); ?>
+                                <?php $distR = $this->general_model->_get_district($value['district']); ?>
+                                <?php $stateR = $this->general_model->_get_state($value['state']); ?>
+                                <?= $areaR?$areaR['name']:'' ?>,<br> <?= $cityR?$cityR['name']:'' ?>,<br> <?= $distR?$distR['name']:'' ?>,<br> <?= $stateR?$stateR['name']:'' ?>
                             </td>
                             <th class="text-center"><?= get_sort_name($value['importance'],1); ?></th>
                             <td class="text-center">

@@ -457,7 +457,7 @@ class Client extends CI_Controller
 		}
 	}
 
-	public function delete_child($id = false,$client)
+	public function delete_child($id,$client)
 	{
 		if($id){
 			$this->db->where('id',$id)->delete('grouping');

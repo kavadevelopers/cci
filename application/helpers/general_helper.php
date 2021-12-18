@@ -190,16 +190,17 @@ function _user_type($id){
 
 function menu($seg,$array)
 {
+    $ar = ['','',''];
     $CI =& get_instance();
     $path = $CI->uri->segment($seg);
     foreach($array as $a)
     {
         if($path === $a)
         {
-          return array("active","active","pcoded-trigger");
-          break;  
+          $ar = array("active","active","pcoded-trigger");  
         }
     }
+    return $ar;
 }
 
 function getRole($type){
