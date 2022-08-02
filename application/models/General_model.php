@@ -206,6 +206,17 @@ class General_model extends CI_Model
 		return $this->db->get_where('area_state',['id'	=> $id])->row_array();
 	}
 
+	public function _get_state_c($id)
+	{
+		$area = $this->db->get_where('area_state',['id'	=> $id])->row_array();
+		if ($id != "" && $area) {
+			return $area;
+		}else{
+			$area['name'] = '';
+			return $area;
+		}
+	}
+
 	public function get_cities()
 	{
 		return $this->db->get_where('area_city',['df' => ''])->result_array();
@@ -224,6 +235,17 @@ class General_model extends CI_Model
 	public function _get_city($id)
 	{
 		return $this->db->get_where('area_city',['id'	=> $id])->row_array();
+	}
+
+	public function _get_city_c($id)
+	{
+		$area = $this->db->get_where('area_city',['id'	=> $id])->row_array();
+		if ($id != "" && $area) {
+			return $area;
+		}else{
+			$area['name'] = '';
+			return $area;
+		}
 	}
 
 	public function get_districts()
@@ -246,6 +268,17 @@ class General_model extends CI_Model
 		return $this->db->get_where('district',['id'	=> $id])->row_array();
 	}
 
+	public function _get_district_c($id)
+	{
+		$area = $this->db->get_where('district',['id'	=> $id])->row_array();
+		if ($id != "" && $area) {
+			return $area;
+		}else{
+			$area['name'] = '';
+			return $area;
+		}
+	}
+
 	public function get_area($id)
 	{
 		return $this->db->get_where('areas',['id'	=> $id,'df' => ''])->row_array();
@@ -254,6 +287,17 @@ class General_model extends CI_Model
 	public function _get_area($id)
 	{
 		return $this->db->get_where('areas',['id'	=> $id])->row_array();
+	}
+
+	public function _get_area_c($id)
+	{
+		$area = $this->db->get_where('areas',['id'	=> $id])->row_array();
+		if ($id != "" && $area) {
+			return $area;
+		}else{
+			$area['name'] = '';
+			return $area;
+		}
 	}
 
 	public function get_areas()

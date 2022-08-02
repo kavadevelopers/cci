@@ -17,8 +17,7 @@
 
 <div class="page-body">
         	<?php foreach ($list as $key => $value) { ?>
-    		<?php $customer = $this->db->order_by('status','desc')->get_where('job',['status <=' => 3,'client' => $value['client']])->num_rows(); ?>
-    		<?php $customer_done = $this->db->order_by('status','desc')->get_where('job',['status' => 3,'client' => $value['client']])->num_rows(); ?>
+    		
     		<?php $client = $this->general_model->_get_client($value['client']); ?>
     <div class="card job-search-container">
     	<div class="card-header">
@@ -39,7 +38,7 @@
                         <th class="text-center">Importance</th>
                         <th class="text-center">Status</th>
                         <th class="text-center">
-                        	<button class="btn btn-info btn-mini generateFullBill<?= $value['client'] ?>" data-client_data="#<?= $client['c_id'] ?><br><b><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?></b><br><?= $client['mobile'] ?><br><?= $client['add1'] ?><br><?= $this->general_model->_get_area($client['area'])['name'] ?>,<?= $this->general_model->_get_city($client['city'])['name'] ?>,<?= $this->general_model->_get_district($client['district'])['name'] ?>,<?= $this->general_model->_get_state($client['state'])['name'] ?><br><br>" onclick="generateMultipleBill('<?= $value['client'] ?>');">		Generate Full Bill
+                        	<button class="btn btn-info btn-mini generateFullBill<?= $value['client'] ?>" data-client_data="#<?= $client['c_id'] ?><br><b><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?></b><br><?= $client['mobile'] ?><br><?= $client['add1'] ?><br><?= $this->general_model->_get_area_c($client['area'])['name'] ?>,<?= $this->general_model->_get_city_c($client['city'])['name'] ?>,<?= $this->general_model->_get_district_c($client['district'])['name'] ?>,<?= $this->general_model->_get_state_c($client['state'])['name'] ?><br><br>" onclick="generateMultipleBill('<?= $value['client'] ?>');">		Generate Full Bill
                         	</button>
                         </th>
                     </tr>
@@ -64,7 +63,7 @@
                             <td class="text-center" id="status-<?= $cvalue['id'] ?>"><?= getjobStatus($cvalue['status']) ?></td>
                             <td class="text-center">
                             	<?php if($cvalue['status'] == 3){ ?>
-                            		<button class="btn btn-info btn-mini generateBill" data-client_data="#<?= $client['c_id'] ?><br><b><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?></b><br><?= $client['mobile'] ?><br><?= $client['add1'] ?><br><?= $this->general_model->_get_area($client['area'])['name'] ?>,<?= $this->general_model->_get_city($client['city'])['name'] ?>,<?= $this->general_model->_get_district($client['district'])['name'] ?>,<?= $this->general_model->_get_state($client['state'])['name'] ?><br><br>" data-job="<?= $cvalue['id'] ?>">Generate Bill</button>
+                            		<button class="btn btn-info btn-mini generateBill" data-client_data="#<?= $client['c_id'] ?><br><b><?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?></b><br><?= $client['mobile'] ?><br><?= $client['add1'] ?><br><?= $this->general_model->_get_area_c($client['area'])['name'] ?>,<?= $this->general_model->_get_city_c($client['city'])['name'] ?>,<?= $this->general_model->_get_district_c($client['district'])['name'] ?>,<?= $this->general_model->_get_state_c($client['state'])['name'] ?><br><br>" data-job="<?= $cvalue['id'] ?>">Generate Bill</button>
                             	<?php } ?>
                             </td>
             			</tr>
