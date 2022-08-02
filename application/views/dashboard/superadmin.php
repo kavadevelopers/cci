@@ -38,11 +38,11 @@
 		</div>
 		<div class="col-md-3">
 			<a href="<?= base_url('dashboard/get_payments') ?>">
-				<div class="card text-center text-white bg-c-lite-green">
+				<div class="card text-center text-white bg-c-lite-green" id="pending-payment-results">
 					<div class="card-block">
-						<h4 class="m-t-10 m-b-10"><?= rs().moneyFormatIndia($this->general_model->pastThDaysPendingPayment()); ?></h4>
-						<h6 class="m-b-0">> 90 days <?= rs().moneyFormatIndia($this->general_model->pastNiDaysPendingPayment()); ?></h6>
-						<p class="m-b-0">Total <?= rs().moneyFormatIndia($this->general_model->pastDaysPendingPayment()); ?></p>
+						<h4 class="m-t-10 m-b-10"><i class="fa fa-refresh fa-spin" aria-hidden="true"></i></h4>
+						<h6 class="m-b-0"></h6>
+						<p class="m-b-0"></p>
 					</div>
 				</div>
 			</a>
@@ -76,7 +76,7 @@
 			        </div>
                 </div>
                 <div class="card-block">
-                	<table class="table table-striped table-bordered table-mini table-dt">
+                	<table class="table table-striped table-bordered table-mini table-dt td-break">
 		                <thead>
 		                    <tr>
 		                        <th class="text-center">Date</th>
@@ -114,7 +114,7 @@
 			        </div>
                 </div>
                 <div class="card-block table-responsive">
-                	<table class="table table-striped table-bordered table-mini table-dt">
+                	<table class="table table-striped table-bordered table-mini table-dt td-break">
 		                <thead>
 		                    <tr>
 		                        <th class="text-center">Date</th>
@@ -163,7 +163,7 @@
 					        </div>
 		                </div>
 		                <div class="card-block dt-responsive table-responsive">
-		                    <table class="table table-striped table-bordered table-mini table-dt">
+		                    <table class="table table-striped table-bordered table-mini table-dt td-break">
 		                        <thead>
 		                            <tr>
 		                                <th class="text-center">Date</th>
@@ -220,7 +220,7 @@
 					        </div>
 		                </div>
 		                <div class="card-block dt-responsive table-responsive">
-		                    <table class="table table-striped table-bordered table-mini table-dt">
+		                    <table class="table table-striped table-bordered table-mini table-dt td-break">
 		                        <thead>
 		                            <tr>
 		                                <th class="text-center">Date</th>

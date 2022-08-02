@@ -13,6 +13,8 @@
 		if (Notification.permission !== 'granted'){
 		  	Notification.requestPermission();
 		}
+
+		getDashboardContent();
 	});
 	function notifyMe(title,string,link) {
  		if (Notification.permission !== 'granted')
@@ -1292,6 +1294,7 @@
 	setInterval(function(){ 
 	    getNotification();
 	    getTodoNotification();
+
 	}, 2000);
 
 	$(function(){
@@ -1352,6 +1355,19 @@
 					$('#todoCounter').html(counter);
 					$('#newTodo').show();
 				}
+            }
+        });
+	}
+
+	function getDashboardContent(){
+		$.ajax({
+            type: "POST",
+            url : "<?= base_url('dashboard/getdata'); ?>",
+            cache : false,
+            dataType : "json",
+            success: function(out)
+            {
+            	$('#pending-payment-results').html(out['dash-pay-pending']);
             }
         });
 	}

@@ -61,7 +61,7 @@
 					        </div>
 		                </div>
 		                <div class="card-block">
-		                	<table class="table table-striped table-bordered table-mini table-dt">
+		                	<table class="table table-striped table-bordered table-mini table-dt td-break">
 				                <thead>
 				                    <tr>
 				                        <th class="text-center">Date</th>
@@ -99,7 +99,7 @@
 					        </div>
 		                </div>
 		                <div class="card-block dt-responsive table-responsive">
-		                    <table class="table table-striped table-bordered table-mini table-dt">
+		                    <table class="table table-striped table-bordered table-mini table-dt td-break">
 		                        <thead>
 		                            <tr>
 		                                <th class="text-center">Date</th>
@@ -156,7 +156,7 @@
 					        </div>
 		                </div>
 		                <div class="card-block dt-responsive table-responsive">
-		                    <table class="table table-striped table-bordered table-mini table-dt">
+		                    <table class="table table-striped table-bordered table-mini table-dt td-break">
 		                        <thead>
 		                            <tr>
 		                                <th class="text-center">Date</th>

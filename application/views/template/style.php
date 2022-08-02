@@ -8,6 +8,12 @@
 	.td-big{
 		white-space: normal;
 	}
+	.td-break td{
+		white-space: normal;
+	    word-wrap: break-word;
+	    overflow-wrap: break-word;
+	    word-break: break-word;
+	}
 	.notifyMy li{
 		padding: 2px 5px;
 		border-bottom: 1px solid #ccc;

@@ -8,6 +8,19 @@ class Dashboard extends CI_Controller
 		$this->auth->check_session();
 	}
 
+	public function getdata()
+	{
+
+		$pay_dash = '<div class="card-block">';
+			$pay_dash .= '<h4 class="m-t-10 m-b-10">'.rs().moneyFormatIndia($this->general_model->pastThDaysPendingPayment()).'</h4>';
+			$pay_dash .= '<h6 class="m-b-0">> 90 days '.rs().moneyFormatIndia($this->general_model->pastNiDaysPendingPayment()).'</h6>';
+			$pay_dash .= '<p class="m-b-0">Total '. rs().moneyFormatIndia($this->general_model->pastDaysPendingPayment()).'</p>';
+		$pay_dash .= '</div>';
+		echo json_encode([
+			'dash-pay-pending'	=> $pay_dash
+		]);
+	}
+
 	public function index()
 	{
 		$data['_title']		= "Dashboard";
@@ -17,19 +30,21 @@ class Dashboard extends CI_Controller
 		$data['receipt_request']	= $this->db->limit(5)->order_by('date','asc')->get_where('payment',['status' => '0'])->result_array();
 		$data['top_five_services_sold']	= $this->getTopFiveServicesSoldInThisMonth();
 
-		if(get_user()['user_type'] == "0"){
+		$user = get_user();
+
+		if($user['user_type'] == "0"){
 			$this->load->theme('dashboard/superadmin',$data);
 		}
 
-		if(get_user()['user_type'] == "1"){
+		if($user['user_type'] == "1"){
 			$this->load->theme('dashboard/admin',$data);
 		}
 
-		if(get_user()['user_type'] == "3"){
+		if($user['user_type'] == "3"){
 			$this->load->theme('dashboard/sales',$data);
 		}
 
-		if(get_user()['user_type'] == "2"){
+		if($user['user_type'] == "2"){
 			$this->load->theme('dashboard/backoffice',$data);
 		}
 	}

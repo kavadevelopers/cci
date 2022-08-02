@@ -608,12 +608,12 @@ class General_model extends CI_Model
 
 		if($odebit > $ocredit){
 			//,'type' => invoice()
-			$tra = $this->db->order_by('id','desc')->get_where('transaction',['client' => $client_id])->row_array();
+			$tra = $this->db->order_by('id','desc')->select('date')->get_where('transaction',['client' => $client_id])->row_array();
 			$days = daysBeetweenDates($tra['date']);
 			return [($odebit - $ocredit),$days];
 		}else if($odebit < $ocredit){
 			//,'type' => payment()
-			$tra = $this->db->order_by('id','desc')->get_where('transaction',['client' => $client_id])->row_array();
+			$tra = $this->db->order_by('id','desc')->select('date')->get_where('transaction',['client' => $client_id])->row_array();
 			$days = daysBeetweenDates($tra['date']);
 			return [($odebit - $ocredit ),$days];
 		}else{
@@ -664,11 +664,12 @@ class General_model extends CI_Model
 
 	public function pastThDaysPendingPayment()
 	{
-		$clients = $this->db->get('client')->result_array();
+		$clients = $this->db->select('id')->get('client')->result_array();
 		$total = 0;
 		foreach ($clients as $key => $value) {
-			if(30 < $this->general_model->getOutStandingClient($value['id'])[1]){
-				$total += $this->general_model->getOutStandingClient($value['id'])[0];
+			$oClients = $this->general_model->getOutStandingClient($value['id']);
+			if(30 < $oClients[1]){
+				$total += $oClients[0];
 			}
 		}
 		return $total;
@@ -679,8 +680,9 @@ class General_model extends CI_Model
 		$clients = $this->db->get('client')->result_array();
 		$total = 0;
 		foreach ($clients as $key => $value) {
-			if(90 < $this->general_model->getOutStandingClient($value['id'])[1]){
-				$total += $this->general_model->getOutStandingClient($value['id'])[0];
+			$oClients = $this->general_model->getOutStandingClient($value['id']);
+			if(90 < $oClients[1]){
+				$total += $oClients[0];
 			}
 		}
 		return $total;

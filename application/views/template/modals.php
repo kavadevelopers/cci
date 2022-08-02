@@ -1,3 +1,4 @@
+<?php if($this->uri->segment(1) == 'leads'){ ?>
 <div class="modal fade" id="lead_transfer_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <form method="post" action="<?= base_url('leads/transfer') ?>">
         <div class="modal-dialog" role="document">
@@ -31,6 +32,7 @@
         </div>
     </form>
 </div>
+<?php } ?>
 
 <div class="modal fade" id="dueDateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <form method="post" action="">
