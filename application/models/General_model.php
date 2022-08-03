@@ -598,7 +598,7 @@ class General_model extends CI_Model
 	{
 		if(get_user()['user_type'] != '0'){
 			$this->db->where('user',get_user()['id']);
-			$this->db->where('credit',0.00);
+			//$this->db->where('credit',0.00);
 		}
 		$this->db->where('date >',date('Y-m-d',strtotime('-15 days')));
 		$this->db->order_by('date','desc');
