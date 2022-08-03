@@ -647,7 +647,7 @@
 			}
 		});
 
-		$('.edit-job').click(function(event) {
+		$(document).on('click','.edit-job',function(event){
 			$('#jobEditModal').modal('show');
 			$('#editJobId').html("#"+$(this).data('job_id'));
 			$('#jobEditService').val($(this).data('service'));

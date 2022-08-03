@@ -41,7 +41,7 @@
                                 <?= $value['firm'] != ''?'<br>-'.$value['firm']:'' ?>        
                             </td>
                             <td class="">
-                                <?= $this->general_model->_get_area($value['area'])['name'] ?>,<br> <?= $this->general_model->_get_city($value['city'])['name'] ?>,<br> <?= $this->general_model->_get_district($value['district'])['name'] ?>,<br> <?= $this->general_model->_get_state($value['state'])['name'] ?>
+                                <?= $this->general_model->_get_area_c($value['area'])['name'] ?>,<br> <?= $this->general_model->_get_city_c($value['city'])['name'] ?>,<br> <?= $this->general_model->_get_district_c($value['district'])['name'] ?>,<br> <?= $this->general_model->_get_state_c($value['state'])['name'] ?>
                             </td>
                             <td class="text-center">
                                 <?php foreach (explode(",", $value['mobile']) as $mkey => $mvalue) { ?>
