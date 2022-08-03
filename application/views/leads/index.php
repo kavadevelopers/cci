@@ -109,6 +109,9 @@
                                         <i class="fa fa-trash"></i>
                                     </a>
                                 <?php } ?>
+                                <a href="<?= base_url('leads/edit/').$value['id'] ?>" class="btn btn-primary btn-mini" title="Edit">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
                                 <a href="<?= base_url('leads/view/').$value['id'] ?>" class="btn btn-success btn-mini" title="View">
                                     <i class="fa fa-eye"></i>
                                 </a>

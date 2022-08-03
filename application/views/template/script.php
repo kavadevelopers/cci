@@ -4,6 +4,12 @@
 		    e.preventDefault();
 		    return false;
 		});
+
+		$("input[type=submit],button[type=submit]").click(function(e) {
+			if (!confirm('Are you sure?')) {
+				e.preventDefault();
+			}
+		});
     });
 	$(document).ready(function() {
 		if (!Notification) {

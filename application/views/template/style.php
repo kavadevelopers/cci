@@ -8,7 +8,7 @@
 	.td-big{
 		white-space: normal;
 	}
-	.td-break td{
+	.td-break td,table td{
 		white-space: normal;
 	    word-wrap: break-word;
 	    overflow-wrap: break-word;
