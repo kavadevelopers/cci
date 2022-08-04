@@ -28,7 +28,7 @@
                     <?php 
                     $getParent = $this->db->get_where('grouping',['child' => $client['id']])->row_array();
                      if($getParent){ ?>
-                       <br> Parent Group ID : <?= $this->general_model->_get_client($getParent['main']); ?>
+                       <br> Parent Group ID : <?= $this->general_model->_get_client($getParent['main'])['group']; ?>
                     <?php } ?>
                     <br> Child Group ID : <?= $client['group'] ?></h5>
                 </div>
