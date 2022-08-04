@@ -23,7 +23,14 @@
     	<div class="card-header">
 			<div class="row"> 
                 <div class="col-md-12">
-                	<h5 class="search-headings">#<?= $client['c_id'] ?> - <?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?> - <?= $client['mobile'] ?></h5>
+                	<h5 class="search-headings">#<?= $client['c_id'] ?> - <?= $client['fname'] ?> <?= $client['mname'] ?> <?= $client['lname'] ?> - <?= $client['mobile'] ?> 
+
+                    <?php 
+                    $getParent = $this->db->get_where('grouping',['child' => $client['id']])->row_array();
+                     if($getParent){ ?>
+                       <br> Parent Group ID : <?= $this->general_model->_get_client($getParent['main']); ?>
+                    <?php } ?>
+                    <br> Child Group ID : <?= $client['group'] ?></h5>
                 </div>
 	        </div>
         </div>
