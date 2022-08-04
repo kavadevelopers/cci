@@ -786,7 +786,7 @@
                                                             <?php $parentclient = $this->general_model->_get_client($value['main']); ?>
     									                	<tr>
     									                		<td class="text-center">
-                                                                    <?= $parentclient['c_id'] ?> - <?= $parentclient['fname'].' '.$parentclient['lname'] ?>
+                                                                    <?= $parentclient['group'] ?>
                                                                 </td>
     									                		<td><?= $nclient['c_id'] ?> - <?= $nclient['fname'].' '.$nclient['mname'].' '.$nclient['lname'] ?></td>
     									                		<td class="text-center"><?= $value['relation'] ?></td>
