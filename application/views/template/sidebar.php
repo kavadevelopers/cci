@@ -180,6 +180,12 @@
                                         <span class="pcoded-mtext">Receipt</span>
                                     </a>
                                 </li>
+                                <li class="<?= menu(1,["discount"])[0]; ?>">
+                                    <a href="<?= base_url('discount') ?>">
+                                        <span class="pcoded-micon"><i class="fa fa-money"></i></span>
+                                        <span class="pcoded-mtext">Discount</span>
+                                    </a>
+                                </li>
                                 <li class="<?= menu(1,["reimburs"])[0]; ?>">
                                     <a href="<?= base_url('reimburs') ?>">
                                         <span class="pcoded-micon"><i class="fa fa-money"></i></span>
@@ -477,6 +483,13 @@
                                     <a href="<?= base_url('user/sales_person') ?>">
                                         <span class="pcoded-micon"><i class="fa fa-list"></i></span>
                                         <span class="pcoded-mtext">Sales Person</span>
+                                    </a>
+                                </li>
+
+                                <li class="<?= menu(2,["deleted"])[0]; ?>">
+                                    <a href="<?= base_url('user/deleted') ?>">
+                                        <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                        <span class="pcoded-mtext">Deleted</span>
                                     </a>
                                 </li>
 

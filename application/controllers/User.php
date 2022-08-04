@@ -8,6 +8,34 @@ class User extends CI_Controller
 		$this->auth->check_session();
 	}
 
+	public function restore($id = false)
+	{
+		if($id){
+			if($this->general_model->_get_user($id)){
+				
+				$data = [
+					'df'	=> ''
+				];
+				$this->db->where('id',$id)->update('user',$data);	
+
+				$this->session->set_flashdata('msg', 'User restored');
+	       	 	redirect(base_url('user/deleted'));
+
+			}else{
+				redirect(base_url('user/deleted'));
+			}
+		}else{
+			redirect(base_url('user/deleted'));
+		}
+	}
+
+	public function deleted()
+	{
+		$data['_title']		= "Deleted Users";
+		$data['user']		= $this->db->order_by('id','desc')->get_where('user',['df !=' => ''])->result_array();
+		$this->load->theme('user/deleted',$data);
+	}	
+
 	public function admin()
 	{
 		$data['_title']		= "Admin";

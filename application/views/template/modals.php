@@ -416,6 +416,19 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
+                                <label>Select Company <span class="-req">*</span></label> 
+                                <select class="form-control form-control-sm" name="company" required>
+                                    <option value="">-- Select --</option>
+                                    <?php foreach ($this->db->get_where('company')->result_array() as $bkey => $bvalue) { ?>
+                                        <option value="<?= $bvalue['id'] ?>"><?= $bvalue['name'] ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
                                 <label>Select Client <span class="-req">*</span></label> 
                                 <select class="form-control form-control-sm addPaymentClient" name="client" required>
                                     <option value="">-- Select --</option>
@@ -467,6 +480,70 @@
     </form>
 </div>
 
+<div class="modal fade" id="add_discount_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <form method="post" action="<?= base_url('discount/save') ?>">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Discount</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Select Company <span class="-req">*</span></label> 
+                                <select class="form-control form-control-sm" name="company" required>
+                                    <option value="">-- Select --</option>
+                                    <?php foreach ($this->db->get_where('company')->result_array() as $bkey => $bvalue) { ?>
+                                        <option value="<?= $bvalue['id'] ?>"><?= $bvalue['name'] ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Select Client <span class="-req">*</span></label> 
+                                <select class="form-control form-control-sm addPaymentClient" name="client" required>
+                                    <option value="">-- Select --</option>
+                                    <?php foreach ($this->general_model->getFilteredClients() as $bkey => $bvalue) { ?>
+                                        <option value="<?= $bvalue['id'] ?>"><?= $bvalue['c_id'] ?> - <?= $bvalue['fname'] ?> <?= $bvalue['mname'] ?> <?= $bvalue['lname'] ?> - <?= $bvalue['mobile'] ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Date <span class="-req">*</span></label> 
+                                <input name="date" type="text" placeholder="Date" class="form-control form-control-sm datepicker" value="<?= set_value('date',date('d-m-Y')); ?>" readonly required>
+                                <?= form_error('date') ?>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Amount <span class="-req">*</span></label> 
+                            <input type="text" name="amount" class="form-control form-control-sm decimal-num" autocomplete="off" placeholder="Amount" required>   
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Remarks</label> 
+                                <textarea class="form-control" name="remarks" placeholder="Remarks"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-plus"></i> Add</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
 <div class="modal fade" id="edit_payment_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <form method="post" action="<?= base_url('payment/update') ?>">
         <div class="modal-dialog" role="document">
@@ -478,6 +555,19 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Select Company <span class="-req">*</span></label> 
+                                <select class="form-control form-control-sm" name="company" id="editPaymentCompany" required>
+                                    <option value="">-- Select --</option>
+                                    <?php foreach ($this->db->get_where('company')->result_array() as $bkey => $bvalue) { ?>
+                                        <option value="<?= $bvalue['id'] ?>"><?= $bvalue['name'] ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -524,6 +614,70 @@
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" name="id" id="editPaymentId">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal fade" id="edit_discount_model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <form method="post" action="<?= base_url('discount/update') ?>">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Discount</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Select Company <span class="-req">*</span></label> 
+                                <select class="form-control form-control-sm" name="company" required>
+                                    <option value="">-- Select --</option>
+                                    <?php foreach ($this->db->get_where('company')->result_array() as $bkey => $bvalue) { ?>
+                                        <option value="<?= $bvalue['id'] ?>"><?= $bvalue['name'] ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Date <span class="-req">*</span></label> 
+                                <input name="date" type="text" placeholder="Date" class="form-control form-control-sm datepicker" value="<?= set_value('date',date('d-m-Y')); ?>" readonly required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Amount <span class="-req">*</span></label> 
+                            <input type="text" name="amount" class="form-control form-control-sm decimal-num" autocomplete="off" placeholder="Amount" required>   
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Select Client <span class="-req">*</span></label> 
+                                <select class="form-control form-control-sm editPaymentClient" name="client" required>
+                                    <option value="">-- Select --</option>
+                                    <?php foreach ($this->general_model->getFilteredClients() as $bkey => $bvalue) { ?>
+                                        <option value="<?= $bvalue['id'] ?>"><?= $bvalue['c_id'] ?> - <?= $bvalue['fname'] ?> <?= $bvalue['mname'] ?> <?= $bvalue['lname'] ?> - <?= $bvalue['mobile'] ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Remarks</label> 
+                                <textarea class="form-control" name="remarks" placeholder="Remarks"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="id">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save</button>
                 </div>
@@ -630,6 +784,19 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Select Company <span class="-req">*</span></label> 
+                                <select class="form-control form-control-sm" name="company" required>
+                                    <option value="">-- Select --</option>
+                                    <?php foreach ($this->db->get_where('company')->result_array() as $bkey => $bvalue) { ?>
+                                        <option value="<?= $bvalue['id'] ?>"><?= $bvalue['name'] ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-12" id="clientDataBill">
                             
                         </div>
@@ -690,6 +857,19 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Select Company <span class="-req">*</span></label> 
+                                <select class="form-control form-control-sm" name="company" required>
+                                    <option value="">-- Select --</option>
+                                    <?php foreach ($this->db->get_where('company')->result_array() as $bkey => $bvalue) { ?>
+                                        <option value="<?= $bvalue['id'] ?>"><?= $bvalue['name'] ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-12" id="clientDataBills">
                             

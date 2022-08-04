@@ -24,14 +24,21 @@ class Payment extends CI_Controller
 		}
 		$client = $this->general_model->_get_client($this->input->post('client'));
 
-		$company = $this->general_model->_get_company($client['company']);
+		$company = $this->general_model->_get_company($this->input->post('company'));
 		$payment_count = $this->db->get_where('payment',['company' => $company['id']])->num_rows();
+		while (1){ 
+			$payment_count++;
+			$Chk = $this->db->get_where('payment',['invoice' => $company['receipt_prefix'].'_'.($payment_count)])->num_rows();
+			if ($Chk == 0) {
+				break;		
+			}	
+		}
 		$data = [
 			'date'			=> $date,
-			'invoice'		=> $company['receipt_prefix'].'_'.($payment_count + 1),
+			'invoice'		=> $company['receipt_prefix'].'_'.($payment_count),
 			'client'		=> $this->input->post('client'),
 			'branch'		=> $client['branch'],
-			'company'		=> $client['company'],
+			'company'		=> $this->input->post('company'),
 			'amount'		=> $this->input->post('amount'),
 			'pay_type'		=> $this->input->post('payment_type'),
 			'pay_remarks'		=> $this->input->post('pay_remarks'),
@@ -65,13 +72,29 @@ class Payment extends CI_Controller
 		
 		$client = $this->general_model->_get_client($this->input->post('client'));
 
-		$company = $this->general_model->_get_company($client['company']);
-		
+		$company = $this->general_model->_get_company($this->input->post('company'));
+		$pay = $this->db->get_where('payment',['id' => $this->input->post('id')])->row_array();
+		if ($pay['company'] != $this->input->post('company')) {
+			$payment_count = $this->db->get_where('payment',['company' => $company['id']])->num_rows();
+
+			while (1){ 
+				$payment_count++;
+				$Chk = $this->db->get_where('payment',['invoice' => $company['receipt_prefix'].'_'.($payment_count)])->num_rows();
+				if ($Chk == 0) {
+					break;		
+				}	
+			}
+			
+			$this->db->where('id',$this->input->post('id'))->update('payment',[
+				'invoice'		=> $company['receipt_prefix'].'_'.($payment_count),
+			]);
+		}
+
 		$data = [
 			'date'			=> $date,
 			'client'		=> $this->input->post('client'),
 			'branch'		=> $client['branch'],
-			'company'		=> $client['company'],
+			'company'		=> $this->input->post('company'),
 			'pay_type'		=> $this->input->post('payment_type'),
 			'pay_remarks'	=> $this->input->post('pay_remarks'),
 			'amount'		=> $this->input->post('amount'),

@@ -135,7 +135,7 @@ $(function(){
         format: 'dd-mm-yyyy',
         todayHighlight:'TRUE',
         autoclose: true,
-        endDate: '-15y',
+        endDate: new Date(),
         startDate: '-100y'
     }).keydown(function(e) {
         return false;

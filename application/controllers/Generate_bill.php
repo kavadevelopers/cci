@@ -40,11 +40,11 @@ class Generate_bill extends CI_Controller
 		$client = $this->general_model->_get_client($this->input->post('client'));
 
 
-		$invoice = $this->db->get_where('invoice',['company' => $client['company']])->num_rows();
+		$invoice = $this->db->get_where('invoice',['company' => $this->input->post('company')])->num_rows();
 
 		$data = [
-			'inv'				=> $this->general_model->_get_company($client['company'])['prefix']."_".($invoice + 1),
-			'company'			=> $client['company'],
+			'inv'				=> $this->general_model->_get_company($this->input->post('company'))['prefix']."_".($invoice + 1),
+			'company'			=> $this->input->post('company'),
 			'branch'			=> $client['branch'],
 			'client'			=> $this->input->post('client'),
 			'date'				=> $date,
@@ -118,11 +118,11 @@ class Generate_bill extends CI_Controller
 		$client = $this->general_model->_get_client($jobs['client']);
 
 
-		$invoice = $this->db->get_where('invoice',['company' => $client['company']])->num_rows();
+		$invoice = $this->db->get_where('invoice',['company' => $this->input->post('company')])->num_rows();
 
 		$data = [
-			'inv'				=> $this->general_model->_get_company($client['company'])['prefix']."_".($invoice + 1),
-			'company'			=> $client['company'],
+			'inv'				=> $this->general_model->_get_company($this->input->post('company'))['prefix']."_".($invoice + 1),
+			'company'			=> $this->input->post('company'),
 			'branch'			=> $client['branch'],
 			'client'			=> $client['id'],
 			'remarks'			=> $this->input->post('remarks'),

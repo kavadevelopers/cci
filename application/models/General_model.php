@@ -594,6 +594,28 @@ class General_model extends CI_Model
 		}
 	}
 
+	public function getDiscounts()
+	{
+		if(get_user()['user_type'] == 0 || get_user()['user_type'] == 2){
+			return $this->db->order_by('id','desc')->get_where('payment_discounts')->result_array();	
+		}else if(get_user()['user_type'] == 1){
+			return $this->db->order_by('id','desc')->get_where('payment_discounts',['branch' => get_user()['branch']])->result_array();	
+		}else if(get_user()['user_type'] == 3){
+			if(get_user()['type'] == 4){
+				$clients = $this->db->get_where('client')->result_array();
+			}else{
+				$clients = $this->db->get_where('client',['owner' => get_user()['id']])->result_array();
+			}
+			$cli = [];
+			$cli = [];
+			foreach ($clients as $key => $value) {
+				array_push($cli, $value['id']);
+			}
+			$this->db->where_in('client',$cli);
+			return $this->db->order_by('id','desc')->get_where('payment_discounts')->result_array();	
+		}
+	}
+
 	public function getPettyCash()
 	{
 		if(get_user()['user_type'] != '0'){

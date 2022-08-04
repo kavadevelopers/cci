@@ -813,6 +813,13 @@
 			});
 		});
 
+		$(document).on('click','.add-discount',function(){
+			$('#add_discount_model').modal('show');
+			$('.addPaymentClient').select2({
+			    dropdownParent: $('#add_discount_model .modal-content')
+			});
+		});
+
 		$(document).on('click', '.add-new-vendor', function(event) {
 			$('#add_vendor_modal').modal('show');
 		});
@@ -981,9 +988,27 @@
 			$('#editPaymentType').val(_this.data('pay_type'));
 			$('#editPaymentPayRemarks').val(_this.data('pay_remarks'));
 			$('#editPaymentId').val(_this.data('id'));
+			$('#editPaymentCompany').val(_this.data('company'));
+			
 
 			$('.editPaymentClient').select2({
 			    dropdownParent: $('#edit_payment_model .modal-content')
+			});
+		});
+
+		$(document).on('click','.edit-discount',function(){
+			var _this = $(this);
+			$('#edit_discount_model').modal('show');
+			$('#edit_discount_model input[name=date]').val(_this.data('date'));
+			$('#edit_discount_model input[name=amount]').val(_this.data('amount'));
+			$('#edit_discount_model select[name=client]').val(_this.data('client'));
+			$('#edit_discount_model input[name=remarks]').val(_this.data('remarks'));
+			$('#edit_discount_model input[name=id]').val(_this.data('id'));
+			$('#edit_discount_model select[name=company]').val(_this.data('company'));
+			
+
+			$('.editPaymentClient').select2({
+			    dropdownParent: $('#edit_discount_model .modal-content')
 			});
 		});
 

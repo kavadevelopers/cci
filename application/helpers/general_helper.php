@@ -274,6 +274,11 @@ function reimbursement()
     return "5";
 }
 
+function discount()
+{
+    return "6";
+}
+
 function typestring($str){
     if($str == 1){
         return "Invoice";
@@ -283,6 +288,8 @@ function typestring($str){
         return "Referal Amount";
     }else if($str == 5){
         return "Reimbursement Amount";
+    }else if($str == 6){
+        return "Discount";
     }
 }
 
@@ -334,6 +341,9 @@ function vch_no($type,$tra_id)
     }else if($type == "5"){
         $invoice = $CI->db->get_where('reimbursement',['id' => $tra_id])->row_array();
         return '<a href="'.base_url('pdf/reimburs/').$invoice['id'].'" target="_blank">'.$invoice['id'].'<a>';
+    }else if($type == "6"){
+        $invoice = $CI->db->get_where('payment_discounts',['id' => $tra_id])->row_array();
+        return $invoice['invoice'];
     }
 }
 

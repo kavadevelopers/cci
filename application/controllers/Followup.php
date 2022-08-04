@@ -624,8 +624,6 @@ class Followup extends CI_Controller
 			$this->db->where('owner',get_user()['id']);
 			$this->db->where('status <',3);
 			$this->db->where('fstatus',0);
-			$this->db->where('f_date',date('Y-m-d'));
-			$this->db->where('f_time <=',date('H:i:s'));
 			$data = $this->db->get('job')->result_array();
 			foreach ($data as $key => $value) {
 				if($value['f_time'] != null){
