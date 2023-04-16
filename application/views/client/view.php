@@ -786,7 +786,7 @@
                                                             <?php $parentclient = $this->general_model->_get_client($value['main']); ?>
     									                	<tr>
     									                		<td class="text-center">
-                                                                    <?= $parentclient['group'] ?>
+                                                                    <?= $parentclient['c_id'] ?> - <?= $parentclient['fname'].' '.$parentclient['lname'] ?>
                                                                 </td>
     									                		<td><?= $nclient['c_id'] ?> - <?= $nclient['fname'].' '.$nclient['mname'].' '.$nclient['lname'] ?></td>
     									                		<td class="text-center"><?= $value['relation'] ?></td>
@@ -802,7 +802,7 @@
     								                <tfoot>
     								                	<tr>
     								                		<td>
-    								                			<input type="text" name="" class="form-control" value="<?= $client['group'] ?>" readonly>
+    								                			<input type="text" name="" class="form-control" value="<?= $client['c_id'].' '.$client['c_id'].' '.$client['lnam'] ?>" readonly>
     								                			<input type="hidden" id="addGroupChild" class="form-control" value="<?= $client['id'] ?>" readonly>
     								                		</td>
     								                		<td>
