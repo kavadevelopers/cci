@@ -593,6 +593,7 @@ class General_model extends CI_Model
 			return $this->db->order_by('id','desc')->get_where('payment')->result_array();	
 		}
 	}
+	
 
 	public function getDiscounts()
 	{

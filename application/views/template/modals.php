@@ -882,6 +882,15 @@
                         <div class="col-md-9"></div>
                         <div class="col-md-3">
                             <div class="form-group">
+                                <label>Discount</label>
+                                <input name="discount" type="text" placeholder="Discount" class="form-control form-control-sm decimal-num" onkeyup="invoiceTotal()" id="addInvoiceModalDiscount" value="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-9"></div>
+                        <div class="col-md-3">
+                            <div class="form-group">
                                 <label>Invoice Total</label>
                                 <input name="" type="text" placeholder="Invoice Total" class="form-control form-control-sm" id="generateBillsTotal" value="" readonly>
                             </div>
@@ -924,6 +933,15 @@
                     </div>
                     <div class="row" id="editBillDataServices">
                            
+                    </div>
+                    <div class="row">
+                        <div class="col-md-9"></div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Discount</label>
+                                <input name="discount" type="text" placeholder="Discount" class="form-control form-control-sm decimal-num" onkeyup="editInvoiceTotal()" id="editInvoiceModalDiscount" value="">
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-9"></div>

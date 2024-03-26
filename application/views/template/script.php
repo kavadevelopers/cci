@@ -16,11 +16,11 @@
 		  	alert('Desktop notifications not available in your browser. Try Chrome.');
 		 	return;
 		}
-		if (Notification.permission !== 'granted'){
-		  	Notification.requestPermission();
-		}
+		// if (Notification.permission !== 'granted'){
+		//   	Notification.requestPermission();
+		// }
 
-		getDashboardContent();
+		//getDashboardContent();
 	});
 	function notifyMe(title,string,link) {
  		if (Notification.permission !== 'granted')
@@ -748,6 +748,7 @@
                 	$('#editInvoiceModalTitle').html(out['title']);
                 	$('#editInvoiceClient').html(out['client']);
                 	$('#editInvoiceRemarks').val(out['remarks']);
+                	$('#editInvoiceModalDiscount').val(out['discount']);
                 	$('#editInvoiceModalTotal').val(out['total']);
                 	$('#editInvoiceId').val(_this.data('id'));
                 	_this.removeAttr('disabled');
@@ -1265,11 +1266,15 @@
 				$('#generateBillTotal'+_this).val(0);
 			}
 		});
-
+		
+		discount = $('#addInvoiceModalDiscount').val();
+		if(discount != "" && maintotal > 0){
+			maintotal = maintotal - parseFloat(discount);
+		}
 		$('#generateBillsTotal').val(maintotal.toFixed(2));
 	}
 
-	function editInvoiceTotal () {
+	function editInvoiceTotal() {
 		maintotal = 0;
 		$(".editInvoiceDetailId").each(function() {
 			_this = $(this).val();
@@ -1281,7 +1286,10 @@
 				$('#editInvoiceTotal'+_this).val(0);
 			}
 		});
-
+		discount = $('#editInvoiceModalDiscount').val();
+		if(discount != "" && maintotal > 0){
+			maintotal = maintotal - parseFloat(discount);
+		}
 		$('#editInvoiceModalTotal').val(maintotal.toFixed(2));
 	}
 
@@ -1323,8 +1331,8 @@
 
 <script type="text/javascript">
 	setInterval(function(){ 
-	    getNotification();
-	    getTodoNotification();
+	    // getNotification();
+	    // getTodoNotification();
 
 	}, 2000);
 

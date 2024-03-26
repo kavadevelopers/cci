@@ -102,7 +102,14 @@
             <?php
         } } ?>
 
-
+        <table style="width: 100%; background-color: #6e6e6e; color: #fff; border-bottom: 1px solid #ddd;" cellpadding="5px;">
+            <tr>
+                <td style="width: 10%; text-align: center;"></td>
+                <td style="width: 55%; text-align: center;"></td>
+                <td style="width: 15%; text-align: center;"><b>Discount : </b></td>
+                <td style="width: 20%; text-align: right;"><b>Rs. -<?= $invoice['discount'] ?></b></td>
+            </tr>
+        </table>
         <table style="width: 100%; background-color: #6e6e6e; color: #fff; border-bottom: 1px solid #ddd;" cellpadding="5px;">
             <tr>
                 <td style="width: 10%; text-align: center;"></td>

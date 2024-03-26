@@ -50,12 +50,13 @@ class Invoices extends CI_Controller
 
 
 
-		echo json_encode(['title' => 'Edit Invoice - #'.$invoice['inv'],'client' => $client_string,'remarks' => $invoice['remarks'],'total' => $invoice['total'],'list' => $str]);
+		echo json_encode(['title' => 'Edit Invoice - #'.$invoice['inv'],'client' => $client_string,'remarks' => $invoice['remarks'],'total' => $invoice['total'],'discount' => $invoice['discount'],'list' => $str]);
 	}
 
 
 	public function update()
 	{
+
 		$total = 0;
 		foreach ($this->input->post('detailId') as $key => $value) {
 			$this->db->where('id',$this->input->post('detailId')[$key]);
@@ -63,8 +64,12 @@ class Invoices extends CI_Controller
 			$total += $this->input->post('qty')[$key] * $this->input->post('price')[$key];
 		}
 
+		if($this->input->post('discount') != ""){
+			$total = $total - $this->input->post('discount');
+		}
+
 		$this->db->where('id',$this->input->post('invoice'));
-		$this->db->update('invoice',['total' => $total,'remarks' => $this->input->post('remarks')]);
+		$this->db->update('invoice',['total' => $total,'discount' => $this->input->post('discount'),'remarks' => $this->input->post('remarks')]);
 
 		$data = [
 			'debit'		=> $total,

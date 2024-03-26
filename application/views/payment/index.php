@@ -53,7 +53,6 @@
                                 <td><?= $this->general_model->_get_user($value['created_by'])['name'] ?></td>
                             <?php } ?>
                             <td class="text-center">
-
                                 <a href="<?= base_url('pdf/receipt/').$value['id'] ?>" target="_blank" class="btn btn-primary btn-mini" title="PDF">
                                     <i class="fa fa-file-pdf-o"></i>
                                 </a>

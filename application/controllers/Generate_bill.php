@@ -88,7 +88,11 @@ class Generate_bill extends CI_Controller
 			$this->db->where('id',$value['id'])->update('job',['f_date' => $date,'f_time'	=> null,'t_time' => null,'status'	=> 4,'updated_date' => date('Y-m-d')]);
 		}
 
-		$this->db->where('id',$inv_id)->update('invoice',['total' => $total]);
+		if($this->input->post('discount') != ""){
+			$total = $total - $this->input->post('discount');
+		}
+
+		$this->db->where('id',$inv_id)->update('invoice',['total' => $total,'discount' => $this->input->post('discount')]);
 
 
 		$data = [

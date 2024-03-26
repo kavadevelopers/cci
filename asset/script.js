@@ -153,12 +153,12 @@ $(function(){
     });
 
     $('.checkAll').click(function(){
-            if($(this).prop("checked")) {
-                $(".checkBox").prop("checked", true);
-            } else {
-                $(".checkBox").prop("checked", false);
-            }                
-        });
+        if($(this).prop("checked")) {
+            $(".checkBox").prop("checked", true);
+        } else {
+            $(".checkBox").prop("checked", false);
+        }                
+    });
 
 
     $('.checkBox').click(function(){
